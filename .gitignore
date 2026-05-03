@@ -109,6 +109,3 @@ pnpm-debug.log*
 # If SuperSVG downloads weights here, ignore them
 vectorization-app/backend/SuperSVG/weights/
 **/weights/
-
-# External cloned repositories
-vectorization-app/backend/SuperSVG/
