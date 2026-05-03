@@ -1,0 +1,114 @@
+# =========================
+# Python virtual environments
+# =========================
+venv/
+.venv/
+*/venv/
+*/.venv/
+**/venv/
+**/.venv/
+
+# Specific backend virtual environment
+vectorization-app/backend/venv/
+vectorization-app/backend/.venv/
+
+
+# =========================
+# Python cache / compiled files
+# =========================
+__pycache__/
+*/__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+
+
+# =========================
+# Frontend dependencies
+# =========================
+node_modules/
+*/node_modules/
+**/node_modules/
+
+# Specific frontend dependencies
+vectorization-app/frontend/node_modules/
+
+
+# =========================
+# Frontend build files
+# =========================
+dist/
+*/dist/
+**/dist/
+
+# Specific frontend build folder
+vectorization-app/frontend/dist/
+
+
+# =========================
+# Backend generated files
+# =========================
+uploads/
+outputs/
+*/uploads/
+*/outputs/
+**/uploads/
+**/outputs/
+
+# Specific backend generated folders
+vectorization-app/backend/uploads/
+vectorization-app/backend/outputs/
+
+
+# =========================
+# Environment variables / secrets
+# =========================
+.env
+.env.*
+!.env.example
+
+
+# =========================
+# IDE / editor files
+# =========================
+.vscode/
+.idea/
+*.code-workspace
+
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+
+# =========================
+# Logs
+# =========================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# =========================
+# Optional: large model/checkpoint files
+# Do not commit downloaded AI weights
+# =========================
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+
+# If SuperSVG downloads weights here, ignore them
+vectorization-app/backend/SuperSVG/weights/
+**/weights/
+
+# External cloned repositories
+vectorization-app/backend/SuperSVG/
