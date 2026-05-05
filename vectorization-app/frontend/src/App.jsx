@@ -27,8 +27,10 @@ function App() {
   // SuperSVG parameters. They stay editable before upload and during re-vectorization.
   const [pathNum, setPathNum] = useState(256);
   const [optimizeIter, setOptimizeIter] = useState(0);
+  const [device, setDevice] = useState("cpu");
   const [draftPathNum, setDraftPathNum] = useState(256);
   const [draftOptimizeIter, setDraftOptimizeIter] = useState(0);
+  const [draftDevice, setDraftDevice] = useState("cpu");
 
   // UI state
   const [isProcessing, setIsProcessing] = useState(false);
@@ -148,11 +150,12 @@ function App() {
     handleSelectedFile(event.dataTransfer.files?.[0] || null);
   }
 
-  function validateInputs(nextPathNum = pathNum, nextOptimizeIter = optimizeIter) {
+  function validateInputs(nextPathNum = pathNum, nextOptimizeIter = optimizeIter, nextDevice = device) {
     const rawPathNum = String(nextPathNum).trim();
     const rawOptimizeIter = String(nextOptimizeIter).trim();
     const parsedPathNum = Number(nextPathNum);
     const parsedOptimizeIter = Number(nextOptimizeIter);
+    const parsedDevice = String(nextDevice).trim().toLowerCase();
 
     if (!rawPathNum || !Number.isInteger(parsedPathNum) || parsedPathNum <= 0) {
       return "path_num must be an integer greater than 0.";
@@ -162,10 +165,15 @@ function App() {
       return "optimize_iter must be an integer greater than or equal to 0.";
     }
 
+    if (!["cpu", "cuda"].includes(parsedDevice)) {
+      return 'device must be either "cpu" or "cuda".';
+    }
+
     return "";
   }
 
   async function vectorizeCurrentImage({
+    nextDevice = device,
     nextOptimizeIter = optimizeIter,
     nextPathNum = pathNum,
     preservePreviousResult = false,
@@ -177,7 +185,7 @@ function App() {
       return false;
     }
 
-    const validationError = validateInputs(nextPathNum, nextOptimizeIter);
+    const validationError = validateInputs(nextPathNum, nextOptimizeIter, nextDevice);
     if (validationError) {
       setErrorMessage(validationError);
       return false;
@@ -190,8 +198,9 @@ function App() {
 
     setIsProcessing(true);
     try {
-      // API request to FastAPI. The service builds FormData with file, path_num, and optimize_iter.
+      // API request to FastAPI. The service builds FormData with file, path_num, optimize_iter, and device.
       const data = await vectorizeImage({
+        device: nextDevice,
         file: selectedFile,
         pathNum: nextPathNum,
         optimizeIter: nextOptimizeIter,
@@ -209,6 +218,7 @@ function App() {
       setSvgResultContent(nextSvgContent);
       setSvgResultUrl(nextSvgUrl);
       setSvgLoadFailed(false);
+      setDevice(String(data?.device || nextDevice).toLowerCase());
       setPathNum(String(Number(nextPathNum)));
       setOptimizeIter(String(Number(nextOptimizeIter)));
       return true;
@@ -356,6 +366,7 @@ function App() {
   function handleOpenSettings() {
     setDraftPathNum(pathNum);
     setDraftOptimizeIter(optimizeIter);
+    setDraftDevice(device);
     setErrorMessage("");
     setIsSettingsOpen(true);
   }
@@ -367,6 +378,7 @@ function App() {
 
     setDraftPathNum(pathNum);
     setDraftOptimizeIter(optimizeIter);
+    setDraftDevice(device);
     setIsSettingsOpen(false);
   }
 
@@ -375,6 +387,7 @@ function App() {
     event.preventDefault();
 
     const succeeded = await vectorizeCurrentImage({
+      nextDevice: draftDevice,
       nextOptimizeIter: draftOptimizeIter,
       nextPathNum: draftPathNum,
       preservePreviousResult: true,
@@ -389,6 +402,8 @@ function App() {
     return (
       <ComparisonViewer
         contentSize={imageNaturalSize}
+        device={resultMeta?.device || device}
+        draftDevice={draftDevice}
         draftOptimizeIter={draftOptimizeIter}
         draftPathNum={draftPathNum}
         downloadHref={downloadHref}
@@ -400,13 +415,13 @@ function App() {
         onEditParameters={handleOpenSettings}
         onFit={resetView}
         onNewImage={handleNewImage}
-        onReset={resetView}
         onRevectorize={handleRevectorize}
         onWheel={handleWheel}
         originalPreviewUrl={originalPreviewUrl}
         pan={viewerPan}
         pointerHandlers={pointerHandlers}
         setDraftOptimizeIter={setDraftOptimizeIter}
+        setDraftDevice={setDraftDevice}
         setDraftPathNum={setDraftPathNum}
         setSvgLoadFailed={setSvgLoadFailed}
         svgDisplayUrl={svgDisplayUrl}
@@ -422,6 +437,7 @@ function App() {
   return (
     <UploadPage
       errorMessage={errorMessage}
+      device={device}
       handleDrop={handleDrop}
       handleFileChange={handleFileChange}
       handleSubmit={handleSubmit}
@@ -434,6 +450,7 @@ function App() {
       originalPreviewUrl={originalPreviewUrl}
       pathNum={pathNum}
       selectedFile={selectedFile}
+      setDevice={setDevice}
       setOptimizeIter={setOptimizeIter}
       setPathNum={setPathNum}
     />

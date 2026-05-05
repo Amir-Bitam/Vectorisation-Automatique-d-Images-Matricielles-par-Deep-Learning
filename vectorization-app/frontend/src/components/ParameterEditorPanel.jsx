@@ -2,11 +2,13 @@ import React from "react";
 import { RefreshCcw, SlidersHorizontal } from "lucide-react";
 
 function ParameterEditorPanel({
+  draftDevice,
   draftOptimizeIter,
   draftPathNum,
   isProcessing,
   onCancel,
   onRevectorize,
+  setDraftDevice,
   setDraftOptimizeIter,
   setDraftPathNum,
 }) {
@@ -58,6 +60,20 @@ function ParameterEditorPanel({
                 disabled={isProcessing}
               />
               <span className="text-xs leading-5 text-slate-500">Number of optimization iterations, 0 means faster</span>
+            </label>
+
+            <label className="grid gap-2">
+              <span className="text-sm font-bold text-slate-800">device</span>
+              <select
+                className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-sm font-semibold text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                value={draftDevice}
+                onChange={(event) => setDraftDevice(event.target.value)}
+                disabled={isProcessing}
+              >
+                <option value="cpu">CPU</option>
+                <option value="cuda">CUDA / GPU</option>
+              </select>
+              <span className="text-xs leading-5 text-slate-500">Rendering device for SuperSVG</span>
             </label>
           </div>
 

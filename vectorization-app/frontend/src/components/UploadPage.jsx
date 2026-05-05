@@ -1,10 +1,10 @@
 import React from "react";
 import { FileImage, ImagePlus, RefreshCcw, UploadCloud, Wand2 } from "lucide-react";
 
-import NavBar from "./NavBar";
 import ProcessingOverlay from "./ProcessingOverlay";
 
 function UploadPage({
+  device,
   errorMessage,
   handleDrop,
   handleFileChange,
@@ -18,6 +18,7 @@ function UploadPage({
   originalPreviewUrl,
   pathNum,
   selectedFile,
+  setDevice,
   setOptimizeIter,
   setPathNum,
 }) {
@@ -29,7 +30,6 @@ function UploadPage({
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
-      <NavBar />
 
       <form className="mx-auto grid w-full max-w-7xl gap-8 px-5 pb-12 pt-5 sm:px-8 lg:grid-cols-[minmax(0,1.08fr)_380px] lg:items-start lg:pt-10" onSubmit={handleSubmit}>
         <section className="mx-auto w-full max-w-3xl text-center lg:mx-0 lg:max-w-none lg:text-left">
@@ -147,6 +147,20 @@ function UploadPage({
                 disabled={isProcessing}
               />
               <span className="text-xs leading-5 text-slate-500">Number of optimization iterations, 0 means faster</span>
+            </label>
+
+            <label className="grid gap-2">
+              <span className="text-sm font-bold text-slate-800">device</span>
+              <select
+                className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-sm font-semibold text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                value={device}
+                onChange={(event) => setDevice(event.target.value)}
+                disabled={isProcessing}
+              >
+                <option value="cpu">CPU</option>
+                <option value="cuda">CUDA / GPU</option>
+              </select>
+              <span className="text-xs leading-5 text-slate-500">Rendering device for SuperSVG</span>
             </label>
           </div>
 

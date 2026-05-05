@@ -75,6 +75,8 @@ function ComparisonPane({
 
 function ComparisonViewer({
   contentSize,
+  device,
+  draftDevice,
   draftOptimizeIter,
   draftPathNum,
   downloadHref,
@@ -86,13 +88,13 @@ function ComparisonViewer({
   onEditParameters,
   onFit,
   onNewImage,
-  onReset,
   onRevectorize,
   onWheel,
   originalPreviewUrl,
   pan,
   pointerHandlers,
   setDraftOptimizeIter,
+  setDraftDevice,
   setDraftPathNum,
   setSvgLoadFailed,
   svgDisplayUrl,
@@ -118,7 +120,10 @@ function ComparisonViewer({
           <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-blue-600 to-violet-600 text-white">
             <Wand2 className="h-5 w-5" aria-hidden="true" />
           </div>
-          <span className="truncate text-sm font-black text-slate-950 sm:text-base">PFE Vectorization App</span>
+          <div className="min-w-0">
+            <span className="truncate text-sm font-black text-slate-950 sm:text-base">Raster to vector</span>
+            <p className="text-xs font-bold uppercase text-slate-500">Device: {String(device || "cpu").toUpperCase()}</p>
+          </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -130,9 +135,6 @@ function ComparisonViewer({
           </div>
           <IconButton label="Zoom in" onClick={zoomIn}>
             <ZoomIn className="h-4 w-4" aria-hidden="true" />
-          </IconButton>
-          <IconButton label="Reset view" onClick={onReset}>
-            <RefreshCcw className="h-4 w-4" aria-hidden="true" />
           </IconButton>
           <IconButton label="Fit to screen" onClick={onFit}>
             <Maximize2 className="h-4 w-4" aria-hidden="true" />
@@ -204,11 +206,13 @@ function ComparisonViewer({
       {/* Settings/Edit parameters modal for re-vectorization without uploading again. */}
       {isSettingsOpen && (
         <ParameterEditorPanel
+          draftDevice={draftDevice}
           draftOptimizeIter={draftOptimizeIter}
           draftPathNum={draftPathNum}
           isProcessing={isProcessing}
           onCancel={onCancelSettings}
           onRevectorize={onRevectorize}
+          setDraftDevice={setDraftDevice}
           setDraftOptimizeIter={setDraftOptimizeIter}
           setDraftPathNum={setDraftPathNum}
         />

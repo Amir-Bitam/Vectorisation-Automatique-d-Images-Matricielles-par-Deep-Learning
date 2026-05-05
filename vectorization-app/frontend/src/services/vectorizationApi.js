@@ -49,11 +49,12 @@ async function parseResponse(response) {
 }
 
 // Send the uploaded image and parameter values to the FastAPI /vectorize endpoint.
-export async function vectorizeImage({ file, pathNum, optimizeIter }) {
+export async function vectorizeImage({ device = "cpu", file, pathNum, optimizeIter }) {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("path_num", String(Number(pathNum)));
   formData.append("optimize_iter", String(Number(optimizeIter)));
+  formData.append("device", device);
 
   const response = await fetch(`${API_BASE_URL}/vectorize`, {
     method: "POST",

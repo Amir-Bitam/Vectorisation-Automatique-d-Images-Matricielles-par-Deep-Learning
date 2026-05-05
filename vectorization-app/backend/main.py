@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Optional
 from uuid import uuid4
 
+import torch
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -49,6 +50,7 @@ def _run_supersvg(
     output_dir: Path,
     path_num: int,
     optimize_iter: int,
+    device: str,
 ) -> subprocess.CompletedProcess[str]:
     # Build the SuperSVG inference command. path_num and optimize_iter come from the frontend form.
     command = [
@@ -59,7 +61,7 @@ def _run_supersvg(
         "--output_dir",
         str(output_dir),
         "--device",
-        "cpu",
+        device,
         "--path_num",
         str(path_num),
         "--optimize_iter",
@@ -85,14 +87,23 @@ def vectorize(
     file: UploadFile = File(...),
     path_num: int = Form(256),
     optimize_iter: int = Form(0),
+    device: str = Form("cpu"),
 ):
     # Uploaded file and parameter validation happens before creating job folders.
+    device = device.strip().lower()
     if not file.filename:
         raise HTTPException(status_code=400, detail="No file was uploaded.")
     if path_num <= 0:
         raise HTTPException(status_code=400, detail="path_num must be greater than 0.")
     if optimize_iter < 0:
         raise HTTPException(status_code=400, detail="optimize_iter must be greater than or equal to 0.")
+    if device not in {"cpu", "cuda"}:
+        raise HTTPException(status_code=400, detail='device must be either "cpu" or "cuda".')
+    if device == "cuda" and not torch.cuda.is_available():
+        raise HTTPException(
+            status_code=400,
+            detail="CUDA was selected, but PyTorch cannot access the GPU. Make sure the NVIDIA driver and CUDA-compatible PyTorch are installed.",
+        )
 
     job_id = uuid4().hex
     upload_job_dir = UPLOADS_DIR / job_id
@@ -107,7 +118,7 @@ def vectorize(
     with input_path.open("wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    result = _run_supersvg(upload_job_dir, output_job_dir, path_num, optimize_iter)
+    result = _run_supersvg(upload_job_dir, output_job_dir, path_num, optimize_iter, device)
     if result.returncode != 0:
         # Keep stdout/stderr in the response because SuperSVG errors are usually diagnosed from logs.
         raise HTTPException(
@@ -141,6 +152,7 @@ def vectorize(
         "download_url": f"/download/{job_id}/{svg_file.name}",
         "path_num": path_num,
         "optimize_iter": optimize_iter,
+        "device": device,
     }
 
 

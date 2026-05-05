@@ -14,9 +14,6 @@ function ProcessingOverlay() {
         <p className="mt-2 text-center text-sm leading-6 text-slate-600">
           SuperSVG is tracing paths and optimizing the generated SVG.
         </p>
-        <p className="mt-2 text-center text-sm leading-6 text-slate-500">
-          Vectorization is still running. This can take several minutes depending on the image and parameters.
-        </p>
         <ol className="mt-6 space-y-3">
           {steps.map((step, index) => (
             <li key={step} className="flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">

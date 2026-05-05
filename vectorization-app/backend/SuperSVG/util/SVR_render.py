@@ -17,7 +17,6 @@ import time
 from tqdm import tqdm
 
 pydiffvg.set_print_timing(False)
-pydiffvg.set_use_gpu(False)
 gamma = 1.0
 
 

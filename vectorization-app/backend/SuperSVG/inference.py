@@ -6,6 +6,9 @@ from pathlib import Path
 import cv2
 import numpy as np
 import pydiffvg
+
+pydiffvg.set_use_gpu(False)
+
 import torch
 import torch.backends.cudnn as cudnn
 import torchvision.transforms as transforms
@@ -17,8 +20,6 @@ from models.attn_painter_superpixel import AttnPainterSVG
 from models.refine_diff_module_multi_self_mlp import AttnPainterSVG as RefinePainterSVG
 from models.refine_model_muti_self_dtw0 import CombinedModel as RefineModel
 from util.utils import SignWithSigmoidGrad
-
-pydiffvg.set_use_gpu(False)
 
 MODEL_WIDTH = 128
 RENDER_WIDTH = 512
@@ -48,6 +49,46 @@ def get_args_parser():
     parser.add_argument("--refine_paths_per_segment", type=int, default=8, help="estimated refine paths per superpixel")
     parser.add_argument("--refine_batch_size", type=int, default=PREDICT_BATCH_SIZE, help="batch size for refine")
     return parser
+
+
+def assert_pydiffvg_cuda_available() -> None:
+    try:
+        circle = pydiffvg.Circle(radius=torch.tensor(1.0), center=torch.tensor([1.0, 1.0]))
+        shapes = [circle]
+        groups = [
+            pydiffvg.ShapeGroup(
+                shape_ids=torch.LongTensor([0]),
+                fill_color=torch.tensor([1.0, 0.0, 0.0, 1.0]),
+            )
+        ]
+        scene_args = pydiffvg.RenderFunction.serialize_scene(2, 2, shapes, groups)
+        render = pydiffvg.RenderFunction.apply
+        with torch.no_grad():
+            render(2, 2, 1, 1, 0, None, *scene_args)
+    except RuntimeError as exc:
+        if "diffvg not compiled with GPU" in str(exc):
+            raise RuntimeError(
+                "CUDA was selected, but DiffVG/pydiffvg was not compiled with GPU support. "
+                "Rebuild DiffVG with CUDA support or use --device cpu."
+            ) from exc
+        raise RuntimeError(f"CUDA was selected, but pydiffvg failed its GPU smoke test: {exc}") from exc
+
+
+def configure_render_device(device: torch.device) -> None:
+    if device.type == "cuda":
+        pydiffvg.set_device(device)
+        pydiffvg.set_use_gpu(True)
+        assert_pydiffvg_cuda_available()
+        return
+
+    pydiffvg.set_device(torch.device("cpu"))
+    pydiffvg.set_use_gpu(False)
+
+
+def set_internal_device_attrs(model: torch.nn.Module, device: torch.device) -> None:
+    for module in model.modules():
+        if hasattr(module, "device"):
+            module.device = device
 
 
 def collect_input_files(input_path):
@@ -388,10 +429,17 @@ def main(args):
     print(f"job dir: {Path(__file__).resolve().parent}")
     print("{}".format(args).replace(", ", ",\n"))
 
+    if args.device not in {"cpu", "cuda"}:
+        raise RuntimeError('device must be either "cpu" or "cuda".')
+
     requested_device = torch.device(args.device)
     if requested_device.type == "cuda" and not torch.cuda.is_available():
-        raise RuntimeError("CUDA is not available. Use --device cpu or run on a CUDA machine.")
+        raise RuntimeError(
+            "CUDA was selected, but PyTorch cannot access the GPU. "
+            "Make sure the NVIDIA driver and CUDA-compatible PyTorch are installed."
+        )
     device = requested_device
+    configure_render_device(device)
 
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
@@ -405,10 +453,12 @@ def main(args):
     coarse_model = AttnPainterSVG(stroke_num=128, path_num=4, width=MODEL_WIDTH, control_num=False, num_loss=True)
     coarse_model.load_state_dict(torch.load(str(ckpt_path), map_location=device))
     coarse_model.to(device)
+    set_internal_device_attrs(coarse_model, device)
     coarse_model.eval()
 
     refine_model = build_refine_model(width=REFINE_WIDTH, device=device)
     maybe_load_checkpoint(refine_model, refine_ckpt_path, device)
+    set_internal_device_attrs(refine_model, device)
 
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
