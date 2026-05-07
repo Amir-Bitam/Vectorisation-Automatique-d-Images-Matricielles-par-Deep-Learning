@@ -87,6 +87,57 @@
       \field{title}{Digital Image Processing}
       \field{year}{2018}
     \endentry
+    \entry{hu2024supersvg}{inproceedings}{}{}
+      \name{author}{6}{}{%
+        {{hash=469071746c4094415dc090ce9892a6dd}{%
+           family={Hu},
+           familyi={H\bibinitperiod},
+           given={Teng},
+           giveni={T\bibinitperiod}}}%
+        {{hash=700f97d056ba2c6811dffa3f5eba1694}{%
+           family={Yi},
+           familyi={Y\bibinitperiod},
+           given={Ran},
+           giveni={R\bibinitperiod}}}%
+        {{hash=57bee45a38fe93a7d12702a57303373d}{%
+           family={Qian},
+           familyi={Q\bibinitperiod},
+           given={Baihong},
+           giveni={B\bibinitperiod}}}%
+        {{hash=b300d750aea42b3d901279c03a33a632}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Jiangning},
+           giveni={J\bibinitperiod}}}%
+        {{hash=318256184a8d62de8947fc90a4366c3a}{%
+           family={Rosin},
+           familyi={R\bibinitperiod},
+           given={Paul\bibnamedelima L.},
+           giveni={P\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=4bb63a56d1c146994bcd32b61ecddbf9}{%
+           family={Lai},
+           familyi={L\bibinitperiod},
+           given={Yu-Kun},
+           giveni={Y\bibinithyphendelim K\bibinitperiod}}}%
+      }
+      \strng{namehash}{d19fefa0a3e972c65b581173f6db6098}
+      \strng{fullhash}{51928ef269a48593bc720779b5013dae}
+      \strng{fullhashraw}{51928ef269a48593bc720779b5013dae}
+      \strng{bibnamehash}{d19fefa0a3e972c65b581173f6db6098}
+      \strng{authorbibnamehash}{d19fefa0a3e972c65b581173f6db6098}
+      \strng{authornamehash}{d19fefa0a3e972c65b581173f6db6098}
+      \strng{authorfullhash}{51928ef269a48593bc720779b5013dae}
+      \strng{authorfullhashraw}{51928ef269a48593bc720779b5013dae}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}
+      \field{title}{SuperSVG: Superpixel-based Scalable Vector Graphics Synthesis}
+      \field{year}{2024}
+      \field{pages}{24892\bibrangedash 24902}
+      \range{pages}{11}
+    \endentry
     \entry{foley1996computer}{book}{}{}
       \name{author}{4}{}{%
         {{hash=61151e3691774bd7a6ecf72e3c15d034}{%
@@ -121,8 +172,8 @@
       \strng{authornamehash}{cf4d80734882b19e122eecb03a83971a}
       \strng{authorfullhash}{ce216e376c7dd8cdc3db86284e9cd8af}
       \strng{authorfullhashraw}{ce216e376c7dd8cdc3db86284e9cd8af}
-      \field{sortinit}{3}
-      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{2nd}
@@ -148,8 +199,8 @@
       \strng{authornamehash}{446a1ae6601a5c59360c7d591c3992da}
       \strng{authorfullhash}{446a1ae6601a5c59360c7d591c3992da}
       \strng{authorfullhashraw}{446a1ae6601a5c59360c7d591c3992da}
-      \field{sortinit}{4}
-      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Scalable Vector Graphics ({SVG}) 1.1 (Second Edition)}
@@ -181,8 +232,8 @@
       \strng{authornamehash}{e54e6c9ce5d233c7046a00f7b3faa6c0}
       \strng{authorfullhash}{e54e6c9ce5d233c7046a00f7b3faa6c0}
       \strng{authorfullhashraw}{e54e6c9ce5d233c7046a00f7b3faa6c0}
-      \field{sortinit}{5}
-      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{3rd}
@@ -209,8 +260,8 @@
       \strng{authornamehash}{d331eeb7f00e650950ccadcb9c47efec}
       \strng{authorfullhash}{d331eeb7f00e650950ccadcb9c47efec}
       \strng{authorfullhashraw}{d331eeb7f00e650950ccadcb9c47efec}
-      \field{sortinit}{6}
-      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Machine Learning}
@@ -237,8 +288,8 @@
       \strng{authornamehash}{9dfd0135a5e80aa6d81cea2c10fb7f73}
       \strng{authorfullhash}{9dfd0135a5e80aa6d81cea2c10fb7f73}
       \strng{authorfullhashraw}{9dfd0135a5e80aa6d81cea2c10fb7f73}
-      \field{sortinit}{7}
-      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Pattern Recognition and Machine Learning}
@@ -336,8 +387,8 @@
       \strng{authornamehash}{ee273ab30cfb889666f8c4d806eb9ce7}
       \strng{authorfullhash}{f82970bbd2bdd7a002d2af62b743d5cc}
       \strng{authorfullhashraw}{f82970bbd2bdd7a002d2af62b743d5cc}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Advances in Neural Information Processing Systems}
@@ -429,57 +480,6 @@
       \verb{url}
       \verb https://arxiv.org/abs/2010.11929
       \endverb
-    \endentry
-    \entry{hu2024supersvg}{inproceedings}{}{}
-      \name{author}{6}{}{%
-        {{hash=469071746c4094415dc090ce9892a6dd}{%
-           family={Hu},
-           familyi={H\bibinitperiod},
-           given={Teng},
-           giveni={T\bibinitperiod}}}%
-        {{hash=700f97d056ba2c6811dffa3f5eba1694}{%
-           family={Yi},
-           familyi={Y\bibinitperiod},
-           given={Ran},
-           giveni={R\bibinitperiod}}}%
-        {{hash=57bee45a38fe93a7d12702a57303373d}{%
-           family={Qian},
-           familyi={Q\bibinitperiod},
-           given={Baihong},
-           giveni={B\bibinitperiod}}}%
-        {{hash=b300d750aea42b3d901279c03a33a632}{%
-           family={Zhang},
-           familyi={Z\bibinitperiod},
-           given={Jiangning},
-           giveni={J\bibinitperiod}}}%
-        {{hash=318256184a8d62de8947fc90a4366c3a}{%
-           family={Rosin},
-           familyi={R\bibinitperiod},
-           given={Paul\bibnamedelima L.},
-           giveni={P\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
-        {{hash=4bb63a56d1c146994bcd32b61ecddbf9}{%
-           family={Lai},
-           familyi={L\bibinitperiod},
-           given={Yu-Kun},
-           giveni={Y\bibinithyphendelim K\bibinitperiod}}}%
-      }
-      \strng{namehash}{d19fefa0a3e972c65b581173f6db6098}
-      \strng{fullhash}{51928ef269a48593bc720779b5013dae}
-      \strng{fullhashraw}{51928ef269a48593bc720779b5013dae}
-      \strng{bibnamehash}{d19fefa0a3e972c65b581173f6db6098}
-      \strng{authorbibnamehash}{d19fefa0a3e972c65b581173f6db6098}
-      \strng{authornamehash}{d19fefa0a3e972c65b581173f6db6098}
-      \strng{authorfullhash}{51928ef269a48593bc720779b5013dae}
-      \strng{authorfullhashraw}{51928ef269a48593bc720779b5013dae}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}
-      \field{title}{SuperSVG: Superpixel-based Scalable Vector Graphics Synthesis}
-      \field{year}{2024}
-      \field{pages}{24892\bibrangedash 24902}
-      \range{pages}{11}
     \endentry
     \entry{li2020diffvg}{article}{}{}
       \name{author}{4}{}{%
@@ -645,6 +645,101 @@
       \range{pages}{10}
       \verb{doi}
       \verb 10.1109/CVPR52688.2022.01583
+      \endverb
+    \endentry
+    \entry{wang2004ssim}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=f244e8ae5eff7776cf2b4b5b84ad8c4a}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Zhou},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=d9c2ab9a8cbcab08292923a454c88ce7}{%
+           family={Bovik},
+           familyi={B\bibinitperiod},
+           given={Alan\bibnamedelima C.},
+           giveni={A\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=b21953b57a16342d57782f7a32ca10ea}{%
+           family={Sheikh},
+           familyi={S\bibinitperiod},
+           given={Hamid\bibnamedelima R.},
+           giveni={H\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=027ac5801d4cec598c393e1f9875c60b}{%
+           family={Simoncelli},
+           familyi={S\bibinitperiod},
+           given={Eero\bibnamedelima P.},
+           giveni={E\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \strng{namehash}{ec7f3703fbd419b313e0a329e6241059}
+      \strng{fullhash}{678422238c76e65638062cadc184ea94}
+      \strng{fullhashraw}{678422238c76e65638062cadc184ea94}
+      \strng{bibnamehash}{ec7f3703fbd419b313e0a329e6241059}
+      \strng{authorbibnamehash}{ec7f3703fbd419b313e0a329e6241059}
+      \strng{authornamehash}{ec7f3703fbd419b313e0a329e6241059}
+      \strng{authorfullhash}{678422238c76e65638062cadc184ea94}
+      \strng{authorfullhashraw}{678422238c76e65638062cadc184ea94}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Image Processing}
+      \field{number}{4}
+      \field{title}{Image Quality Assessment: From Error Visibility to Structural Similarity}
+      \field{volume}{13}
+      \field{year}{2004}
+      \field{pages}{600\bibrangedash 612}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.1109/TIP.2003.819861
+      \endverb
+    \endentry
+    \entry{zhang2018lpips}{inproceedings}{}{}
+      \name{author}{5}{}{%
+        {{hash=0c65190dcbd461dee172354f7938ae43}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod}}}%
+        {{hash=cae9f806bc99a5f19fadea538fc2db04}{%
+           family={Isola},
+           familyi={I\bibinitperiod},
+           given={Phillip},
+           giveni={P\bibinitperiod}}}%
+        {{hash=5a663b27298722834a8cf09bb93d8c94}{%
+           family={Efros},
+           familyi={E\bibinitperiod},
+           given={Alexei\bibnamedelima A.},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=739ef881fb9e0c2c8d7110c90325d960}{%
+           family={Shechtman},
+           familyi={S\bibinitperiod},
+           given={Eli},
+           giveni={E\bibinitperiod}}}%
+        {{hash=4954ab8be479c4a3f1496ddfbc21a605}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Oliver},
+           giveni={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{a186c318a8836d77467280ce6646a302}
+      \strng{fullhash}{b4812124f82ca96d3c1cb10ee3db7804}
+      \strng{fullhashraw}{b4812124f82ca96d3c1cb10ee3db7804}
+      \strng{bibnamehash}{a186c318a8836d77467280ce6646a302}
+      \strng{authorbibnamehash}{a186c318a8836d77467280ce6646a302}
+      \strng{authornamehash}{a186c318a8836d77467280ce6646a302}
+      \strng{authorfullhash}{b4812124f82ca96d3c1cb10ee3db7804}
+      \strng{authorfullhashraw}{b4812124f82ca96d3c1cb10ee3db7804}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition}
+      \field{title}{The Unreasonable Effectiveness of Deep Features as a Perceptual Metric}
+      \field{year}{2018}
+      \field{pages}{586\bibrangedash 595}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1109/CVPR.2018.00068
       \endverb
     \endentry
   \enddatalist

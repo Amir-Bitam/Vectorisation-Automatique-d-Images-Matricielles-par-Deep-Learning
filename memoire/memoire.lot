@@ -2,7 +2,7 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {3.1}{\ignorespaces Spécifications de la machine Kaggle}}{15}{table.caption.12}%
-\contentsline {table}{\numberline {3.2}{\ignorespaces Valeurs du PSNR en fonction du nombre de générations}}{16}{table.caption.13}%
-\contentsline {table}{\numberline {3.3}{\ignorespaces Résultats du downsampling (Set5) — PSNR / SSIM}}{16}{table.caption.14}%
-\contentsline {table}{\numberline {3.4}{\ignorespaces Comparaison quantitative sur Set5 (PSNR en dB)}}{17}{table.caption.15}%
+\contentsline {table}{\numberline {3.1}{\ignorespaces Spécifications de la machine Kaggle}}{17}{table.caption.12}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Valeurs du PSNR en fonction du nombre de générations}}{18}{table.caption.13}%
+\contentsline {table}{\numberline {3.3}{\ignorespaces Résultats du downsampling (Set5) — PSNR / SSIM}}{18}{table.caption.14}%
+\contentsline {table}{\numberline {3.4}{\ignorespaces Comparaison quantitative sur Set5 (PSNR en dB)}}{19}{table.caption.15}%

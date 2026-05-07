@@ -11,81 +11,81 @@
 \contentsline {subsection}{\numberline {1.2.1}Images matricielles}{3}{subsection.1.2.1}%
 \contentsline {subsubsection}{\numberline {1.2.1.1}Pixels}{4}{subsubsection.1.2.1.1}%
 \contentsline {subsection}{\numberline {1.2.2}Images vectorielles}{4}{subsection.1.2.2}%
-\contentsline {subsubsection}{\numberline {1.2.2.1}Courbes de Bézier}{4}{subsubsection.1.2.2.1}%
-\contentsline {subsubsection}{\numberline {1.2.2.2}Format SVG}{4}{subsubsection.1.2.2.2}%
+\contentsline {subsubsection}{\numberline {1.2.2.1}Courbes de Bézier}{5}{subsubsection.1.2.2.1}%
+\contentsline {subsubsection}{\numberline {1.2.2.2}Format SVG}{5}{subsubsection.1.2.2.2}%
 \contentsline {section}{\numberline {1.3}Apprentissage automatique et apprentissage profond}{5}{section.1.3}%
 \contentsline {subsection}{\numberline {1.3.1}Apprentissage automatique}{5}{subsection.1.3.1}%
-\contentsline {subsubsection}{\numberline {1.3.1.1}Apprentissage supervisé}{5}{subsubsection.1.3.1.1}%
+\contentsline {subsubsection}{\numberline {1.3.1.1}Apprentissage supervisé}{6}{subsubsection.1.3.1.1}%
 \contentsline {subsubsection}{\numberline {1.3.1.2}Apprentissage non supervisé}{6}{subsubsection.1.3.1.2}%
 \contentsline {subsubsection}{\numberline {1.3.1.3}Apprentissage auto-supervisé}{6}{subsubsection.1.3.1.3}%
-\contentsline {subsection}{\numberline {1.3.2}Apprentissage profond}{6}{subsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.3.2}Apprentissage profond}{7}{subsection.1.3.2}%
 \contentsline {subsubsection}{\numberline {1.3.2.1}Réseaux de neurones}{7}{subsubsection.1.3.2.1}%
 \contentsline {subsubsection}{\numberline {1.3.2.2}Réseaux convolutionnels}{7}{subsubsection.1.3.2.2}%
-\contentsline {subsubsection}{\numberline {1.3.2.3}Transformers}{7}{subsubsection.1.3.2.3}%
-\contentsline {subsubsection}{\numberline {1.3.2.4}Vision Transformers}{7}{subsubsection.1.3.2.4}%
+\contentsline {subsubsection}{\numberline {1.3.2.3}Transformers}{8}{subsubsection.1.3.2.3}%
+\contentsline {subsubsection}{\numberline {1.3.2.4}Vision Transformers}{8}{subsubsection.1.3.2.4}%
 \contentsline {section}{\numberline {1.4}Mécanismes d'attention}{8}{section.1.4}%
-\contentsline {subsection}{\numberline {1.4.1}Attention}{8}{subsection.1.4.1}%
+\contentsline {subsection}{\numberline {1.4.1}Attention}{9}{subsection.1.4.1}%
 \contentsline {subsection}{\numberline {1.4.2}Self-attention}{9}{subsection.1.4.2}%
 \contentsline {subsection}{\numberline {1.4.3}Cross-attention}{9}{subsection.1.4.3}%
-\contentsline {section}{\numberline {1.5}Concepts utilisés dans la vectorisation par apprentissage profond}{9}{section.1.5}%
+\contentsline {section}{\numberline {1.5}Concepts utilisés dans la vectorisation par apprentissage profond}{10}{section.1.5}%
 \contentsline {subsection}{\numberline {1.5.1}Superpixels}{10}{subsection.1.5.1}%
-\contentsline {subsection}{\numberline {1.5.2}Rendu différentiable}{10}{subsection.1.5.2}%
+\contentsline {subsection}{\numberline {1.5.2}Rendu différentiable}{11}{subsection.1.5.2}%
 \contentsline {subsection}{\numberline {1.5.3}Fonctions de perte}{11}{subsection.1.5.3}%
 \contentsline {subsection}{\numberline {1.5.4}Apprentissage coarse-to-fine}{11}{subsection.1.5.4}%
-\contentsline {section}{\numberline {1.6}Évaluation des résultats}{11}{section.1.6}%
+\contentsline {section}{\numberline {1.6}Évaluation des résultats}{12}{section.1.6}%
 \contentsline {subsection}{\numberline {1.6.1}MSE}{12}{subsection.1.6.1}%
 \contentsline {subsection}{\numberline {1.6.2}PSNR}{13}{subsection.1.6.2}%
 \contentsline {subsection}{\numberline {1.6.3}SSIM}{13}{subsection.1.6.3}%
-\contentsline {subsection}{\numberline {1.6.4}LPIPS}{13}{subsection.1.6.4}%
-\contentsline {subsection}{\numberline {1.6.5}Temps d'inférence}{13}{subsection.1.6.5}%
-\contentsline {section}{\numberline {1.7}Travaux connexes}{13}{section.1.7}%
-\contentsline {subsection}{\numberline {1.7.1}Approches algorithmiques}{13}{subsection.1.7.1}%
-\contentsline {subsubsection}{\numberline {1.7.1.1}Potrace}{13}{subsubsection.1.7.1.1}%
-\contentsline {subsection}{\numberline {1.7.2}Approches basées sur l'optimisation}{13}{subsection.1.7.2}%
-\contentsline {subsubsection}{\numberline {1.7.2.1}DiffVG}{13}{subsubsection.1.7.2.1}%
-\contentsline {subsubsection}{\numberline {1.7.2.2}LIVE}{13}{subsubsection.1.7.2.2}%
-\contentsline {subsection}{\numberline {1.7.3}Approches basées sur l'apprentissage profond}{13}{subsection.1.7.3}%
-\contentsline {subsubsection}{\numberline {1.7.3.1}Im2Vec}{13}{subsubsection.1.7.3.1}%
-\contentsline {subsubsection}{\numberline {1.7.3.2}SuperSVG}{13}{subsubsection.1.7.3.2}%
-\contentsline {section}{\numberline {1.8}Synthèse comparative des approches}{13}{section.1.8}%
-\contentsline {section}{\numberline {1.9}Problématique}{13}{section.1.9}%
-\contentsline {section}{\numberline {1.10}Conclusion}{13}{section.1.10}%
-\contentsline {chapter}{\numberline {2}Approche Proposée}{14}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Introduction}{14}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Dataset et prétraitement}{14}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}Le prétraitement des données}{14}{subsection.2.2.1}%
-\contentsline {subsubsection}{\numberline {2.2.1.1}Former les paires d'images}{14}{subsubsection.2.2.1.1}%
-\contentsline {subsubsection}{\numberline {2.2.1.2}Augmentation de données}{14}{subsubsection.2.2.1.2}%
-\contentsline {section}{\numberline {2.3}Méthode proposée}{14}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Définir les hyperparamètres évalués par les métaheuristiques}{14}{subsection.2.3.1}%
-\contentsline {subsubsection}{\numberline {2.3.1.1}L'Algorithme Génétique}{14}{subsubsection.2.3.1.1}%
-\contentsline {subsubsection}{\numberline {2.3.1.2}Les paramètres à optimiser}{14}{subsubsection.2.3.1.2}%
-\contentsline {subsubsection}{\numberline {2.3.1.3}Évaluation d'une solution}{14}{subsubsection.2.3.1.3}%
-\contentsline {subsection}{\numberline {2.3.2}Architecture}{14}{subsection.2.3.2}%
-\contentsline {subsubsection}{\numberline {2.3.2.1}Sur-échantillonnage (Upsampling)}{14}{subsubsection.2.3.2.1}%
-\contentsline {subsubsection}{\numberline {2.3.2.2}Sous-échantillonnage (Downsampling)}{14}{subsubsection.2.3.2.2}%
-\contentsline {section}{\numberline {2.4}Conclusion}{14}{section.2.4}%
-\contentsline {chapter}{\numberline {3}Expérimentations et Résultats}{15}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Introduction}{15}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Environnement de développement}{15}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Hardware}{15}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}Software}{15}{subsection.3.2.2}%
-\contentsline {section}{\numberline {3.3}Dataset utilisé}{15}{section.3.3}%
-\contentsline {section}{\numberline {3.4}Prétraitement}{15}{section.3.4}%
-\contentsline {section}{\numberline {3.5}Évaluation}{15}{section.3.5}%
-\contentsline {subsection}{\numberline {3.5.1}Évaluation quantitative}{15}{subsection.3.5.1}%
-\contentsline {subsection}{\numberline {3.5.2}Fonction de perte}{15}{subsection.3.5.2}%
-\contentsline {section}{\numberline {3.6}Paramétrage de l'Algorithme Génétique}{15}{section.3.6}%
-\contentsline {section}{\numberline {3.7}Sous-échantillonnage}{16}{section.3.7}%
-\contentsline {subsection}{\numberline {3.7.1}Hyperparamètres avec la métaheuristique (GA)}{16}{subsection.3.7.1}%
-\contentsline {subsection}{\numberline {3.7.2}Résultats}{16}{subsection.3.7.2}%
-\contentsline {subsubsection}{\numberline {3.7.2.1}Résultats quantitatifs}{16}{subsubsection.3.7.2.1}%
-\contentsline {subsubsection}{\numberline {3.7.2.2}Résultats qualitatifs}{16}{subsubsection.3.7.2.2}%
-\contentsline {section}{\numberline {3.8}Sur-échantillonnage}{16}{section.3.8}%
-\contentsline {subsection}{\numberline {3.8.1}Hyperparamètres}{16}{subsection.3.8.1}%
-\contentsline {subsection}{\numberline {3.8.2}Résultats}{17}{subsection.3.8.2}%
-\contentsline {subsubsection}{\numberline {3.8.2.1}Résultats quantitatifs}{17}{subsubsection.3.8.2.1}%
-\contentsline {subsubsection}{\numberline {3.8.2.2}Résultats qualitatifs}{17}{subsubsection.3.8.2.2}%
-\contentsline {section}{\numberline {3.9}Conclusion}{17}{section.3.9}%
-\contentsline {chapter}{Conclusion Générale}{18}{chapter*.16}%
-\contentsline {chapter}{Bibliographie}{19}{chapter*.17}%
+\contentsline {subsection}{\numberline {1.6.4}LPIPS}{14}{subsection.1.6.4}%
+\contentsline {subsection}{\numberline {1.6.5}Temps d'inférence}{14}{subsection.1.6.5}%
+\contentsline {section}{\numberline {1.7}Travaux connexes}{15}{section.1.7}%
+\contentsline {subsection}{\numberline {1.7.1}Approches algorithmiques}{15}{subsection.1.7.1}%
+\contentsline {subsubsection}{\numberline {1.7.1.1}Potrace}{15}{subsubsection.1.7.1.1}%
+\contentsline {subsection}{\numberline {1.7.2}Approches basées sur l'optimisation}{15}{subsection.1.7.2}%
+\contentsline {subsubsection}{\numberline {1.7.2.1}DiffVG}{15}{subsubsection.1.7.2.1}%
+\contentsline {subsubsection}{\numberline {1.7.2.2}LIVE}{15}{subsubsection.1.7.2.2}%
+\contentsline {subsection}{\numberline {1.7.3}Approches basées sur l'apprentissage profond}{15}{subsection.1.7.3}%
+\contentsline {subsubsection}{\numberline {1.7.3.1}Im2Vec}{15}{subsubsection.1.7.3.1}%
+\contentsline {subsubsection}{\numberline {1.7.3.2}SuperSVG}{15}{subsubsection.1.7.3.2}%
+\contentsline {section}{\numberline {1.8}Synthèse comparative des approches}{15}{section.1.8}%
+\contentsline {section}{\numberline {1.9}Problématique}{15}{section.1.9}%
+\contentsline {section}{\numberline {1.10}Conclusion}{15}{section.1.10}%
+\contentsline {chapter}{\numberline {2}Approche Proposée}{16}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Introduction}{16}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Dataset et prétraitement}{16}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Le prétraitement des données}{16}{subsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.1.1}Former les paires d'images}{16}{subsubsection.2.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.2.1.2}Augmentation de données}{16}{subsubsection.2.2.1.2}%
+\contentsline {section}{\numberline {2.3}Méthode proposée}{16}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Définir les hyperparamètres évalués par les métaheuristiques}{16}{subsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.1.1}L'Algorithme Génétique}{16}{subsubsection.2.3.1.1}%
+\contentsline {subsubsection}{\numberline {2.3.1.2}Les paramètres à optimiser}{16}{subsubsection.2.3.1.2}%
+\contentsline {subsubsection}{\numberline {2.3.1.3}Évaluation d'une solution}{16}{subsubsection.2.3.1.3}%
+\contentsline {subsection}{\numberline {2.3.2}Architecture}{16}{subsection.2.3.2}%
+\contentsline {subsubsection}{\numberline {2.3.2.1}Sur-échantillonnage (Upsampling)}{16}{subsubsection.2.3.2.1}%
+\contentsline {subsubsection}{\numberline {2.3.2.2}Sous-échantillonnage (Downsampling)}{16}{subsubsection.2.3.2.2}%
+\contentsline {section}{\numberline {2.4}Conclusion}{16}{section.2.4}%
+\contentsline {chapter}{\numberline {3}Expérimentations et Résultats}{17}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Introduction}{17}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Environnement de développement}{17}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Hardware}{17}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Software}{17}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3.3}Dataset utilisé}{17}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Prétraitement}{17}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Évaluation}{17}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Évaluation quantitative}{17}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Fonction de perte}{17}{subsection.3.5.2}%
+\contentsline {section}{\numberline {3.6}Paramétrage de l'Algorithme Génétique}{17}{section.3.6}%
+\contentsline {section}{\numberline {3.7}Sous-échantillonnage}{18}{section.3.7}%
+\contentsline {subsection}{\numberline {3.7.1}Hyperparamètres avec la métaheuristique (GA)}{18}{subsection.3.7.1}%
+\contentsline {subsection}{\numberline {3.7.2}Résultats}{18}{subsection.3.7.2}%
+\contentsline {subsubsection}{\numberline {3.7.2.1}Résultats quantitatifs}{18}{subsubsection.3.7.2.1}%
+\contentsline {subsubsection}{\numberline {3.7.2.2}Résultats qualitatifs}{18}{subsubsection.3.7.2.2}%
+\contentsline {section}{\numberline {3.8}Sur-échantillonnage}{18}{section.3.8}%
+\contentsline {subsection}{\numberline {3.8.1}Hyperparamètres}{18}{subsection.3.8.1}%
+\contentsline {subsection}{\numberline {3.8.2}Résultats}{19}{subsection.3.8.2}%
+\contentsline {subsubsection}{\numberline {3.8.2.1}Résultats quantitatifs}{19}{subsubsection.3.8.2.1}%
+\contentsline {subsubsection}{\numberline {3.8.2.2}Résultats qualitatifs}{19}{subsubsection.3.8.2.2}%
+\contentsline {section}{\numberline {3.9}Conclusion}{19}{section.3.9}%
+\contentsline {chapter}{Conclusion Générale}{20}{chapter*.16}%
+\contentsline {chapter}{Bibliographie}{21}{chapter*.17}%
