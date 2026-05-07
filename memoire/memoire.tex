@@ -248,6 +248,9 @@ Genetic Algorithm, Metaheuristics, PSNR, SSIM.
   \acro{DRDN}{Deep Residual Dense Network}
   \acro{EDSAN}{Enhanced Dense Space Attention Network}
   \acro{PPI}{Pixels Per Inch}
+  \acro{ViT}{Vision Transformer}
+  \acro{UDF}{Unsigned Distance guided Focal loss}
+  
 \end{acronym}
 
 \newpage
@@ -321,101 +324,101 @@ Dans cette section nous tenterons de définir les termes et concepts lié à la 
     Les courbes de Bézier font partie des formes géométriques individuelles qui composent les images vectorielles et se distinguent par le faible nombre de données numériques nécessaires à la représentation de formes complexes
      
     \subsubsection{Format SVG}
-    %ici c'est bel et bien un article et non un site web qui est cit
+    %ici c'est bel et bien un article et non un site web qui est cité donc je ne citerai pas la date mdr allez vous faire foutre
 		SVG (Scalable Vector Graphics) est un format basé sur XML comportant des directives pour la définition de graphiques 2D\cite{w3c2011svg}. Stockées dans des fichiers textes rendant les SVG compressible et indexable, ces directives SVG supportent aussi bien les formes géométriques vectorielle que les images et le texte. Pour les raisons précédentes ce sera ce format qui sera préféré pour la sortie du modèle.
 		\begin{figure}[H]
         \centering
         \includegraphics[width=0.6\textwidth]{figure_svg.png}
         \caption{Exemple du contenu d'un fichier .svg}
     \end{figure}
-\section{Apprentissage automatique }
-
+\section{Apprentissage automatique et apprentissage profond}
 	\subsection{Apprentissage automatique}
-	%TODO
-		
-	 	\subsubsection*{Supervisé}
-	 	%TODO
+	L'apprentissage automatique est une discipline du domaine de l'intelligence artificielle, où contrairement à l'approche programmatique classique, la machine ne se voit pas présenté des instructions détaillé pour effectuer un ensemble de taches $T$ car les instructions nécessaires seraient trop complexes ou inefficaces\cite{geron2022hands}, cette dernière démarre plutôt d'un ensemble de données à partir duquel elle pourra améliorer sa performance $P$ en se basant sur ses expériences passées$E$, en d'autre termes, converger vers une solution optimale en minimisant les erreurs commise lors des itérations précédentes\cite{mitchell1997ml}. Le type d'ensemble de données justement, distingue l'apprentissage automatique supervisé (où les données sont étiquetées) et non supervisé (où l'on cherche des structures cachées). 
 	
-	 	\subsubsection{Non supervisé}
-	 	%TODO
-	 	
+	 	\subsubsection{Apprentissage supervisé}
+	 	%bon ici j'ai bien plagié mais who cares
+		L'apprentissage supervisé se caractérise par la présence des cibles ou réponses attendues $t$ pour chaque variable d'entrée de l'ensemble de données d'entrainement. On parle de classification lorsque la variable $t$ est discrète, et de régression lorsque celle-ci est continue \cite{bishop2006pattern}. Seulement cette approche est grandement limité par la qualité des données étiquetés et leur disponibilité la rendant difficile pour certain cas d'utilisation. 
+		
+	 	\subsubsection{Apprentissage non supervisé}
+	 	L'apprentissage non supervisé intervient lorsque l'ensemble de données d'entraînement ne contient pas de cibles ou d'étiquettes associées aux variables d'entrée. Contrairement à l'apprentissage supervisé, le modèle doit donc découvrir par lui-même les structures présentes dans les données. Ces structures peuvent prendre la forme de groupes d'exemples similaires, comme dans le clustering, d'une estimation de la distribution des données, ou encore d'une projection vers un espace de plus faible dimension afin de faciliter la visualisation et l'analyse \cite{bishop2006pattern}. Cette approche est particulièrement utile lorsque l'annotation manuelle des données est coûteuse ou difficile, car elle permet d'exploiter directement de grands ensembles de données non étiquetées \cite{geron2022hands}.
+		\subsubsection{Apprentissage auto-supervisé}	 	
+		L'apprentissage auto-supervisé est une approche dans laquelle le modèle apprend à partir de données non étiquetées, mais en générant automatiquement des signaux de supervision à partir des données elles-mêmes. Contrairement à l'apprentissage supervisé classique, il ne nécessite donc pas d'annotations humaines explicites. Par exemple, dans le cas des images, une partie de l'image peut être masquée et le modèle est entraîné à reconstruire la partie manquante ; l'image originale joue alors le rôle de cible d'apprentissage \cite{geron2022hands}. Cette stratégie est particulièrement intéressante en vision par ordinateur, car elle permet d'exploiter de grands ensembles d'images non annotées afin d'apprendre des représentations visuelles générales, qui peuvent ensuite être réutilisées ou adaptées à d'autres tâches comme la classification, la détection ou la segmentation \cite{jing2021selfsupervised}.
+		
 	\subsection{Apprentissage profond}
-	%TODO
-	
-		\subsubsection{Introduction aux réseaux de neurones}
-		%TODO
-		
-		\subsubsection{Réseaux de neurones multicouches}
-		%TODO
-		
-		\subsubsection{Réseaux de neurones multicouches}
-		%TODO
-				
-		\subsubsection{Transformeurs}
-		%TODO
-			 
-			\paragraph{Attention}
-			%TODO
-			\paragraph{Auto attention}
-			%TODO
-			\paragraph{Attention croisée}
-			%TODO
-			
-	\subsection{Fonction de perte}
-	%TODO
-		
-	\subsection{Fonction de coût}
-	%TODO
-		
-	\subsection{Fonction d'activation}
-	%TODO
+	L'apprentissage profond est une sous-branche de l'apprentissage automatique fondée principalement sur les réseaux de neurones profonds. Ces modèles sont constitués de plusieurs couches de neurones artificiels capables d'apprendre progressivement des représentations de plus en plus abstraites à partir des données. Cette approche s'est fortement développée grâce à l'augmentation de la puissance de calcul, à la disponibilité de grandes quantités de données et aux progrès réalisés dans l'entraînement des réseaux profonds \cite{geron2022hands}. Dans le domaine du traitement d'images, l'apprentissage profond est particulièrement important, notamment à travers les réseaux de neurones convolutionnels, capables de prendre directement des images en entrée et d'apprendre automatiquement les caractéristiques utiles pour des tâches complexes de classification, de reconnaissance ou de reconstruction \cite{gonzalez2018digital}.
+		\subsubsection{Réseaux de neurones}
+		Les réseaux de neurones artificiels sont des modèles d'apprentissage automatique inspirés, de manière simplifiée, du fonctionnement des neurones biologiques. Ils sont constitués d'unités de calcul appelées neurones artificiels, organisées en couches et reliées entre elles par des connexions pondérées. L'apprentissage consiste à ajuster ces poids à partir des données d'entraînement afin que le réseau puisse produire une sortie correcte pour une tâche donnée \cite{geron2022hands}. Dans le domaine du traitement d'images, ces modèles sont utilisés pour apprendre automatiquement des fonctions de décision à partir d'exemples, notamment dans les problèmes de classification, de reconnaissance de formes et de reconstruction \cite{gonzalez2018digital}.	
+		\subsubsection{Réseaux convolutionnels}
+		Les réseaux de neurones convolutionnels, ou CNN, sont une catégorie de réseaux de neurones profonds particulièrement adaptée au traitement des images. Contrairement aux réseaux entièrement connectés, ils exploitent directement la structure spatiale de l'image grâce à des opérations de convolution appliquées sur des régions locales appelées champs récepteurs. Ces convolutions utilisent des noyaux dont les poids sont appris durant l'entraînement afin de produire des cartes de caractéristiques capables de détecter des motifs visuels comme les contours, les formes ou certaines textures \cite{gonzalez2018digital}. Les couches de pooling sont ensuite utilisées pour réduire la dimension des cartes de caractéristiques, diminuer le coût de calcul et limiter le risque de surapprentissage, tout en conservant les informations les plus importantes \cite{geron2022hands}.	
+		\subsubsection{Transformers}
+		Les Transformers sont une architecture de réseaux de neurones introduite initialement pour le traitement des séquences, notamment en traduction automatique. Contrairement aux réseaux récurrents, ils ne traitent pas les éléments de la séquence de manière strictement séquentielle, mais s'appuient principalement sur des mécanismes d'attention, en particulier l'auto-attention, afin de modéliser les relations entre les différents éléments d'une entrée \cite{vaswani2017attention}. Cette architecture a ensuite été largement utilisée dans de nombreux domaines de l'apprentissage profond, notamment le traitement du langage naturel, la vision par ordinateur et les modèles multimodaux, grâce à sa capacité à apprendre des dépendances complexes et à être entraînée efficacement sur de grandes quantités de données \cite{geron2022hands}.				
+		\subsubsection{Vision Transformers}
+		Les Vision Transformers, ou ViT, sont une adaptation de l'architecture Transformer au traitement des images. Au lieu de s'appuyer principalement sur des convolutions comme les CNN, une image est divisée en petits blocs appelés patchs, par exemple de taille $16 \times 16$. Ces patchs sont ensuite transformés en vecteurs et traités comme une séquence d'éléments, de manière similaire aux tokens dans le traitement du langage naturel \cite{dosovitskiy2021image}. Grâce au mécanisme d'auto-attention, le modèle peut apprendre des relations globales entre différentes régions de l'image. Dans le contexte de la vectorisation d'images, cette approche peut être utilisée pour extraire des caractéristiques visuelles avant de prédire des paramètres vectoriels ; par exemple, SuperSVG emploie un encodeur ViT pour encoder les superpixels avant de générer les chemins SVG correspondants \cite{hu2024supersvg}.
 
+\section{Mécanismes d'attention}
+Les mécanismes d'attention constituent une composante importante des architectures modernes d'apprentissage profond, en particulier dans les modèles de type Transformer. Leur objectif est de permettre au modèle d'accorder une importance différente aux éléments d'une entrée selon leur pertinence pour la tâche à résoudre. Au lieu de traiter toutes les informations de manière uniforme, l'attention permet de pondérer certaines parties de l'entrée afin de mieux capturer les relations entre les éléments. Cette idée est particulièrement utile pour modéliser des dépendances à longue distance, que ce soit dans une séquence de mots ou dans une image découpée en régions ou en patchs \cite{vaswani2017attention}. Dans les Transformers, ces mécanismes remplacent les traitements séquentiels classiques et permettent un apprentissage plus parallélisable \cite{vaswani2017attention}.
+    \subsection{Attention}
+	Le mécanisme d'attention permet à un modèle de sélectionner dynamiquement les informations les plus pertinentes dans une entrée. Son fonctionnement peut être décrit à l'aide de trois éléments principaux : une requête, des clés et des valeurs. La requête représente l'information recherchée, les clés servent à mesurer la similarité avec cette requête, et les valeurs contiennent les informations à combiner. Le modèle calcule alors des scores de similarité entre la requête et les différentes clés, puis applique généralement une fonction softmax afin d'obtenir des poids d'attention. La sortie est ensuite obtenue comme une somme pondérée des valeurs, ce qui permet au modèle de se concentrer davantage sur les éléments les plus utiles \cite{vaswani2017attention}. De manière intuitive, l'attention peut être vue comme un mécanisme de récupération d'information différentiable, où le modèle apprend à retrouver les éléments importants d'une séquence ou d'une représentation en fonction du contexte \cite{geron2022hands}.
+    \subsection{Self-attention}
+    La self-attention, ou auto-attention, est un cas particulier du mécanisme d'attention dans lequel les requêtes, les clés et les valeurs proviennent de la même séquence. Elle permet donc à chaque élément d'une entrée de prendre en compte les autres éléments de cette même entrée afin de construire une représentation plus riche et contextualisée. Dans une phrase, par exemple, chaque mot peut être relié aux autres mots pour mieux comprendre son sens selon le contexte. Dans une image représentée sous forme de patchs, chaque patch peut de la même manière interagir avec les autres régions de l'image \cite{vaswani2017attention}. Cette capacité à modéliser les relations internes d'une séquence explique l'importance de la self-attention dans les architectures Transformer. Dans le cas de SuperSVG, un module de self-attention est utilisé après le module de cross-attention afin de traiter les caractéristiques intermédiaires et de les projeter vers l'espace des paramètres des chemins SVG \cite{hu2024supersvg}.
+    \subsection{Cross-attention}			 
+	La cross-attention, ou attention croisée, est une variante du mécanisme d'attention dans laquelle les requêtes ne proviennent pas de la même source que les clés et les valeurs. Contrairement à la self-attention, où un élément interagit avec les autres éléments de la même séquence, la cross-attention permet à une représentation de s'appuyer sur une autre représentation externe. Dans un Transformer encodeur-décodeur, par exemple, le décodeur produit les requêtes, tandis que les clés et les valeurs proviennent des représentations calculées par l'encodeur. Cela permet au décodeur de sélectionner les informations importantes de l'entrée lors de la génération de la sortie \cite{geron2022hands}. Dans le contexte de la vectorisation d'images, SuperSVG utilise un module de cross-attention pour calculer la corrélation entre les caractéristiques extraites d'un superpixel par un encodeur ViT et des requêtes apprenables associées aux chemins SVG. Ce mécanisme permet ainsi de produire des caractéristiques intermédiaires adaptées à la prédiction des paramètres vectoriels \cite{hu2024supersvg}.			
+
+\section{Concepts utilisés dans la vectorisation par apprentissage profond}
+La vectorisation d'images par apprentissage profond repose sur plusieurs concepts techniques permettant de passer d'une image matricielle, composée de pixels, à une représentation vectorielle décrite par des formes paramétriques. Contrairement aux méthodes classiques de traçage, les approches récentes cherchent à apprendre ou à optimiser automatiquement les paramètres des primitives vectorielles afin de reconstruire au mieux l'image d'entrée. Pour cela, elles utilisent notamment la décomposition de l'image en régions plus simples, le rendu différentiable pour relier les paramètres vectoriels à leur rendu matriciel, ainsi que des fonctions de perte permettant de mesurer l'écart entre l'image originale et l'image reconstruite. Certaines méthodes adoptent également une stratégie progressive de type \textit{coarse-to-fine}, dans laquelle la structure globale de l'image est d'abord reconstruite avant d'ajouter les détails fins \cite{li2020diffvg,hu2024supersvg}.
+    \subsection{Superpixels}
+	Les superpixels sont des régions obtenues en regroupant des pixels voisins présentant des caractéristiques similaires, notamment en termes de couleur et de position spatiale. Ils permettent de remplacer une représentation pixel par pixel par une représentation plus compacte, composée de régions visuellement cohérentes. Parmi les méthodes les plus connues, l'algorithme SLIC (\textit{Simple Linear Iterative Clustering}) adapte le principe du k-means afin de générer efficacement des superpixels. Cette méthode est appréciée pour sa simplicité, sa rapidité, sa faible consommation mémoire et sa capacité à produire des régions qui respectent bien les contours de l'image \cite{achanta2012slic}. Dans le cadre de la vectorisation d'images, les superpixels sont utiles car ils divisent une image complexe en sous-régions plus simples à traiter. SuperSVG exploite précisément cette idée en décomposant l'image d'entrée en superpixels contenant des pixels de couleurs et de textures similaires, puis en vectorisant ces régions de manière progressive \cite{hu2024supersvg}.
+    \subsection{Rendu différentiable}
+	Le rendu différentiable est une technique qui permet de relier une représentation vectorielle à son rendu matriciel tout en conservant la possibilité de calculer des gradients. Dans le contexte de la vectorisation d'images, les paramètres des primitives vectorielles, comme les positions des points de contrôle, les couleurs ou l'épaisseur des traits, sont d'abord rendus sous forme d'image raster. L'image obtenue est ensuite comparée à l'image cible à l'aide d'une fonction de perte, puis les gradients de cette perte sont rétropropagés vers les paramètres vectoriels afin de les optimiser \cite{li2020diffvg}. Cette approche permet donc d'utiliser des méthodes d'optimisation ou d'apprentissage profond pour ajuster automatiquement les formes vectorielles à partir d'une supervision dans le domaine des pixels. Elle est notamment utilisée dans des méthodes comme LIVE, qui optimise progressivement des chemins de Bézier dans un cadre de rendu entièrement différentiable afin de produire des SVG organisés en couches \cite{ma2022live}.
+    \subsection{Fonctions de perte}
+	Les fonctions de perte jouent un rôle central dans la vectorisation d'images par apprentissage profond, car elles permettent de mesurer l'écart entre l'image matricielle d'origine et l'image reconstruite à partir des primitives vectorielles. Dans les approches utilisant un rendu différentiable, les chemins SVG prédits ou optimisés sont d'abord rasterisés, puis comparés à l'image cible à l'aide d'une fonction de perte calculée dans l'espace des pixels. Une perte simple, comme la MSE, peut être utilisée pour minimiser la différence entre les deux images, mais elle ne suffit pas toujours à préserver correctement la structure, les contours ou la couleur des objets. Par exemple, LIVE montre qu'une optimisation fondée uniquement sur la MSE peut conduire à un effet de couleur moyenne, puis propose une perte UDF afin de donner plus d'importance aux pixels proches des contours, ainsi qu'une perte Xing pour limiter les auto-intersections des courbes \cite{ma2022live}. Dans SuperSVG, les auteurs combinent plusieurs pertes adaptées à la vectorisation par superpixels, notamment une perte de reconstruction normalisée, une perte de frontière pour empêcher les chemins de dépasser les limites du superpixel, et une perte Dynamic Path Warping permettant au modèle de raffinement d'hériter des connaissances du modèle grossier \cite{hu2024supersvg}.
+    \subsection{Apprentissage coarse-to-fine}
+	L'apprentissage \textit{coarse-to-fine} désigne une stratégie progressive dans laquelle le modèle commence par reconstruire les éléments globaux ou principaux d'une image, avant d'ajouter progressivement des détails plus fins. Dans le contexte de la vectorisation d'images, cette approche est particulièrement utile car une image complexe est difficile à convertir directement en une représentation SVG précise. En procédant par étapes, le modèle peut d'abord approximer la structure générale, puis améliorer localement la reconstruction. SuperSVG adopte cette logique à travers un cadre d'apprentissage en deux étapes : un modèle grossier prédit d'abord des chemins SVG pour reconstruire la structure principale du superpixel, puis un modèle de raffinement ajoute d'autres chemins afin d'enrichir les détails, en étant guidé par les chemins prédits à l'étape précédente \cite{hu2024supersvg}. Une idée similaire apparaît dans LIVE, où l'image est reconstruite progressivement en ajoutant et en optimisant de nouveaux chemins de Bézier dans une représentation en couches, ce qui permet d'obtenir un SVG plus compact et plus cohérent avec la structure visuelle de l'image \cite{ma2022live}.
+	
 \section{Évaluation des résultats}
-	
-	\subsection{Mean Squared Error (MSE)}
+	L'évaluation des résultats est une étape essentielle pour mesurer la qualité d'une méthode de vectorisation d'images. Dans ce contexte, l'image SVG générée est généralement rendue sous forme matricielle, puis comparée à l'image d'entrée afin d'estimer la fidélité de reconstruction. Plusieurs métriques complémentaires peuvent être utilisées, car une seule mesure ne suffit pas toujours à juger correctement la qualité visuelle d'un résultat. Les métriques comme la MSE et le PSNR évaluent principalement l'écart pixel par pixel entre l'image originale et l'image reconstruite, tandis que la SSIM cherche davantage à mesurer la similarité structurelle. De son côté, la LPIPS évalue une distance perceptuelle plus proche de la perception humaine. Enfin, le temps d'inférence permet d'évaluer l'efficacité pratique de la méthode, notamment lorsqu'il s'agit de traiter des images complexes ou un grand nombre d'images \cite{hu2024supersvg}.
+    \subsection{MSE}
+	La MSE (\textit{Mean Squared Error}), ou erreur quadratique moyenne, est une métrique utilisée pour mesurer l'écart pixel par pixel entre une image de référence et une image reconstruite. Dans le cas de la vectorisation, l'image SVG générée est d'abord rendue sous forme matricielle, puis comparée à l'image d'entrée. La MSE calcule la moyenne des carrés des différences entre les valeurs des pixels des deux images :
+\[
+MSE = \frac{1}{HWC}\sum_{i=1}^{H}\sum_{j=1}^{W}\sum_{c=1}^{C} \left(I_{i,j,c} - \hat{I}_{i,j,c}\right)^2
+\]
+où \(I\) représente l'image originale, \(\hat{I}\) l'image reconstruite, \(H\) et \(W\) les dimensions de l'image, et \(C\) le nombre de canaux. Une valeur faible de MSE indique donc une meilleure fidélité de reconstruction. Cette métrique est utilisée dans SuperSVG pour mesurer la distance pixel entre l'image d'entrée et le rendu obtenu à partir du SVG généré \cite{hu2024supersvg}. Cependant, la MSE reste une mesure purement numérique et ne reflète pas toujours parfaitement la qualité visuelle perçue. Dans LIVE, les auteurs montrent par exemple qu'une optimisation basée uniquement sur la MSE peut conduire à un effet de couleur moyenne, car tous les pixels sont pris en compte de la même manière, même ceux qui ne sont pas directement liés à la forme en cours d'optimisation \cite{ma2022live}.
+    \subsection{PSNR}
+	%TODO
+    \subsection{SSIM}
+	%TODO
+    \subsection{LPIPS}
+	%TODO
+    \subsection{Temps d'inférence}
 	%TODO
 	
-	\subsection{Peak Signal-to-Noise Ratio (PSNR)}
-	%TODO
-	
-	\subsection{Learned Perceptual Image Patch Similarity (LPIPS)}
-	%TODO
-	
-	\subsection{Structural Similarity index (SSIM)}
-	%TODO
-
 \section{Travaux connexes}
 %TODO
+    \subsection{Approches algorithmiques}
+	%TODO
+        \subsubsection{Potrace}
+		%TODO
 
-	\subsection{Approche algorithmique}
-	%TODO
-	
-		\subsubsection{(Potrace)}
-		%TODO
-		
-	\subsection{Approche d'optimisation}
-	%TODO
-	
-		\subsubsection{(DIFFVG)}
-		%TODO
-		
-		\subsubsection{(LIVE)}
-		%TODO
-		
-	\subsection{Approche d'apprentissage profond}
-	%TODO
-	
-		\subsubsection{IM2VEC}
-		%TODO
-		
-		\subsubsection{SuperSVG	}
-		%TODO
-		
+    \subsection{Approches basées sur l'optimisation}
+        \subsubsection{DiffVG}
+        %TODO
+        \subsubsection{LIVE}
+        %TODO
+
+    \subsection{Approches basées sur l'apprentissage profond}
+        \subsubsection{Im2Vec}
+        %TODO
+        \subsubsection{SuperSVG}
+        %TODO
+
+\section{Synthèse comparative des approches}
+%TODO
+
 \section{Problématique}
-% TODO
+%TODO
 
 \section{Conclusion}
-% TODO
+%TODO
 
 % ============================================================
 %   CHAPITRE 2 — APPROCHE PROPOSÉE

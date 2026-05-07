@@ -1,0 +1,15 @@
+[0] Config.pm:328> INFO - This is Biber 2.21
+[1] Config.pm:331> INFO - Logfile is 'memoire.blg'
+[302] biber-MSWIN64:342> INFO - === 
+[394] Biber.pm:421> INFO - Reading 'memoire.bcf'
+[747] Biber.pm:1002> INFO - Found 14 citekeys in bib section 0
+[795] Biber.pm:4487> INFO - Processing section 0
+[820] Biber.pm:4678> INFO - Looking for bibtex file 'references.bib' for section 0
+[935] bibtex.pm:1713> INFO - LaTeX decoding ...
+[1003] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
+[1420] UCollate.pm:68> INFO - Overriding locale 'fr-FR' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1421] UCollate.pm:68> INFO - Overriding locale 'fr-FR' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1421] Biber.pm:4307> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'fr-FR'
+[1421] Biber.pm:4313> INFO - No sort tailoring available for locale 'fr-FR'
+[1464] bbl.pm:676> INFO - Writing 'memoire.bbl' with encoding 'UTF-8'
+[1495] bbl.pm:779> INFO - Output to memoire.bbl
