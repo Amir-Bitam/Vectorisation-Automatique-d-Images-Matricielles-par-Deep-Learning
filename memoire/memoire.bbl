@@ -135,8 +135,8 @@
       \field{booktitle}{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}
       \field{title}{SuperSVG: Superpixel-based Scalable Vector Graphics Synthesis}
       \field{year}{2024}
-      \field{pages}{24892\bibrangedash 24902}
-      \range{pages}{11}
+      \field{pages}{24892\bibrangedash 24901}
+      \range{pages}{10}
     \endentry
     \entry{foley1996computer}{book}{}{}
       \name{author}{4}{}{%
@@ -741,6 +741,121 @@
       \verb{doi}
       \verb 10.1109/CVPR.2018.00068
       \endverb
+    \endentry
+    \entry{dziuba2023imagevectorization}{misc}{}{}
+      \name{author}{4}{}{%
+        {{hash=9d0d0b9456e8c9c9259760dcffc8cc53}{%
+           family={Dziuba},
+           familyi={D\bibinitperiod},
+           given={Maria},
+           giveni={M\bibinitperiod}}}%
+        {{hash=4a2e8e6853ea9a5ecdacc49649dba13e}{%
+           family={Jarsky},
+           familyi={J\bibinitperiod},
+           given={Ivan},
+           giveni={I\bibinitperiod}}}%
+        {{hash=8a3ebace213ebd01c04d55a586c38d3a}{%
+           family={Efimova},
+           familyi={E\bibinitperiod},
+           given={Valeria},
+           giveni={V\bibinitperiod}}}%
+        {{hash=b63ede0a6bcac951eee62e4ac4fd56e6}{%
+           family={Filchenkov},
+           familyi={F\bibinitperiod},
+           given={Andrey},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{52c876fab288879d7faa7a682cf1a720}
+      \strng{fullhash}{6e7319ae3dfb2ad2b6fb21578d4b357a}
+      \strng{fullhashraw}{6e7319ae3dfb2ad2b6fb21578d4b357a}
+      \strng{bibnamehash}{52c876fab288879d7faa7a682cf1a720}
+      \strng{authorbibnamehash}{52c876fab288879d7faa7a682cf1a720}
+      \strng{authornamehash}{52c876fab288879d7faa7a682cf1a720}
+      \strng{authorfullhash}{6e7319ae3dfb2ad2b6fb21578d4b357a}
+      \strng{authorfullhashraw}{6e7319ae3dfb2ad2b6fb21578d4b357a}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.CV}
+      \field{eprinttype}{arXiv}
+      \field{title}{Image Vectorization: A Review}
+      \field{year}{2023}
+      \verb{eprint}
+      \verb 2306.06441
+      \endverb
+    \endentry
+    \entry{selinger2003potrace}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=0d665e53102b24b5d852725ad829d803}{%
+           family={Selinger},
+           familyi={S\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{0d665e53102b24b5d852725ad829d803}
+      \strng{fullhash}{0d665e53102b24b5d852725ad829d803}
+      \strng{fullhashraw}{0d665e53102b24b5d852725ad829d803}
+      \strng{bibnamehash}{0d665e53102b24b5d852725ad829d803}
+      \strng{authorbibnamehash}{0d665e53102b24b5d852725ad829d803}
+      \strng{authornamehash}{0d665e53102b24b5d852725ad829d803}
+      \strng{authorfullhash}{0d665e53102b24b5d852725ad829d803}
+      \strng{authorfullhashraw}{0d665e53102b24b5d852725ad829d803}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Technical report}
+      \field{month}{9}
+      \field{title}{Potrace: A Polygon-Based Tracing Algorithm}
+      \field{year}{2003}
+      \verb{urlraw}
+      \verb https://potrace.sourceforge.net/potrace.pdf
+      \endverb
+      \verb{url}
+      \verb https://potrace.sourceforge.net/potrace.pdf
+      \endverb
+    \endentry
+    \entry{reddy2021im2vec}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=0c7e97b2f4ffc7ec502d39927ae105b6}{%
+           family={Reddy},
+           familyi={R\bibinitperiod},
+           given={Pradyumna},
+           giveni={P\bibinitperiod}}}%
+        {{hash=cf328c7709824ba16def9d391e8f4a0f}{%
+           family={Gharbi},
+           familyi={G\bibinitperiod},
+           given={Michaël},
+           giveni={M\bibinitperiod}}}%
+        {{hash=891348f95bef6f34922c0adc61b1c9bc}{%
+           family={Lukáč},
+           familyi={L\bibinitperiod},
+           given={Michal},
+           giveni={M\bibinitperiod}}}%
+        {{hash=5936c7e9f97b4d7d7fa6e85bb9daa65d}{%
+           family={Mitra},
+           familyi={M\bibinitperiod},
+           given={Niloy\bibnamedelima J.},
+           giveni={N\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{d061cd7a0580256e20e74c0145671220}
+      \strng{fullhash}{a9ef43563066bac732bffa4d074b2d39}
+      \strng{fullhashraw}{a9ef43563066bac732bffa4d074b2d39}
+      \strng{bibnamehash}{d061cd7a0580256e20e74c0145671220}
+      \strng{authorbibnamehash}{d061cd7a0580256e20e74c0145671220}
+      \strng{authornamehash}{d061cd7a0580256e20e74c0145671220}
+      \strng{authorfullhash}{a9ef43563066bac732bffa4d074b2d39}
+      \strng{authorfullhashraw}{a9ef43563066bac732bffa4d074b2d39}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}
+      \field{title}{Im2Vec: Synthesizing Vector Graphics without Vector Supervision}
+      \field{year}{2021}
+      \field{pages}{7342\bibrangedash 7351}
+      \range{pages}{10}
     \endentry
   \enddatalist
 \endrefsection

@@ -332,24 +332,15 @@ Dans cette section nous tenterons de définir les termes et concepts lié à la 
         \caption{Exemple du contenu d'un fichier .svg}
     \end{figure}
 \section{Apprentissage automatique et apprentissage profond}
-	\subsection{Apprentissage automatique}
-	L'apprentissage automatique est une discipline du domaine de l'intelligence artificielle, où contrairement à l'approche programmatique classique, la machine ne se voit pas présenté des instructions détaillé pour effectuer un ensemble de taches $T$ car les instructions nécessaires seraient trop complexes ou inefficaces\cite{geron2022hands}, cette dernière démarre plutôt d'un ensemble de données à partir duquel elle pourra améliorer sa performance $P$ en se basant sur ses expériences passées$E$, en d'autre termes, converger vers une solution optimale en minimisant les erreurs commise lors des itérations précédentes\cite{mitchell1997ml}. Le type d'ensemble de données justement, distingue l'apprentissage automatique supervisé (où les données sont étiquetées) et non supervisé (où l'on cherche des structures cachées). 
-	
-	 	\subsubsection{Apprentissage supervisé}
-	 	%bon ici j'ai bien plagié mais who cares
-		L'apprentissage supervisé se caractérise par la présence des cibles ou réponses attendues $t$ pour chaque variable d'entrée de l'ensemble de données d'entrainement. On parle de classification lorsque la variable $t$ est discrète, et de régression lorsque celle-ci est continue \cite{bishop2006pattern}. Seulement cette approche est grandement limité par la qualité des données étiquetés et leur disponibilité la rendant difficile pour certain cas d'utilisation. 
-		
-	 	\subsubsection{Apprentissage non supervisé}
-	 	L'apprentissage non supervisé intervient lorsque l'ensemble de données d'entraînement ne contient pas de cibles ou d'étiquettes associées aux variables d'entrée. Contrairement à l'apprentissage supervisé, le modèle doit donc découvrir par lui-même les structures présentes dans les données. Ces structures peuvent prendre la forme de groupes d'exemples similaires, comme dans le clustering, d'une estimation de la distribution des données, ou encore d'une projection vers un espace de plus faible dimension afin de faciliter la visualisation et l'analyse \cite{bishop2006pattern}. Cette approche est particulièrement utile lorsque l'annotation manuelle des données est coûteuse ou difficile, car elle permet d'exploiter directement de grands ensembles de données non étiquetées \cite{geron2022hands}.
-		\subsubsection{Apprentissage auto-supervisé}	 	
-		L'apprentissage auto-supervisé est une approche dans laquelle le modèle apprend à partir de données non étiquetées, mais en générant automatiquement des signaux de supervision à partir des données elles-mêmes. Contrairement à l'apprentissage supervisé classique, il ne nécessite donc pas d'annotations humaines explicites. Par exemple, dans le cas des images, une partie de l'image peut être masquée et le modèle est entraîné à reconstruire la partie manquante ; l'image originale joue alors le rôle de cible d'apprentissage \cite{geron2022hands}. Cette stratégie est particulièrement intéressante en vision par ordinateur, car elle permet d'exploiter de grands ensembles d'images non annotées afin d'apprendre des représentations visuelles générales, qui peuvent ensuite être réutilisées ou adaptées à d'autres tâches comme la classification, la détection ou la segmentation \cite{jing2021selfsupervised}.
-		
+	\subsection{Apprentissage automatique et apprentissage auto-supervisé}
+	L'apprentissage automatique est une discipline du domaine de l'intelligence artificielle dans laquelle, contrairement à l'approche programmatique classique, la machine ne reçoit pas une suite d'instructions détaillées pour résoudre une tâche donnée, car ces instructions seraient souvent trop complexes à définir explicitement \cite{geron2022hands}. Le principe consiste plutôt à apprendre à partir d'un ensemble de données, afin d'améliorer progressivement une performance $P$ sur une tâche $T$ à partir d'une expérience $E$, selon la définition proposée par Mitchell \cite{mitchell1997ml}. Selon la nature des données disponibles, on distingue généralement l'apprentissage supervisé, où chaque exemple d'entrée est associé à une cible ou étiquette attendue, et l'apprentissage non supervisé, où le modèle doit découvrir par lui-même des structures présentes dans les données, comme des groupes d'exemples similaires ou des représentations de plus faible dimension \cite{bishop2006pattern}. 
+
+Cependant, dans le contexte de la vision par ordinateur moderne, ces deux catégories ne suffisent pas toujours à expliquer l'intérêt des modèles pré-entraînés utilisés pour l'extraction de caractéristiques visuelles. En effet, l'annotation manuelle de grands ensembles d'images est une tâche coûteuse et parfois difficile à généraliser à tous les domaines. C'est dans ce cadre que l'apprentissage auto-supervisé prend une place importante. Cette approche exploite des données non étiquetées tout en générant automatiquement un signal de supervision à partir des données elles-mêmes, par exemple en demandant au modèle de prédire une partie manquante, une transformation appliquée ou une relation entre différentes vues d'une même image \cite{jing2021selfsupervised}. Elle permet ainsi d'apprendre des représentations visuelles générales à partir de grandes collections d'images sans annotations humaines explicites, représentations qui peuvent ensuite être transférées vers d'autres tâches de vision par ordinateur \cite{geron2022hands,jing2021selfsupervised}. Dans le cadre de la vectorisation d'images, cet aspect est particulièrement pertinent, car l'objectif n'est pas seulement de classer une image, mais d'en extraire une représentation riche de sa structure, de ses régions et de ses détails visuels, afin de faciliter ensuite la prédiction de primitives vectorielles.
+
 	\subsection{Apprentissage profond}
-	L'apprentissage profond est une sous-branche de l'apprentissage automatique fondée principalement sur les réseaux de neurones profonds. Ces modèles sont constitués de plusieurs couches de neurones artificiels capables d'apprendre progressivement des représentations de plus en plus abstraites à partir des données. Cette approche s'est fortement développée grâce à l'augmentation de la puissance de calcul, à la disponibilité de grandes quantités de données et aux progrès réalisés dans l'entraînement des réseaux profonds \cite{geron2022hands}. Dans le domaine du traitement d'images, l'apprentissage profond est particulièrement important, notamment à travers les réseaux de neurones convolutionnels, capables de prendre directement des images en entrée et d'apprendre automatiquement les caractéristiques utiles pour des tâches complexes de classification, de reconnaissance ou de reconstruction \cite{gonzalez2018digital}.
+	L'apprentissage profond est une sous-branche de l'apprentissage automatique fondée principalement sur les réseaux de neurones profonds. Ces modèles sont constitués de plusieurs couches de neurones artificiels capables d'apprendre progressivement des représentations de plus en plus abstraites à partir des données. Cette approche s'est fortement développée grâce à l'augmentation de la puissance de calcul, à la disponibilité de grandes quantités de données et aux progrès réalisés dans l'entraînement des réseaux profonds \cite{geron2022hands}. Dans le domaine du traitement d'images, les réseaux convolutionnels CNN ont longtemps constitué l'une des architectures dominantes, grâce à leur capacité à exploiter la structure spatiale locale des images et à extraire automatiquement des caractéristiques visuelles telles que les contours, les formes ou les textures \cite{gonzalez2018digital}. Cependant, les architectures récentes fondées sur l'attention, en particulier les Transformers et les Vision Transformers, ont progressivement élargi cette approche en permettant de modéliser des relations plus globales entre les différentes régions d'une image.
 		\subsubsection{Réseaux de neurones}
-		Les réseaux de neurones artificiels sont des modèles d'apprentissage automatique inspirés, de manière simplifiée, du fonctionnement des neurones biologiques. Ils sont constitués d'unités de calcul appelées neurones artificiels, organisées en couches et reliées entre elles par des connexions pondérées. L'apprentissage consiste à ajuster ces poids à partir des données d'entraînement afin que le réseau puisse produire une sortie correcte pour une tâche donnée \cite{geron2022hands}. Dans le domaine du traitement d'images, ces modèles sont utilisés pour apprendre automatiquement des fonctions de décision à partir d'exemples, notamment dans les problèmes de classification, de reconnaissance de formes et de reconstruction \cite{gonzalez2018digital}.	
-		\subsubsection{Réseaux convolutionnels}
-		Les réseaux de neurones convolutionnels, ou CNN, sont une catégorie de réseaux de neurones profonds particulièrement adaptée au traitement des images. Contrairement aux réseaux entièrement connectés, ils exploitent directement la structure spatiale de l'image grâce à des opérations de convolution appliquées sur des régions locales appelées champs récepteurs. Ces convolutions utilisent des noyaux dont les poids sont appris durant l'entraînement afin de produire des cartes de caractéristiques capables de détecter des motifs visuels comme les contours, les formes ou certaines textures \cite{gonzalez2018digital}. Les couches de pooling sont ensuite utilisées pour réduire la dimension des cartes de caractéristiques, diminuer le coût de calcul et limiter le risque de surapprentissage, tout en conservant les informations les plus importantes \cite{geron2022hands}.	
+		Les réseaux de neurones artificiels sont des modèles d'apprentissage automatique inspirés, de manière simplifiée, du fonctionnement des neurones biologiques. Ils sont constitués d'unités de calcul appelées neurones artificiels, organisées en couches et reliées entre elles par des connexions pondérées. L'apprentissage consiste à ajuster ces poids à partir des données d'entraînement afin que le réseau puisse produire une sortie correcte pour une tâche donnée \cite{geron2022hands}. Dans le domaine du traitement d'images, ces modèles sont utilisés pour apprendre automatiquement des fonctions de décision à partir d'exemples, notamment dans les problèmes de classification, de reconnaissance de formes et de reconstruction \cite{gonzalez2018digital}.		
 		\subsubsection{Transformers}
 		Les Transformers sont une architecture de réseaux de neurones introduite initialement pour le traitement des séquences, notamment en traduction automatique. Contrairement aux réseaux récurrents, ils ne traitent pas les éléments de la séquence de manière strictement séquentielle, mais s'appuient principalement sur des mécanismes d'attention, en particulier l'auto-attention, afin de modéliser les relations entre les différents éléments d'une entrée \cite{vaswani2017attention}. Cette architecture a ensuite été largement utilisée dans de nombreux domaines de l'apprentissage profond, notamment le traitement du langage naturel, la vision par ordinateur et les modèles multimodaux, grâce à sa capacité à apprendre des dépendances complexes et à être entraînée efficacement sur de grandes quantités de données \cite{geron2022hands}.				
 		\subsubsection{Vision Transformers}
@@ -407,32 +398,98 @@ où \(\phi_l\) représente les caractéristiques extraites à la couche \(l\), \
 	Le temps d'inférence désigne le temps nécessaire à un modèle pour produire un résultat à partir d'une image d'entrée. Dans le contexte de la vectorisation d'images, il correspond au temps requis pour générer les chemins SVG ou pour optimiser les paramètres vectoriels représentant l'image. Cette métrique est importante car une méthode peut obtenir une bonne qualité de reconstruction tout en restant difficilement exploitable si son temps de calcul est trop élevé. Les méthodes fondées sur l'optimisation directe des paramètres SVG peuvent produire des résultats précis, mais elles nécessitent souvent plusieurs itérations de rendu et de rétropropagation, ce qui augmente fortement le temps de traitement. À l'inverse, les méthodes fondées sur l'apprentissage profond cherchent à prédire directement les paramètres vectoriels, ce qui permet généralement une génération plus rapide. Dans SuperSVG, les auteurs évaluent ainsi le temps d'exécution en plus des métriques de qualité comme la MSE, le PSNR, la LPIPS et la SSIM. Leurs résultats montrent que SuperSVG-B atteint un temps d'inférence très court, par exemple 0,31 seconde pour 500 chemins et 0,71 seconde pour 2000 chemins, tandis que certaines méthodes d'optimisation comme LIVE nécessitent un temps beaucoup plus important \cite{hu2024supersvg}.
 	
 \section{Travaux connexes}
-%TODO
+
+La vectorisation automatique d'images a connu une évolution progressive, allant des méthodes algorithmiques classiques jusqu'aux approches récentes combinant apprentissage profond et rendu différentiable. Pour comparer ces travaux, il ne suffit pas de regarder uniquement la similarité visuelle entre l'image d'entrée et le SVG obtenu. Une méthode de vectorisation doit aussi être évaluée selon plusieurs critères, notamment la fidélité visuelle, le temps de calcul, le nombre de chemins générés, la simplicité du SVG, son éditabilité, sa capacité de généralisation et le niveau de contrôle laissé à l'utilisateur \cite{dziuba2023imagevectorization}. Dans cette section, nous présentons donc les méthodes les plus pertinentes pour notre sujet, en montrant progressivement comment les limites des approches classiques et d'optimisation ont mené vers des méthodes plus récentes comme SuperSVG.
+
     \subsection{Approches algorithmiques}
-	%TODO
+
+Les approches algorithmiques reposent généralement sur l'analyse géométrique de l'image, comme l'extraction de contours, la détection de régions ou l'ajustement de courbes. Elles sont souvent rapides et ne nécessitent pas de données d'entraînement, mais restent limitées lorsque l'image contient des couleurs complexes, des textures ou un grand nombre de détails.
+
         \subsubsection{Potrace}
-		%TODO
+
+Potrace est une méthode classique de vectorisation principalement conçue pour convertir des images binaires en contours vectoriels \cite{selinger2003potrace}. Son principe consiste à extraire les frontières entre les zones noires et blanches, à les approximer par des polygones, puis à transformer ces polygones en courbes de Bézier lisses. Cette méthode est simple, rapide et efficace pour des images comme les logos, les textes ou les dessins en noir et blanc. Cependant, elle dépend fortement de la qualité de la binarisation et reste peu adaptée aux images complexes, colorées ou texturées. Potrace constitue donc une référence importante pour les approches classiques, mais montre aussi les limites des méthodes purement algorithmiques face à une vectorisation plus générale.
 
     \subsection{Approches basées sur l'optimisation}
+
+Les approches basées sur l'optimisation cherchent à ajuster directement les paramètres des primitives vectorielles afin que le rendu obtenu soit le plus proche possible de l'image d'entrée. Avec le rendu différentiable, il devient possible de calculer des gradients entre l'image rendue et l'image cible, puis de les utiliser pour modifier les courbes, les couleurs ou l'opacité des chemins SVG.
+
         \subsubsection{DiffVG}
-        %TODO
+
+DiffVG propose un rasteriseur différentiable permettant de relier le domaine vectoriel au domaine matriciel \cite{li2020diffvg}. Grâce à ce mécanisme, un ensemble de courbes ou de formes vectorielles peut être rendu sous forme d'image, comparé à une image cible, puis optimisé par rétropropagation. Cette approche est importante car elle permet d'utiliser une supervision uniquement matricielle, sans avoir besoin d'un SVG de référence. Elle est donc devenue une base technique pour plusieurs méthodes récentes. Cependant, DiffVG reste coûteux lorsqu'il faut optimiser beaucoup de chemins ou effectuer un grand nombre d'itérations. De plus, le nombre de primitives doit souvent être fixé à l'avance, ce qui limite le contrôle automatique de la complexité du SVG.
+
         \subsubsection{LIVE}
-        %TODO
+
+LIVE, pour \textit{Layer-wise Image Vectorization}, améliore les approches d'optimisation en introduisant une reconstruction progressive par couches \cite{ma2022live}. La méthode ajoute progressivement des chemins de Bézier, puis les optimise afin de reconstruire l'image de manière \textit{coarse-to-fine}. Cette stratégie permet d'obtenir des SVG plus structurés, plus compacts et plus éditables que ceux produits par une optimisation naïve. LIVE introduit également des pertes spécifiques pour mieux préserver les contours et limiter les auto-intersections des chemins. Malgré ces avantages, la méthode reste lente, car chaque image nécessite une optimisation itérative. Le résultat dépend aussi du nombre de chemins choisi et de plusieurs hyperparamètres. LIVE montre donc l'intérêt d'une représentation vectorielle progressive et éditable, mais confirme aussi le besoin de méthodes plus rapides.
 
     \subsection{Approches basées sur l'apprentissage profond}
+
+Les approches basées sur l'apprentissage profond cherchent à apprendre directement la relation entre une image matricielle et une représentation vectorielle. Contrairement aux méthodes d'optimisation qui ajustent les chemins pour chaque image, ces méthodes entraînent un modèle capable de prédire les paramètres vectoriels à partir de l'image d'entrée, ce qui permet généralement une inférence plus rapide.
+
         \subsubsection{Im2Vec}
-        %TODO
+
+Im2Vec propose une méthode de génération de graphiques vectoriels sans supervision vectorielle directe \cite{reddy2021im2vec}. Le modèle apprend à partir d'images matricielles seulement : il encode l'image dans un espace latent, génère des formes vectorielles, puis utilise un rendu différentiable pour comparer le résultat à l'image cible. Cette approche est intéressante car elle évite le besoin de jeux de données SVG annotés, qui sont difficiles à obtenir et souvent ambigus, puisqu'une même image peut être représentée par plusieurs structures vectorielles différentes. Cependant, Im2Vec reste surtout adapté à des images relativement simples ou appartenant à des domaines limités, comme les icônes, les caractères ou les emojis. Il montre donc l'intérêt de l'apprentissage profond pour la vectorisation, mais reste limité pour traiter des images complexes et variées.
+
         \subsubsection{SuperSVG}
-        %TODO
+
+SuperSVG est la méthode la plus proche de notre thématique et constitue une référence importante dans les travaux récents de vectorisation image-to-SVG \cite{hu2024supersvg}. La méthode décompose d'abord l'image en superpixels, afin de travailler sur des régions localement plus homogènes en couleur et en texture. Elle utilise ensuite une architecture d'apprentissage profond pour prédire les chemins SVG de chaque région, avec une reconstruction en deux étapes : une étape grossière pour préserver la structure principale, puis une étape de raffinement pour enrichir les détails. SuperSVG combine ainsi plusieurs idées importantes des travaux précédents : le rendu différentiable hérité de DiffVG, la reconstruction progressive proche de LIVE, et la prédiction de chemins SVG par apprentissage profond. Cette combinaison lui permet d'obtenir un meilleur compromis entre qualité de reconstruction et temps de calcul. Néanmoins, ses résultats dépendent encore de la qualité de la décomposition en superpixels et du nombre de chemins utilisés. Malgré ces limites, SuperSVG représente l'approche la plus pertinente pour notre état de l'art, car elle résume l'évolution des méthodes de vectorisation vers des solutions plus rapides, plus précises et mieux adaptées aux images complexes.
 
 \section{Synthèse comparative des approches}
-%TODO
+
+Les travaux étudiés montrent que la vectorisation automatique d'images repose sur un compromis entre plusieurs critères : la fidélité visuelle, le temps de calcul, la simplicité du SVG généré, le nombre de chemins, l'éditabilité et la capacité de généralisation. Les méthodes algorithmiques privilégient généralement la rapidité et la simplicité, mais restent limitées aux images peu complexes. Les méthodes basées sur l'optimisation offrent une meilleure flexibilité grâce au rendu différentiable, mais leur coût augmente avec le nombre de chemins et d'itérations. Les approches basées sur l'apprentissage profond cherchent à dépasser cette limite en apprenant à prédire directement les paramètres vectoriels.
+
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{longtable}{p{2.3cm} p{3.4cm} p{3.4cm} p{3.4cm} p{3.0cm}}
+\caption{Synthèse comparative des principales approches de vectorisation étudiées.}
+\label{tab:synthese_vectorisation}\\
+\toprule
+\textbf{Méthode} & \textbf{Idée principale} & \textbf{Points forts} & \textbf{Limites} & \textbf{Rôle dans l'évolution du domaine} \\
+\midrule
+\endfirsthead
+
+\toprule
+\textbf{Méthode} & \textbf{Idée principale} & \textbf{Points forts} & \textbf{Limites} & \textbf{Rôle dans l'évolution du domaine} \\
+\midrule
+\endhead
+
+Potrace & Extraction de contours à partir d'une image binaire, puis approximation par courbes de Bézier. & Simple, rapide, sans apprentissage, efficace pour les logos, textes et dessins binaires. & Peu adaptée aux images complexes, colorées ou texturées. Dépend fortement de la binarisation. & Représente les approches algorithmiques classiques. \\
+
+\midrule
+DiffVG & Rasteriseur différentiable permettant d'optimiser les paramètres vectoriels à partir d'une perte dans l'espace image. & Permet la rétropropagation vers les paramètres SVG et ne nécessite pas de SVG de référence. & Optimisation coûteuse, nombre de chemins souvent fixé à l'avance, sensibilité à l'initialisation. & Introduit le rendu différentiable comme outil central pour les méthodes modernes. \\
+
+\midrule
+LIVE & Optimisation progressive de chemins de Bézier dans une logique couche par couche. & Produit des SVG plus structurés, compacts et éditables. & Temps de calcul élevé et forte dépendance au nombre de chemins et aux hyperparamètres. & Montre l'intérêt d'une reconstruction progressive et organisée. \\
+
+\midrule
+Im2Vec & Génération de formes vectorielles à partir d'une supervision uniquement matricielle. & Évite la supervision SVG directe et apprend une représentation latente des formes. & Plus adapté aux images simples ou à des domaines limités. Moins efficace pour les images complexes. & Montre l'intérêt de l'apprentissage profond pour prédire des primitives vectorielles. \\
+
+\midrule
+SuperSVG & Décomposition en superpixels, prédiction de chemins SVG par réseau profond et reconstruction \textit{coarse-to-fine}. & Combine apprentissage profond, superpixels, rendu différentiable et raffinement progressif. Bon compromis entre qualité et vitesse. & Dépend de la décomposition en superpixels et du nombre de chemins utilisés. & Représente l'approche la plus proche des méthodes récentes de vectorisation image-to-SVG. \\
+
+\bottomrule
+\end{longtable}
+\endgroup
+
+Cette comparaison montre que SuperSVG constitue l'approche la plus complète parmi les travaux étudiés. Elle reprend le rendu différentiable introduit par DiffVG, la logique progressive mise en avant par LIVE, et l'efficacité des modèles d'apprentissage profond. Cependant, la vectorisation automatique reste confrontée à plusieurs difficultés, notamment le contrôle de la complexité du SVG, la fidélité visuelle, le temps de calcul et la généralisation à des images variées.
 
 \section{Problématique}
-%TODO
+
+La vectorisation automatique d'images matricielles en SVG reste un problème difficile, car elle doit produire une représentation à la fois fidèle, compacte, éditable et générée dans un temps raisonnable. Une reconstruction visuellement correcte ne suffit pas si le SVG obtenu contient trop de chemins, s'il est difficile à modifier ou si sa génération nécessite une optimisation trop coûteuse.
+
+Les travaux étudiés montrent que les approches existantes répondent partiellement à ce problème. Les méthodes classiques sont rapides mais limitées aux images simples. Les méthodes d'optimisation offrent une meilleure qualité de reconstruction, mais au prix d'un temps de calcul élevé. Les méthodes basées sur l'apprentissage profond améliorent l'efficacité de la génération, mais doivent encore gérer la complexité des images réelles et la structure des SVG produits.
+
+La problématique de ce travail peut donc être formulée ainsi : comment améliorer la vectorisation automatique d'images matricielles en SVG afin d'obtenir une représentation fidèle, compacte et exploitable, tout en limitant le temps de calcul et la complexité de la représentation générée ?
+
+L'enjeu principal est donc de trouver un meilleur compromis entre qualité visuelle, simplicité du SVG, rapidité de génération et capacité de généralisation.
 
 \section{Conclusion}
-%TODO
+
+Dans ce chapitre, nous avons présenté les notions essentielles liées à la vectorisation d'images, puis étudié les principales familles de méthodes existantes. L'analyse des travaux connexes montre une évolution progressive des approches algorithmiques vers les méthodes d'optimisation différentiable, puis vers les modèles basés sur l'apprentissage profond.
+
+Cette évolution met en évidence un compromis central : produire un SVG fidèle à l'image d'entrée tout en conservant une représentation simple, éditable et générée efficacement. Les méthodes récentes comme SuperSVG montrent des avancées importantes dans cette direction, mais la vectorisation automatique reste un problème ouvert lorsque l'on cherche à traiter des images complexes tout en maîtrisant le temps de calcul et la complexité du SVG obtenu.
+
+La suite du mémoire présentera l'approche proposée pour répondre à cette problématique, ainsi que les choix de conception retenus pour la mise en place du système de vectorisation.
 
 % ============================================================
 %   CHAPITRE 2 — APPROCHE PROPOSÉE

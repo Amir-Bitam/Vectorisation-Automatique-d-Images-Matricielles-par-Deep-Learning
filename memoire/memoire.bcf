@@ -2382,48 +2382,51 @@
     <bcf:citekey order="7" intorder="1">geron2022hands</bcf:citekey>
     <bcf:citekey order="8" intorder="1">mitchell1997ml</bcf:citekey>
     <bcf:citekey order="9" intorder="1">bishop2006pattern</bcf:citekey>
-    <bcf:citekey order="10" intorder="1">bishop2006pattern</bcf:citekey>
+    <bcf:citekey order="10" intorder="1">jing2021selfsupervised</bcf:citekey>
     <bcf:citekey order="11" intorder="1">geron2022hands</bcf:citekey>
+    <bcf:citekey order="11" intorder="2">jing2021selfsupervised</bcf:citekey>
     <bcf:citekey order="12" intorder="1">geron2022hands</bcf:citekey>
-    <bcf:citekey order="13" intorder="1">jing2021selfsupervised</bcf:citekey>
+    <bcf:citekey order="13" intorder="1">gonzalez2018digital</bcf:citekey>
     <bcf:citekey order="14" intorder="1">geron2022hands</bcf:citekey>
     <bcf:citekey order="15" intorder="1">gonzalez2018digital</bcf:citekey>
-    <bcf:citekey order="16" intorder="1">geron2022hands</bcf:citekey>
-    <bcf:citekey order="17" intorder="1">gonzalez2018digital</bcf:citekey>
-    <bcf:citekey order="18" intorder="1">gonzalez2018digital</bcf:citekey>
-    <bcf:citekey order="19" intorder="1">geron2022hands</bcf:citekey>
+    <bcf:citekey order="16" intorder="1">vaswani2017attention</bcf:citekey>
+    <bcf:citekey order="17" intorder="1">geron2022hands</bcf:citekey>
+    <bcf:citekey order="18" intorder="1">dosovitskiy2021image</bcf:citekey>
+    <bcf:citekey order="19" intorder="1">hu2024supersvg</bcf:citekey>
     <bcf:citekey order="20" intorder="1">vaswani2017attention</bcf:citekey>
-    <bcf:citekey order="21" intorder="1">geron2022hands</bcf:citekey>
-    <bcf:citekey order="22" intorder="1">dosovitskiy2021image</bcf:citekey>
-    <bcf:citekey order="23" intorder="1">hu2024supersvg</bcf:citekey>
+    <bcf:citekey order="21" intorder="1">vaswani2017attention</bcf:citekey>
+    <bcf:citekey order="22" intorder="1">vaswani2017attention</bcf:citekey>
+    <bcf:citekey order="23" intorder="1">geron2022hands</bcf:citekey>
     <bcf:citekey order="24" intorder="1">vaswani2017attention</bcf:citekey>
-    <bcf:citekey order="25" intorder="1">vaswani2017attention</bcf:citekey>
-    <bcf:citekey order="26" intorder="1">vaswani2017attention</bcf:citekey>
-    <bcf:citekey order="27" intorder="1">geron2022hands</bcf:citekey>
-    <bcf:citekey order="28" intorder="1">vaswani2017attention</bcf:citekey>
-    <bcf:citekey order="29" intorder="1">hu2024supersvg</bcf:citekey>
-    <bcf:citekey order="30" intorder="1">geron2022hands</bcf:citekey>
-    <bcf:citekey order="31" intorder="1">hu2024supersvg</bcf:citekey>
-    <bcf:citekey order="32" intorder="1">li2020diffvg</bcf:citekey>
-    <bcf:citekey order="32" intorder="2">hu2024supersvg</bcf:citekey>
-    <bcf:citekey order="33" intorder="1">achanta2012slic</bcf:citekey>
+    <bcf:citekey order="25" intorder="1">hu2024supersvg</bcf:citekey>
+    <bcf:citekey order="26" intorder="1">geron2022hands</bcf:citekey>
+    <bcf:citekey order="27" intorder="1">hu2024supersvg</bcf:citekey>
+    <bcf:citekey order="28" intorder="1">li2020diffvg</bcf:citekey>
+    <bcf:citekey order="28" intorder="2">hu2024supersvg</bcf:citekey>
+    <bcf:citekey order="29" intorder="1">achanta2012slic</bcf:citekey>
+    <bcf:citekey order="30" intorder="1">hu2024supersvg</bcf:citekey>
+    <bcf:citekey order="31" intorder="1">li2020diffvg</bcf:citekey>
+    <bcf:citekey order="32" intorder="1">ma2022live</bcf:citekey>
+    <bcf:citekey order="33" intorder="1">ma2022live</bcf:citekey>
     <bcf:citekey order="34" intorder="1">hu2024supersvg</bcf:citekey>
-    <bcf:citekey order="35" intorder="1">li2020diffvg</bcf:citekey>
+    <bcf:citekey order="35" intorder="1">hu2024supersvg</bcf:citekey>
     <bcf:citekey order="36" intorder="1">ma2022live</bcf:citekey>
-    <bcf:citekey order="37" intorder="1">ma2022live</bcf:citekey>
+    <bcf:citekey order="37" intorder="1">hu2024supersvg</bcf:citekey>
     <bcf:citekey order="38" intorder="1">hu2024supersvg</bcf:citekey>
-    <bcf:citekey order="39" intorder="1">hu2024supersvg</bcf:citekey>
-    <bcf:citekey order="40" intorder="1">ma2022live</bcf:citekey>
-    <bcf:citekey order="41" intorder="1">hu2024supersvg</bcf:citekey>
-    <bcf:citekey order="42" intorder="1">hu2024supersvg</bcf:citekey>
-    <bcf:citekey order="43" intorder="1">ma2022live</bcf:citekey>
-    <bcf:citekey order="44" intorder="1">hu2024supersvg</bcf:citekey>
-    <bcf:citekey order="45" intorder="1">li2020diffvg</bcf:citekey>
-    <bcf:citekey order="46" intorder="1">wang2004ssim</bcf:citekey>
-    <bcf:citekey order="47" intorder="1">hu2024supersvg</bcf:citekey>
-    <bcf:citekey order="48" intorder="1">zhang2018lpips</bcf:citekey>
-    <bcf:citekey order="49" intorder="1">hu2024supersvg</bcf:citekey>
-    <bcf:citekey order="50" intorder="1">hu2024supersvg</bcf:citekey>
+    <bcf:citekey order="39" intorder="1">ma2022live</bcf:citekey>
+    <bcf:citekey order="40" intorder="1">hu2024supersvg</bcf:citekey>
+    <bcf:citekey order="41" intorder="1">li2020diffvg</bcf:citekey>
+    <bcf:citekey order="42" intorder="1">wang2004ssim</bcf:citekey>
+    <bcf:citekey order="43" intorder="1">hu2024supersvg</bcf:citekey>
+    <bcf:citekey order="44" intorder="1">zhang2018lpips</bcf:citekey>
+    <bcf:citekey order="45" intorder="1">hu2024supersvg</bcf:citekey>
+    <bcf:citekey order="46" intorder="1">hu2024supersvg</bcf:citekey>
+    <bcf:citekey order="47" intorder="1">dziuba2023imagevectorization</bcf:citekey>
+    <bcf:citekey order="48" intorder="1">selinger2003potrace</bcf:citekey>
+    <bcf:citekey order="49" intorder="1">li2020diffvg</bcf:citekey>
+    <bcf:citekey order="50" intorder="1">ma2022live</bcf:citekey>
+    <bcf:citekey order="51" intorder="1">reddy2021im2vec</bcf:citekey>
+    <bcf:citekey order="52" intorder="1">hu2024supersvg</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="none">
