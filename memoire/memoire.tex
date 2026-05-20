@@ -342,14 +342,38 @@ Cependant, dans le contexte de la vision par ordinateur moderne, ces deux catég
 		\subsubsection{Réseaux de neurones}
 		Les réseaux de neurones artificiels sont des modèles d'apprentissage automatique inspirés, de manière simplifiée, du fonctionnement des neurones biologiques. Ils sont constitués d'unités de calcul appelées neurones artificiels, organisées en couches et reliées entre elles par des connexions pondérées. L'apprentissage consiste à ajuster ces poids à partir des données d'entraînement afin que le réseau puisse produire une sortie correcte pour une tâche donnée \cite{geron2022hands}. Dans le domaine du traitement d'images, ces modèles sont utilisés pour apprendre automatiquement des fonctions de décision à partir d'exemples, notamment dans les problèmes de classification, de reconnaissance de formes et de reconstruction \cite{gonzalez2018digital}.		
 		\subsubsection{Transformers}
-		Les Transformers sont une architecture de réseaux de neurones introduite initialement pour le traitement des séquences, notamment en traduction automatique. Contrairement aux réseaux récurrents, ils ne traitent pas les éléments de la séquence de manière strictement séquentielle, mais s'appuient principalement sur des mécanismes d'attention, en particulier l'auto-attention, afin de modéliser les relations entre les différents éléments d'une entrée \cite{vaswani2017attention}. Grâce à sa capacité à apprendre des dépendances complexes et à être entraînée efficacement sur de grandes quantités de données, cette architecture a ensuite été largement utilisée dans de nombreux domaines de l'apprentissage profond, notamment le traitement du langage naturel, la vision par ordinateur et les modèles multimodaux \cite{geron2022hands}.				
+		Les Transformers sont une architecture de réseaux de neurones introduite initialement pour le traitement des séquences, notamment en traduction automatique. Contrairement aux réseaux récurrents, ils ne traitent pas les éléments de la séquence de manière strictement séquentielle, mais s'appuient principalement sur des mécanismes d'attention, en particulier l'auto-attention, afin de modéliser les relations entre les différents éléments d'une entrée \cite{vaswani2017attention}. Grâce à sa capacité à apprendre des dépendances complexes et à être entraînée efficacement sur de grandes quantités de données, cette architecture a ensuite été largement utilisée dans de nombreux domaines de l'apprentissage profond, notamment le traitement du langage naturel, la vision par ordinateur et les modèles multimodaux \cite{geron2022hands}.
+		
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{transf_encself.png}
+	\caption[Structure simplifiée d'un encodeur Transformer]{Structure simplifiée d'un encodeur Transformer, composé d'un mécanisme d'auto-attention multi-têtes et d'un réseau feed-forward. Figure adaptée de dvgodoy, sous licence CC BY 4.0.}
+    \label{fig:transformer_encoder}
+\end{figure}		
+						
 		\subsubsection{Vision Transformers}
 		Les Vision Transformers, ou ViT, sont une adaptation de l'architecture Transformer au traitement des images. Au lieu de s'appuyer principalement sur des convolutions comme les CNN, une image est divisée en petits blocs appelés patchs, par exemple de taille $16 \times 16$. Ces patchs sont ensuite transformés en vecteurs et traités comme une séquence d'éléments, de manière similaire aux tokens dans le traitement du langage naturel \cite{dosovitskiy2021image}. Grâce au mécanisme d'auto-attention, le modèle peut apprendre des relations globales entre différentes régions de l'image. Cette capacité rend les Vision Transformers particulièrement intéressants pour les tâches où la compréhension de la structure globale de l'image est importante, en complément des informations locales.
+		
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{vit_model.png}
+    \caption[Principe général d'un Vision Transformer]{Principe général d'un Vision Transformer : l'image est divisée en patchs, projetée sous forme d'embeddings, puis traitée par un encodeur Transformer. Figure adaptée de dvgodoy, sous licence CC BY 4.0.}
+    \label{fig:vit_model}
+\end{figure}
 
 \section{Mécanismes d'attention}
 Les mécanismes d'attention constituent une composante importante des architectures modernes d'apprentissage profond, en particulier dans les modèles de type Transformer. Leur objectif est de permettre au modèle d'accorder une importance différente aux éléments d'une entrée selon leur pertinence pour la tâche à résoudre, au lieu de traiter toutes les informations de manière uniforme. Ce fonctionnement repose généralement sur trois éléments principaux : une requête, des clés et des valeurs. La requête représente l'information recherchée, les clés servent à mesurer la similarité avec cette requête, et les valeurs contiennent les informations à combiner.
 
-Dans le cas de l'attention par produit scalaire mise à l'échelle, les requêtes, les clés et les valeurs sont regroupées respectivement dans les matrices $Q$, $K$ et $V$. Les scores d'attention sont obtenus en calculant le produit entre les requêtes et les clés, puis en le normalisant par $\sqrt{d_k}$, où $d_k$ désigne la dimension des clés. Une fonction softmax est ensuite appliquée afin d'obtenir des poids d'attention, utilisés pour pondérer les valeurs. Ce mécanisme est formalisé par l'équation suivante \cite{vaswani2017attention} :
+Dans le cas de l'attention par produit scalaire mise à l'échelle, les requêtes, les clés et les valeurs sont regroupées respectivement dans les matrices $Q$, $K$ et $V$. Les scores d'attention sont obtenus en calculant le produit entre les requêtes et les clés, puis en le normalisant par $\sqrt{d_k}$, où $d_k$ désigne la dimension des clés. Un masque peut éventuellement être appliqué avant la fonction softmax, notamment lorsque l'on souhaite empêcher le modèle d'accéder à certaines positions. La fonction softmax est ensuite utilisée afin d'obtenir des poids d'attention, qui servent à pondérer les valeurs.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{aiayn_dot.png}
+    \caption[Attention par produit scalaire mise à l'échelle]{Principe de l'attention par produit scalaire mise à l'échelle, calculée à partir des matrices $Q$, $K$ et $V$. Figure adaptée de dvgodoy, sous licence CC BY 4.0.}
+    \label{fig:scaled_dot_product_attention}
+\end{figure}
+
+Ce mécanisme est illustré dans la figure~\ref{fig:scaled_dot_product_attention} et peut être formalisé par l'équation suivante \cite{vaswani2017attention} :
 
 \begin{equation}
     \operatorname{Attention}(Q, K, V) = 
@@ -358,8 +382,10 @@ Dans le cas de l'attention par produit scalaire mise à l'échelle, les requête
 \end{equation}
 
 Ainsi, la sortie est obtenue comme une combinaison pondérée des valeurs, ce qui permet au modèle de se concentrer davantage sur les éléments les plus utiles. De manière intuitive, l'attention peut être vue comme un mécanisme de récupération d'information différentiable, où le modèle apprend à retrouver les éléments importants d'une séquence ou d'une représentation en fonction du contexte \cite{geron2022hands}. Cette idée est particulièrement utile pour modéliser des dépendances à longue distance, que ce soit dans une séquence de mots ou dans une image découpée en régions ou en patchs. Dans les Transformers, les mécanismes d'attention remplacent en grande partie les traitements séquentiels classiques, ce qui facilite la parallélisation de l'apprentissage et permet de mieux exploiter de grandes quantités de données \cite{vaswani2017attention}.
-    \subsection{Self-attention}
-	La self-attention, ou auto-attention, est un cas particulier du mécanisme d'attention dans lequel les requêtes, les clés et les valeurs proviennent de la même séquence. Elle permet donc à chaque élément d'une entrée de prendre en compte les autres éléments de cette même entrée afin de construire une représentation plus riche et contextualisée. Dans une phrase, par exemple, chaque mot peut être relié aux autres mots pour mieux comprendre son sens selon le contexte. Dans une image représentée sous forme de patchs, chaque patch peut de la même manière interagir avec les autres régions de l'image \cite{vaswani2017attention}. Cette capacité à modéliser les relations internes d'une séquence explique l'importance de la self-attention dans les architectures Transformer. Dans le traitement d'images, cette propriété permet notamment de mettre en relation des régions éloignées d'une même image, contrairement aux opérations strictement locales qui se limitent à un voisinage restreint.
+
+\subsection{Self-attention}
+La self-attention, ou auto-attention, est un cas particulier du mécanisme d'attention dans lequel les requêtes, les clés et les valeurs proviennent de la même séquence. Elle permet donc à chaque élément d'une entrée de prendre en compte les autres éléments de cette même entrée afin de construire une représentation plus riche et contextualisée. Dans une phrase, par exemple, chaque mot peut être relié aux autres mots pour mieux comprendre son sens selon le contexte. Dans une image représentée sous forme de patchs, chaque patch peut de la même manière interagir avec les autres régions de l'image \cite{vaswani2017attention}. Cette capacité à modéliser les relations internes d'une séquence explique l'importance de la self-attention dans les architectures Transformer. Dans le traitement d'images, cette propriété permet notamment de mettre en relation des régions éloignées d'une même image, contrairement aux opérations strictement locales qui se limitent à un voisinage restreint.
+
     \subsection{Cross-attention}			 
 	La cross-attention, ou attention croisée, est une variante du mécanisme d'attention dans laquelle les requêtes ne proviennent pas de la même source que les clés et les valeurs. Contrairement à la self-attention, où un élément interagit avec les autres éléments de la même séquence, la cross-attention permet à une représentation de s'appuyer sur une autre représentation externe. Dans un Transformer encodeur-décodeur, par exemple, le décodeur produit les requêtes, tandis que les clés et les valeurs proviennent des représentations calculées par l'encodeur. Cela permet au décodeur de sélectionner les informations importantes de l'entrée lors de la génération de la sortie \cite{geron2022hands}. Dans le contexte de la vectorisation d'images, ce type d'attention peut être utilisé pour faire interagir des requêtes associées aux primitives vectorielles à générer avec des clés et des valeurs issues des caractéristiques extraites de l'image. Les paramètres vectoriels prédits peuvent ainsi être guidés par les informations visuelles les plus pertinentes, ce qui facilite la génération de primitives adaptées au contenu de l'entrée.
 
@@ -434,12 +460,16 @@ LIVE, pour \textit{Layer-wise Image Vectorization}, améliore les approches d'op
 Les approches basées sur l'apprentissage profond cherchent à apprendre directement la relation entre une image matricielle et une représentation vectorielle. Contrairement aux méthodes d'optimisation qui ajustent les chemins pour chaque image, ces méthodes entraînent un modèle capable de prédire les paramètres vectoriels à partir de l'image d'entrée, ce qui permet généralement une inférence plus rapide.
 
         \subsubsection{Im2Vec}
+Im2Vec propose une méthode de génération de graphiques vectoriels sans supervision vectorielle directe \cite{reddy2021im2vec}. Contrairement aux approches qui nécessitent des fichiers SVG annotés, le modèle apprend uniquement à partir d'images matricielles. Son architecture suit un schéma encodeur-décodeur : l'image d'entrée est d'abord encodée dans un espace latent, puis ce code latent est utilisé pour générer une représentation vectorielle composée de plusieurs chemins fermés. Pour gérer les formes constituées de plusieurs composants, Im2Vec utilise un module récurrent de type RNN/LSTM qui produit un code latent propre à chaque chemin. Chaque chemin est ensuite décodé sous forme de courbes de Bézier à l'aide d'un décodeur fondé sur des convolutions 1D circulaires, ce qui permet de modéliser des formes fermées comme des déformations d'un cercle.
 
-Im2Vec propose une méthode de génération de graphiques vectoriels sans supervision vectorielle directe \cite{reddy2021im2vec}. Le modèle apprend à partir d'images matricielles seulement : il encode l'image dans un espace latent, génère des formes vectorielles, puis utilise un rendu différentiable pour comparer le résultat à l'image cible. Cette approche est intéressante car elle évite le besoin de jeux de données SVG annotés, qui sont difficiles à obtenir et souvent ambigus, puisqu'une même image peut être représentée par plusieurs structures vectorielles différentes. Cependant, Im2Vec reste surtout adapté à des images relativement simples ou appartenant à des domaines limités, comme les icônes, les caractères ou les emojis. Il montre donc l'intérêt de l'apprentissage profond pour la vectorisation, mais reste limité pour traiter des images complexes et variées.
+Le résultat vectoriel généré est ensuite rendu sous forme matricielle à l'aide d'un rendu différentiable, puis comparé à l'image cible afin d'entraîner le modèle sans supervision SVG explicite. Cette approche est intéressante car elle évite le besoin de jeux de données vectoriels annotés, qui sont difficiles à obtenir et souvent ambigus, puisqu'une même image peut être représentée par plusieurs structures vectorielles différentes. Cependant, Im2Vec reste surtout adapté à des images relativement simples ou appartenant à des domaines limités, comme les icônes, les caractères ou les emojis. Il montre donc l'intérêt de l'apprentissage profond pour la génération et la vectorisation de formes paramétriques, mais reste limité pour traiter des images complexes et variées.
 
         \subsubsection{SuperSVG}
+SuperSVG est la méthode la plus proche de notre thématique et constitue une référence importante dans les travaux récents de vectorisation image-to-SVG \cite{hu2024supersvg}. Son principe consiste d'abord à décomposer l'image d'entrée en superpixels, afin de réduire la difficulté du problème en travaillant sur des régions plus homogènes en couleur et en texture. Chaque superpixel est ensuite vectorisé séparément par un modèle d'apprentissage profond chargé de prédire les paramètres des chemins SVG correspondants.
 
-SuperSVG est la méthode la plus proche de notre thématique et constitue une référence importante dans les travaux récents de vectorisation image-to-SVG \cite{hu2024supersvg}. La méthode décompose d'abord l'image en superpixels, afin de travailler sur des régions localement plus homogènes en couleur et en texture. Elle utilise ensuite une architecture d'apprentissage profond pour prédire les chemins SVG de chaque région, avec une reconstruction en deux étapes : une étape grossière pour préserver la structure principale, puis une étape de raffinement pour enrichir les détails. SuperSVG combine ainsi plusieurs idées importantes des travaux précédents : le rendu différentiable hérité de DiffVG, la reconstruction progressive proche de LIVE, et la prédiction de chemins SVG par apprentissage profond. Cette combinaison lui permet d'obtenir un meilleur compromis entre qualité de reconstruction et temps de calcul. Néanmoins, ses résultats dépendent encore de la qualité de la décomposition en superpixels et du nombre de chemins utilisés. Malgré ces limites, SuperSVG représente l'approche la plus pertinente pour notre état de l'art, car elle résume l'évolution des méthodes de vectorisation vers des solutions plus rapides, plus précises et mieux adaptées aux images complexes.
+L'architecture de SuperSVG repose sur un modèle en deux étapes. Dans la première étape, dite coarse-stage, un encodeur Vision Transformer extrait les caractéristiques visuelles du superpixel. Ces caractéristiques sont ensuite combinées avec des requêtes apprenables associées aux chemins SVG à l'aide d'un module de cross-attention. Un module de self-attention traite ensuite les représentations intermédiaires afin de les projeter vers l'espace des paramètres vectoriels. Cette première étape permet de reconstruire la structure principale du superpixel. Dans la seconde étape, dite refinement-stage, un second modèle prend en entrée le rendu obtenu à partir des chemins grossiers ainsi que le superpixel cible, puis prédit des chemins supplémentaires destinés à enrichir les détails. Les sorties des deux étapes sont finalement combinées pour produire le SVG final.
+
+SuperSVG combine ainsi plusieurs idées importantes des travaux précédents : le rendu différentiable hérité de DiffVG, la reconstruction progressive proche de LIVE, et la prédiction directe de chemins SVG par apprentissage profond. Cette architecture lui permet d'obtenir un meilleur compromis entre qualité de reconstruction et temps de calcul, notamment par rapport aux méthodes purement basées sur l'optimisation. Néanmoins, ses résultats dépendent encore de la qualité de la décomposition en superpixels, du nombre de chemins utilisés et de la capacité du modèle à représenter correctement les détails fins de chaque région. Malgré ces limites, SuperSVG représente l'approche la plus pertinente pour notre état de l'art, car elle illustre l'évolution récente des méthodes de vectorisation vers des solutions plus rapides, plus précises et mieux adaptées aux images complexes.
 
 \section{Synthèse comparative des approches}
 
@@ -474,6 +504,68 @@ Im2Vec & Génération de formes vectorielles à partir d'une supervision uniquem
 
 \midrule
 SuperSVG & Décomposition en superpixels, prédiction de chemins SVG par réseau profond et reconstruction \textit{coarse-to-fine}. & Combine apprentissage profond, superpixels, rendu différentiable et raffinement progressif. Bon compromis entre qualité et vitesse. & Dépend de la décomposition en superpixels et du nombre de chemins utilisés. & Représente l'approche la plus proche des méthodes récentes de vectorisation image-to-SVG. \\
+
+\bottomrule
+\end{longtable}
+\endgroup
+
+
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+
+\begin{longtable}{p{1.7cm} p{2.7cm} p{2.6cm} p{3.0cm} p{3.0cm}}
+\caption{Synthèse comparative des principales approches de vectorisation étudiées.}
+\label{tab:synthese_vectorisation}\\
+
+\toprule
+\textbf{Méthode} & \textbf{Principe} & \textbf{Points forts} & \textbf{Limites} & \textbf{Apport} \\
+\midrule
+\endfirsthead
+
+\toprule
+\textbf{Méthode} & \textbf{Principe} & \textbf{Points forts} & \textbf{Limites} & \textbf{Apport} \\
+\midrule
+\endhead
+
+Potrace &
+Tracé de contours binaires et approximation par courbes de Bézier. &
+Rapide, simple et sans apprentissage. &
+Limité aux images complexes, colorées ou texturées ; dépend de la binarisation. &
+Base des approches algorithmiques classiques. \\
+
+\midrule
+
+DiffVG &
+Optimisation de primitives SVG via un rendu différentiable. &
+Permet une supervision matricielle et la rétropropagation vers les paramètres SVG. &
+Coûteux, sensible à l'initialisation et au nombre de chemins fixé. &
+Introduit le rendu différentiable comme outil central. \\
+
+\midrule
+
+LIVE &
+Ajout progressif de chemins de Bézier selon une logique couche par couche. &
+Produit des SVG plus structurés, compacts et éditables. &
+Temps de calcul élevé ; dépend des chemins et des hyperparamètres. &
+Montre l'intérêt d'une reconstruction progressive. \\
+
+\midrule
+
+Im2Vec &
+Prédiction de formes vectorielles à partir d'images matricielles. &
+Évite la supervision SVG directe et apprend un espace latent. &
+Surtout adapté aux images simples comme les icônes, caractères ou emojis. &
+Introduit l'apprentissage profond pour prédire des primitives vectorielles. \\
+
+\midrule
+
+SuperSVG &
+Vectorisation par superpixels avec reconstruction \textit{coarse-to-fine}. &
+Bon compromis entre qualité, vitesse et traitement d'images complexes. &
+Dépend de la décomposition en superpixels et du nombre de chemins. &
+Approche récente la plus proche de notre problématique. \\
 
 \bottomrule
 \end{longtable}
