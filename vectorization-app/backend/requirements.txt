@@ -14,6 +14,9 @@ timm
 lpips
 tqdm
 huggingface_hub
+torchmetrics
+termcolor
+pybind11
 matplotlib
 scipy
 cmake
