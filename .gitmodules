@@ -1,0 +1,6 @@
+[submodule "diffvg"]
+	path = diffvg
+	url = https://github.com/BachiLi/diffvg.git
+[submodule "implementation/diffvg"]
+	path = implementation/diffvg
+	url = https://github.com/BachiLi/diffvg.git
