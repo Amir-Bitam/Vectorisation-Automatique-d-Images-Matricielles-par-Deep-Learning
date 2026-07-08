@@ -19,41 +19,6 @@
 
 \refsection{0}
   \datalist[entry]{none/global//global/global/global}
-    \entry{dhar2024paradigm}{article}{}{}
-      \name{author}{1}{}{%
-        {{hash=72e7dd6096ad871a58725f4261fc9706}{%
-           family={Dhar},
-           familyi={D\bibinitperiod},
-           given={Vasant},
-           giveni={V\bibinitperiod}}}%
-      }
-      \list{publisher}{1}{%
-        {Association for Computing Machinery}%
-      }
-      \strng{namehash}{72e7dd6096ad871a58725f4261fc9706}
-      \strng{fullhash}{72e7dd6096ad871a58725f4261fc9706}
-      \strng{fullhashraw}{72e7dd6096ad871a58725f4261fc9706}
-      \strng{bibnamehash}{72e7dd6096ad871a58725f4261fc9706}
-      \strng{authorbibnamehash}{72e7dd6096ad871a58725f4261fc9706}
-      \strng{authornamehash}{72e7dd6096ad871a58725f4261fc9706}
-      \strng{authorfullhash}{72e7dd6096ad871a58725f4261fc9706}
-      \strng{authorfullhashraw}{72e7dd6096ad871a58725f4261fc9706}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Communications of the ACM}
-      \field{month}{11}
-      \field{number}{11}
-      \field{title}{The Paradigm Shifts in Artificial Intelligence}
-      \field{volume}{67}
-      \field{year}{2024}
-      \field{pages}{50\bibrangedash 59}
-      \range{pages}{10}
-      \verb{doi}
-      \verb 10.1145/3664804
-      \endverb
-    \endentry
     \entry{gonzalez2018digital}{book}{}{}
       \name{author}{2}{}{%
         {{hash=07713b8c79fe78ffaf9ab728a5f3ce88}{%
@@ -78,8 +43,8 @@
       \strng{authornamehash}{629c2754a63b62c1f205866b8ab085f9}
       \strng{authorfullhash}{629c2754a63b62c1f205866b8ab085f9}
       \strng{authorfullhashraw}{629c2754a63b62c1f205866b8ab085f9}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{4th}
@@ -121,8 +86,8 @@
       \strng{authornamehash}{cf4d80734882b19e122eecb03a83971a}
       \strng{authorfullhash}{ce216e376c7dd8cdc3db86284e9cd8af}
       \strng{authorfullhashraw}{ce216e376c7dd8cdc3db86284e9cd8af}
-      \field{sortinit}{4}
-      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{2nd}
@@ -280,6 +245,70 @@
       \range{pages}{22}
       \verb{doi}
       \verb 10.1109/TPAMI.2020.2992393
+      \endverb
+    \endentry
+    \entry{lecun1989backpropagation}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=6a1aa6b7eab12b931ca7c7e3f927231d}{%
+           family={LeCun},
+           familyi={L\bibinitperiod},
+           given={Yann},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=824ee0660bd2a40e283a9b8266f0868b}{%
+           family={Boser},
+           familyi={B\bibinitperiod},
+           given={Bernhard},
+           giveni={B\bibinitperiod}}}%
+        {{hash=017996bb299557636f8e47759ba29a60}{%
+           family={Denker},
+           familyi={D\bibinitperiod},
+           given={John\bibnamedelima S.},
+           giveni={J\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=0444ce878492140cb17d6d4f19c2b24d}{%
+           family={Henderson},
+           familyi={H\bibinitperiod},
+           given={Donnie},
+           giveni={D\bibinitperiod}}}%
+        {{hash=ddaff2b97b0b8bf177545e0a7f694002}{%
+           family={Howard},
+           familyi={H\bibinitperiod},
+           given={Richard\bibnamedelima E.},
+           giveni={R\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=494b3ee863ae780ea5237c5b09b80c0e}{%
+           family={Hubbard},
+           familyi={H\bibinitperiod},
+           given={Wayne},
+           giveni={W\bibinitperiod}}}%
+        {{hash=7c31ca2e27cf716eb355090b20ab6455}{%
+           family={Jackel},
+           familyi={J\bibinitperiod},
+           given={Lawrence\bibnamedelima D.},
+           giveni={L\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {MIT Press}%
+      }
+      \strng{namehash}{9e4c6012409dc8dd9b2aa198a2059804}
+      \strng{fullhash}{db03602b955b0c9b23b4bd012343619d}
+      \strng{fullhashraw}{db03602b955b0c9b23b4bd012343619d}
+      \strng{bibnamehash}{9e4c6012409dc8dd9b2aa198a2059804}
+      \strng{authorbibnamehash}{9e4c6012409dc8dd9b2aa198a2059804}
+      \strng{authornamehash}{9e4c6012409dc8dd9b2aa198a2059804}
+      \strng{authorfullhash}{db03602b955b0c9b23b4bd012343619d}
+      \strng{authorfullhashraw}{db03602b955b0c9b23b4bd012343619d}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Neural Computation}
+      \field{number}{4}
+      \field{title}{Backpropagation Applied to Handwritten Zip Code Recognition}
+      \field{volume}{1}
+      \field{year}{1989}
+      \field{pages}{541\bibrangedash 551}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1162/neco.1989.1.4.541
       \endverb
     \endentry
     \entry{vaswani2017attention}{inproceedings}{}{}
