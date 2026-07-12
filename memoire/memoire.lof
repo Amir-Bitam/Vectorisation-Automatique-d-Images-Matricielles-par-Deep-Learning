@@ -6,4 +6,6 @@
 \contentsline {figure}{\numberline {1.4}{\ignorespaces Architecture générale d'un Vision Transformer}}{8}{figure.caption.13}%
 \contentsline {figure}{\numberline {1.5}{\ignorespaces Attention par produit scalaire mise à l'échelle}}{10}{figure.caption.14}%
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Pipeline générale de l'approche proposée, de l'image matricielle aux chemins SVG.}}{21}{figure.caption.15}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Chemin fermé composé de quatre courbes de Bézier cubiques et de douze points prédits.}}{27}{figure.caption.17}%
 \addvspace {10\p@ }

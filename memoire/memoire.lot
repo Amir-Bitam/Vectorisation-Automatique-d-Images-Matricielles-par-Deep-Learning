@@ -2,4 +2,7 @@
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {1.1}{\ignorespaces Synthèse comparative des principales approches de vectorisation étudiées.}}{18}{table.1.1}%
 \addvspace {10\p@ }
+\contentsline {table}{\numberline {2.1}{\ignorespaces Principaux modules de la pipeline proposée.}}{22}{table.caption.16}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces Configuration enregistrée pour l'entraînement du modèle à 128 chemins par superpixel.}}{31}{table.caption.18}%
+\contentsline {table}{\numberline {2.3}{\ignorespaces Comparaison du flux d'entraînement et du flux d'inférence.}}{34}{table.caption.19}%
 \addvspace {10\p@ }
