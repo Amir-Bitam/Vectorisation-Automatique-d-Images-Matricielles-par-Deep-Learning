@@ -25,6 +25,8 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
 \graphicspath{{figures/}}
 
 % ── Tableaux ──────────────────────────────────────────────
@@ -250,6 +252,9 @@ Genetic Algorithm, Metaheuristics, PSNR, SSIM.
   \acro{PPI}{Pixels Per Inch}
   \acro{ViT}{Vision Transformer}
   \acro{UDF}{Unsigned Distance guided Focal loss}
+  \acro{SLIC}{Simple Linear Iterative Clustering}
+  \acro{DINO}{self-DIstillation with NO labels}
+  \acro{AMP}{Automatic Mixed Precision}
   
 \end{acronym}
 
@@ -292,10 +297,10 @@ L'un des problèmes les plus courants dans ce domaine est la qualité de l'image
 \bigskip
 Ce mémoire est organisé comme suit :
 \begin{itemize}
-  \item \textbf{Chapitre 1 :} État de l'art — revue de littérature sur le redimensionnement
-        d'images et les approches existantes.
-  \item \textbf{Chapitre 2 :} Approche proposée — architecture des modèles CNN et
-        sélection des hyperparamètres par méta heuristiques.
+  \item \textbf{Chapitre 1 :} État de l'art — notions fondamentales et principales
+        approches de vectorisation d'images.
+  \item \textbf{Chapitre 2 :} Approche proposée — préparation par superpixels,
+        architecture DINOv3 avec attention, rendu différentiable et génération du SVG.
   \item \textbf{Chapitre 3 :} Expérimentations et Résultats — évaluation quantitative
         et qualitative avec comparaisons.
 \end{itemize}
@@ -304,11 +309,13 @@ Ce mémoire est organisé comme suit :
 %   CHAPITRE 1 — ÉTAT DE L'ART
 % ============================================================
 \chapter{État de l'Art}
+\label{chap:etat_art}
 
 \section{Introduction}
 Dans ce chapitre, nous exposerons d'abord les concepts clés à la vectorisation d'images, à l'apprentissage automatique, et les architectures utilisées tout au long de ce travail, ceci nous permettra de mieux appréhender ensuite les travaux effectués sur le sujet.
 
 \section{La vectorisation d'images}
+\label{sec:vectorisation_images}
 Dans cette section nous tenterons de définir les termes et concepts lié à la transformation d'image matricielles en images vectorielles, dite, vectorisation d'images. En soulignant notamment la différence entre les images dites matricielles et vectorielles. En opposant ainsi les deux types d'images nous pourrons mieux cerner la motivation derrière ce travail et pourquoi la vectorisation d'image constitue un exercice complexe de la vision par ordinateur.
   \subsection{Images matricielles}
   Les images matricielles peuvent être définies comme des fonctions bidimensionnelles $f(x,y)$, où $x$ et $y$ représentent des coordonnées spatiales planes et où la valeur de $f$ associée à chaque paire de coordonnées correspond à l'intensité ou à la couleur du point considéré. Plus simplement, elles peuvent être représentées comme une grille de pixels organisée selon une largeur et une hauteur données \cite{gonzalez2018digital}. Les images matricielles présentent toutefois une limite lors de leur agrandissement. En effet, comme elles sont constituées d’un nombre fixe de pixels, une augmentation importante de leurs dimensions peut rendre ces derniers visibles et produire un effet de pixellisation. La qualité de l’image se dégrade alors progressivement à mesure que le facteur d’agrandissement augmente.
@@ -329,6 +336,7 @@ Les images vectorielles sont décrites par un ensemble de formes géométriques 
 Afin de mieux comprendre la manière dont une image vectorielle est construite et enregistrée, il convient de présenter deux éléments essentiels. Les courbes de Bézier permettent de représenter des contours et des formes complexes à partir d'un nombre limité de points de contrôle, tandis que le format SVG fournit une structure permettant de décrire et de stocker ces primitives vectorielles.
 
 \subsubsection{Courbes de Bézier}
+\label{sec:courbes_bezier}
 
 Une courbe de Bézier est définie comme une fonction polynomiale dont la forme est dictée par la position de points de contrôle. La courbe passe par le premier et le dernier point (points d'ancrage), tandis que les points intermédiaires agissent comme des "aimants" qui tirent la courbe vers eux \cite{foley1996computer}. 
 
@@ -370,6 +378,7 @@ Les Transformers sont une architecture de réseaux de neurones introduite initia
 \end{figure}	
 						
 \subsubsection{Vision Transformers}
+\label{sec:vision_transformers}
 
 Les Vision Transformers, ou ViT, sont une adaptation de l'architecture Transformer au traitement des images. Au lieu de s'appuyer principalement sur des convolutions comme les CNN, une image est divisée en petits blocs appelés patchs, par exemple de taille $16 \times 16$. Ces patchs sont ensuite transformés en vecteurs et traités comme une séquence d'éléments, de manière similaire aux tokens dans le traitement du langage naturel \cite{dosovitskiy2021image}. Grâce au mécanisme d'auto-attention, le modèle peut apprendre des relations globales entre différentes régions de l'image. Cette capacité rend les Vision Transformers particulièrement intéressants pour les tâches où la compréhension de la structure globale de l'image est importante, en complément des informations locales. Comme l'illustre la figure~\ref{fig:vit_model}, les représentations des patchs sont combinées à un encodage positionnel, puis transmises à un encodeur Transformer afin de produire la sortie du modèle.
 
@@ -382,6 +391,7 @@ Les Vision Transformers, ou ViT, sont une adaptation de l'architecture Transform
 \end{figure}
 
 \section{Mécanismes d'attention}
+\label{sec:mecanismes_attention}
 Les mécanismes d'attention constituent une composante importante des architectures modernes d'apprentissage profond, en particulier dans les modèles de type Transformer. Leur objectif est de permettre au modèle d'accorder une importance différente aux éléments d'une entrée selon leur pertinence pour la tâche à résoudre, au lieu de traiter toutes les informations de manière uniforme. Ce fonctionnement repose généralement sur trois éléments principaux : une requête, des clés et des valeurs. La requête représente l'information recherchée, les clés servent à mesurer la similarité avec cette requête, et les valeurs contiennent les informations à combiner \cite{vaswani2017attention}.
 
 Dans le cas de l'attention par produit scalaire mise à l'échelle, les requêtes, les clés et les valeurs sont regroupées respectivement dans les matrices $Q$, $K$ et $V$. Les scores d'attention sont obtenus en calculant le produit entre les requêtes et les clés, puis en le normalisant par $\sqrt{d_k}$, où $d_k$ désigne la dimension des clés. Un masque peut éventuellement être appliqué, notamment lorsque l'on souhaite empêcher le modèle d'accéder à certaines positions. La fonction softmax transforme ensuite, pour chaque requête, les scores obtenus en poids positifs compris entre 0 et 1, dont la somme est égale à 1. Les scores les plus élevés reçoivent ainsi les poids les plus importants, ce qui permet au modèle d'accorder davantage d'attention aux éléments considérés comme les plus pertinents. Ces poids sont finalement utilisés pour effectuer une combinaison pondérée des valeurs \cite{vaswani2017attention,geron2022hands}. Comme l'illustre la figure~\ref{fig:scaled_dot_product_attention}, ce mécanisme enchaîne le produit scalaire entre $Q$ et $K$, la mise à l'échelle, l'application éventuelle d'un masque, la fonction softmax et la combinaison pondérée avec $V$.
@@ -408,6 +418,7 @@ Cette équation montre que les similarités entre les requêtes $Q$ et les clés
 La self-attention, ou auto-attention, est un cas particulier du mécanisme d'attention dans lequel les requêtes, les clés et les valeurs proviennent de la même séquence. Elle permet donc à chaque élément d'une entrée de prendre en compte les autres éléments de cette même entrée afin de construire une représentation plus riche et contextualisée. Dans une phrase, par exemple, chaque mot peut être relié aux autres mots pour mieux comprendre son sens selon le contexte. Dans une image représentée sous forme de patchs, chaque patch peut de la même manière interagir avec les autres régions de l'image \cite{vaswani2017attention}. Cette capacité à modéliser les relations internes d'une séquence explique l'importance de la self-attention dans les architectures Transformer. Dans le traitement d'images, cette propriété permet notamment de mettre en relation des régions éloignées d'une même image, contrairement aux opérations strictement locales qui se limitent à un voisinage restreint.
 
 \subsection{Cross-attention}
+\label{sec:cross_attention}
 
 La cross-attention, ou attention croisée, est une variante du mécanisme d'attention dans laquelle les requêtes ne proviennent pas de la même source que les clés et les valeurs. Contrairement à la self-attention, où un élément interagit avec les autres éléments d'une même séquence, la cross-attention permet à une représentation de s'appuyer sur une autre représentation externe.
 
@@ -416,12 +427,16 @@ Dans une architecture Transformer de type encodeur-décodeur, l'encodeur reçoit
 Dans le contexte de la vectorisation d'images, l'encodeur peut extraire les caractéristiques visuelles de l'image matricielle, tandis que le décodeur génère les paramètres des primitives vectorielles. La cross-attention permet alors aux requêtes associées aux primitives à produire d'interagir avec les clés et les valeurs issues de l'image encodée. Les paramètres vectoriels prédits sont ainsi guidés par les informations visuelles les plus pertinentes, ce qui facilite la génération de primitives adaptées au contenu de l'entrée.
 
 \section{Concepts utilisés dans la vectorisation par apprentissage profond}
+\label{sec:concepts_vectorisation}
 La vectorisation d'images par apprentissage profond repose sur plusieurs concepts techniques permettant de passer d'une image matricielle, composée de pixels, à une représentation vectorielle décrite par des formes paramétriques. Contrairement aux méthodes classiques de traçage, les approches récentes cherchent à apprendre ou à optimiser automatiquement les paramètres des primitives vectorielles afin de reconstruire au mieux l'image d'entrée. Pour cela, elles utilisent notamment la décomposition de l'image en régions plus simples, le rendu différentiable pour relier les paramètres vectoriels à leur rendu matriciel, ainsi que des fonctions de perte permettant de mesurer l'écart entre l'image originale et l'image reconstruite. Certaines méthodes adoptent également une stratégie progressive de type \textit{coarse-to-fine}, dans laquelle la structure globale de l'image est d'abord reconstruite avant d'ajouter les détails fins \cite{li2020diffvg,hu2024supersvg}.
     \subsection{Superpixels}
+    \label{sec:superpixels}
 	Les superpixels sont des régions obtenues en regroupant des pixels voisins présentant des caractéristiques similaires, notamment en termes de couleur et de position spatiale. Ils permettent de remplacer une représentation pixel par pixel par une représentation plus compacte, composée de régions visuellement cohérentes. Parmi les méthodes les plus connues, l'algorithme SLIC (\textit{Simple Linear Iterative Clustering}) adapte le principe du k-means afin de générer efficacement des superpixels. Cette méthode est appréciée pour sa simplicité, sa rapidité, sa faible consommation mémoire et sa capacité à produire des régions qui respectent bien les contours de l'image \cite{achanta2012slic}. Dans le cadre de la vectorisation d'images, les superpixels sont utiles car ils divisent une image complexe en sous-régions plus simples à traiter. SuperSVG exploite précisément cette idée en décomposant l'image d'entrée en superpixels contenant des pixels de couleurs et de textures similaires, puis en vectorisant ces régions de manière progressive \cite{hu2024supersvg}.
     \subsection{Rendu différentiable}
+    \label{sec:rendu_differentiel}
 	Le rendu différentiable est une technique qui permet de relier une représentation vectorielle à son rendu matriciel tout en conservant la possibilité de calculer des gradients. Dans le contexte de la vectorisation d'images, les paramètres des primitives vectorielles, comme les positions des points de contrôle, les couleurs ou l'épaisseur des traits, sont d'abord rendus sous forme d'image raster. L'image obtenue est ensuite comparée à l'image cible à l'aide d'une fonction de perte, puis les gradients de cette perte sont rétropropagés vers les paramètres vectoriels afin de les optimiser \cite{li2020diffvg}. Cette approche permet donc d'utiliser des méthodes d'optimisation ou d'apprentissage profond pour ajuster automatiquement les formes vectorielles à partir d'une supervision dans le domaine des pixels. Elle est notamment utilisée dans des méthodes comme LIVE, qui optimise progressivement des chemins de Bézier dans un cadre de rendu entièrement différentiable afin de produire des SVG organisés en couches \cite{ma2022live}.
     \subsection{Fonctions de perte}
+    \label{sec:fonctions_perte_vectorisation}
 	Les fonctions de perte jouent un rôle central dans la vectorisation d'images par apprentissage profond, car elles permettent de mesurer l'écart entre l'image matricielle d'origine et l'image reconstruite à partir des primitives vectorielles. Dans les approches utilisant un rendu différentiable, les chemins SVG prédits ou optimisés sont d'abord rasterisés, puis comparés à l'image cible à l'aide d'une fonction de perte calculée dans l'espace des pixels. Une perte simple, comme la MSE, peut être utilisée pour minimiser la différence entre les deux images, mais elle ne suffit pas toujours à préserver correctement la structure, les contours ou la couleur des objets. Par exemple, LIVE montre qu'une optimisation fondée uniquement sur la MSE peut conduire à un effet de couleur moyenne, puis propose une perte UDF afin de donner plus d'importance aux pixels proches des contours, ainsi qu'une perte Xing pour limiter les auto-intersections des courbes \cite{ma2022live}. Dans SuperSVG, les auteurs combinent plusieurs pertes adaptées à la vectorisation par superpixels, notamment une perte de reconstruction normalisée, une perte de frontière pour empêcher les chemins de dépasser les limites du superpixel, et une perte Dynamic Path Warping permettant au modèle de raffinement d'hériter des connaissances du modèle grossier \cite{hu2024supersvg}.
     \subsection{Apprentissage coarse-to-fine}
 	L'apprentissage \textit{coarse-to-fine} désigne une stratégie progressive dans laquelle le modèle commence par reconstruire les éléments globaux ou principaux d'une image, avant d'ajouter progressivement des détails plus fins. Dans le contexte de la vectorisation d'images, cette approche est particulièrement utile car une image complexe est difficile à convertir directement en une représentation SVG précise. En procédant par étapes, le modèle peut d'abord approximer la structure générale, puis améliorer localement la reconstruction. SuperSVG adopte cette logique à travers un cadre d'apprentissage en deux étapes : un modèle grossier prédit d'abord des chemins SVG pour reconstruire la structure principale du superpixel, puis un modèle de raffinement ajoute d'autres chemins afin d'enrichir les détails, en étant guidé par les chemins prédits à l'étape précédente \cite{hu2024supersvg}. Une idée similaire apparaît dans LIVE, où l'image est reconstruite progressivement en ajoutant et en optimisant de nouveaux chemins de Bézier dans une représentation en couches, ce qui permet d'obtenir un SVG plus compact et plus cohérent avec la structure visuelle de l'image \cite{ma2022live}.
@@ -634,8 +649,524 @@ La suite du mémoire présentera l'approche proposée pour répondre à cette pr
 % ============================================================
 %   CHAPITRE 2 — APPROCHE PROPOSÉE
 % ============================================================
-\chapter{Approche Proposée}
+\chapter{Approche proposée}
+\label{chap:approche_proposee}
 
+\section{Introduction}
+
+Le chapitre précédent a présenté les notions nécessaires à la compréhension de la vectorisation d'images ainsi que les principales familles de méthodes existantes. Nous décrivons à présent la solution mise en œuvre dans ce projet. Son objectif est de convertir une image matricielle couleur en un ensemble de chemins vectoriels fermés, représentés par des courbes de Bézier cubiques et enregistrés dans un fichier SVG. La méthode ne nécessite pas de fichiers SVG de référence pendant l'entraînement : la supervision est obtenue en rendant les chemins prédits avec DiffVG, puis en comparant le rendu à la région matricielle d'origine.
+
+Notre approche repose sur une décomposition locale de l'image. L'image complète est d'abord segmentée avec SLIC, puis chaque superpixel est recadré et vectorisé séparément. Un encodeur visuel DINOv3 extrait les caractéristiques de la région, tandis qu'un décodeur fondé sur la cross-attention et la self-attention prédit directement les points de contrôle et la couleur de chaque chemin. Cette organisation reprend l'idée de simplifier une image complexe par superpixels, mise en avant dans SuperSVG, mais la version actuellement implémentée utilise une seule étape de prédiction et ne comporte pas de modèle de raffinement \textit{coarse-to-fine} \cite{hu2024supersvg}.
+
+Dans ce chapitre, nous présentons d'abord la vue d'ensemble de la méthode et la préparation des données. Nous détaillons ensuite l'architecture du modèle, la représentation des primitives vectorielles, le rendu différentiable et les fonctions de perte. Enfin, nous décrivons la stratégie d'entraînement ainsi que le passage des prédictions locales au SVG de l'image complète.
+
+\section{Vue d'ensemble de la méthode}
+\label{sec:vue_ensemble_approche}
+
+Cette section présente l'organisation générale de l'approche proposée et les principaux choix ayant guidé sa conception. Nous décrivons d'abord le cheminement suivi depuis la décomposition de l'image en superpixels jusqu'à la prédiction et à l'assemblage des primitives vectorielles. Nous précisons ensuite les choix retenus concernant la supervision matricielle, la prédiction des chemins en une seule passe et les principaux modules constituant la pipeline.
+
+\subsection{Principe général}
+
+La conversion directe d'une image naturelle complète vers un nombre limité de primitives vectorielles constitue un problème difficile. Une même image peut contenir de nombreux objets, couleurs, contours et détails, tandis qu'il existe plusieurs descriptions SVG capables de produire un rendu visuellement proche. Nous réduisons cette difficulté en travaillant sur des régions dont les pixels sont plus homogènes. Comme les superpixels tendent à suivre les changements de couleur et les frontières locales, chaque prédiction porte sur une forme plus simple que l'image entière. Cette décomposition a été introduite dans la section~\ref{sec:superpixels}; elle est appliquée ici avec l'algorithme SLIC \cite{achanta2012slic}.
+
+Pour chaque région, le réseau prédit un nombre fixé $P$ de chemins. Chaque chemin est décrit par douze points bidimensionnels et une couleur RGB, soit un vecteur de $27$ paramètres. Les chemins sont ensuite rasterisés par DiffVG. Pendant l'entraînement, cette image rendue permet de calculer une erreur de reconstruction et une pénalité lorsque les formes débordent du superpixel. Pendant l'inférence, les coordonnées prédites dans le repère local du recadrage sont replacées dans le repère de l'image originale, puis l'ensemble des chemins est enregistré au format SVG.
+
+La figure~\ref{fig:pipeline_proposee} résume ce flux. Le trajet supérieur est commun à l'entraînement et à l'inférence. Les deux branches inférieures montrent, d'une part, l'utilisation du rendu différentiable pour apprendre les paramètres du réseau et, d'autre part, la transformation géométrique utilisée pour construire le document vectoriel final.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+    \begin{tikzpicture}[
+        node distance=0.55cm,
+        block/.style={
+            draw,
+            rounded corners=2pt,
+            align=center,
+            minimum height=1.15cm,
+            text width=2.25cm,
+            inner sep=5pt,
+            font=\small
+        },
+        data/.style={block, fill=gray!12},
+        process/.style={block, fill=blue!8},
+        learned/.style={block, fill=green!10},
+        result/.style={block, fill=yellow!13},
+        arrow/.style={-{Latex[length=2.5mm]}, thick}
+    ]
+
+        % Ligne principale
+        \node[data] (image) {Image RGB\\matricielle};
+
+        \node[process, right=of image]
+            (slic) {Segmentation\\SLIC};
+
+        \node[process, right=of slic]
+            (crop) {Recadrage, masque\\et mise à l'échelle};
+
+        \node[learned, right=of crop]
+            (dino) {Encodeur\\DINOv3--ViT};
+
+        \node[learned, right=of dino]
+            (attention) {Requêtes de chemins\\et attention};
+
+        \node[result, right=of attention]
+            (params) {$P \times 27$ paramètres\\vectoriels};
+
+        % Ligne inférieure
+        \node[process, below=1.15cm of attention]
+            (diffvg) {Rendu différentiable\\DiffVG};
+
+        \node[result, left=of diffvg]
+            (losses) {Pertes de reconstruction\\et de masque};
+
+        \node[process, below=1.15cm of params]
+            (mapping) {Coordonnées locales\\vers globales};
+
+        % Bloc légèrement élargi pour éviter les retours à la ligne indésirables
+        \node[
+            result,
+            right=of mapping,
+            text width=2.60cm,
+            minimum height=1.45cm,
+            inner xsep=7pt
+        ]
+            (svg) {Assemblage et\\enregistrement\\SVG};
+
+        % Flux principal supérieur
+        \draw[arrow] (image.east) -- (slic.west);
+        \draw[arrow] (slic.east) -- (crop.west);
+        \draw[arrow] (crop.east) -- (dino.west);
+        \draw[arrow] (dino.east) -- (attention.west);
+        \draw[arrow] (attention.east) -- (params.west);
+
+        % Bifurcation entre entraînement et export
+        \coordinate (branch) at ($(params.south)+(0,-0.38cm)$);
+
+        \draw[thick] (params.south) -- (branch);
+        \fill (branch) circle (1.2pt);
+
+        % Branche vers DiffVG : elle passe au-dessus des nœuds inférieurs
+        \draw[arrow] (branch) -| (diffvg.north);
+
+        % Branche vers les coordonnées globales
+        \draw[arrow] (branch) -- (mapping.north);
+
+        % Branche d'entraînement
+        \draw[arrow] (diffvg.west) -- (losses.east);
+
+        % Rétropropagation vers l'encodeur
+        \draw[arrow] (losses.north) -- (dino.south);
+
+        % Export SVG
+        \draw[arrow] (mapping.east) -- (svg.west);
+
+    \end{tikzpicture}%
+    }
+
+    \caption{Pipeline générale de l'approche proposée, de l'image matricielle aux chemins SVG.}
+    \label{fig:pipeline_proposee}
+\end{figure} 
+
+\subsection{Choix de conception}
+
+Le premier choix consiste à apprendre à partir d'images matricielles uniquement. La correspondance entre une image et un SVG n'est pas unique : deux ensembles de courbes différents peuvent produire des rendus proches. Exiger une vérité terrain vectorielle imposerait donc une structure particulière sans garantir qu'elle soit la seule représentation correcte. Le rendu différentiable permet d'éviter cette contrainte en ramenant la supervision dans l'espace des pixels, comme dans DiffVG et plusieurs méthodes étudiées au chapitre~\ref{chap:etat_art} \cite{li2020diffvg,reddy2021im2vec}.
+
+Le second choix est de prédire les primitives en une seule passe du réseau. Contrairement à une optimisation directe qui ajuste les courbes séparément pour chaque nouvelle image, les paramètres sont ici produits par un modèle entraîné. L'inférence ne lance donc pas de descente de gradient sur les chemins. Cette conception vise à séparer le coût de l'apprentissage, effectué une fois, du traitement des images ultérieures. La version implémentée reste volontairement simple : elle emploie un seul décodeur, un nombre fixe de chemins par région et deux termes de perte directement liés à la reconstruction et au respect du masque.
+
+Le tableau~\ref{tab:modules_approche} présente les principaux modules et les données qu'ils échangent. Les dimensions indiquées correspondent à une région redimensionnée en $224 \times 224$ pixels. La dimension interne $d$ est déterminée automatiquement à partir du modèle DINOv3 chargé.
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Principaux modules de la pipeline proposée.}
+    \label{tab:modules_approche}
+    \begin{tabular}{p{2.7cm}p{4.1cm}p{5.5cm}}
+        \toprule
+        \textbf{Module} & \textbf{Entrée et sortie} & \textbf{Rôle dans la pipeline} \\
+        \midrule
+        SLIC & Image RGB $\rightarrow$ carte d'étiquettes & Décomposer l'image en régions localement homogènes et connexes. \\
+        Prétraitement & Région et masque $\rightarrow$ tenseur $3 \times 224 \times 224$ & Recadrer le superpixel, normaliser sa taille et distinguer la région de son arrière-plan. \\
+        DINOv3--ViT & Région $\rightarrow 196 \times d$ tokens & Extraire une représentation visuelle dense des $14 \times 14$ patchs. \\
+        Décodeur d'attention & Tokens visuels et $P$ requêtes $\rightarrow P \times d$ & Associer chaque requête de chemin aux zones pertinentes, puis modéliser les interactions entre chemins. \\
+        Tête linéaire & $P \times d \rightarrow P \times 27$ & Prédire les coordonnées normalisées et la couleur de remplissage. \\
+        DiffVG & Chemins vectoriels $\rightarrow$ image RGBA & Fournir un rendu différentiable pour le calcul des pertes et un aperçu matriciel à l'inférence. \\
+        Export SVG & Chemins globaux $\rightarrow$ fichier SVG & Enregistrer les primitives à la résolution de l'image d'origine. \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\section{Préparation des données}
+\label{sec:preparation_donnees_approche}
+
+Cette section décrit les opérations appliquées aux images avant leur passage dans le modèle. Nous présentons d'abord le jeu de données utilisé, puis la décomposition des images en superpixels et, enfin, la construction des recadrages locaux fournis au réseau avec leur masque associé.
+
+\subsection{Jeu de données utilisé}
+
+L'implémentation utilise le sous-ensemble d'entraînement d'ImageNet comme source d'images naturelles \cite{deng2009imagenet}. Les fichiers sont parcourus récursivement et chargés en RGB, puis leurs valeurs entières sont converties en nombres réels dans l'intervalle $[0,1]$. Le chargeur accepte les principaux formats matriciels, notamment JPEG, PNG, BMP, WebP et TIFF. Aucune étiquette de classe ImageNet n'intervient dans l'objectif : seules les images sont exploitées pour apprendre la reconstruction de régions visuelles.
+
+Un exemple du jeu de données ne correspond pas à une image complète. À chaque accès, l'image concernée est segmentée, l'ordre de ses superpixels est mélangé et une région non vide est choisie. Cette stratégie permet de présenter différentes régions d'une même image au cours des époques sans stocker à l'avance tous les recadrages. En cas d'image corrompue ou de région impossible à traiter, le chargeur tente jusqu'à cinq images voisines afin qu'une erreur isolée n'interrompe pas un entraînement long.
+
+\subsection{Décomposition en superpixels}
+
+Pour une image $I \in [0,1]^{H_0 \times W_0 \times 3}$, SLIC produit une carte d'étiquettes $L \in \mathbb{N}^{H_0 \times W_0}$. Les pixels portant la même étiquette définissent un masque binaire. Le code demande $16$ régions pendant l'entraînement, avec une compacité de $10$ et un lissage gaussien de paramètre $\sigma=1$. La connectivité est imposée afin d'éviter qu'une même étiquette corresponde à plusieurs composantes éloignées. Le nombre demandé est également borné entre $2$ et $H_0W_0$ pour conserver une valeur valide sur les petites images.
+
+Ce choix fournit un compromis entre la taille des régions et leur homogénéité. Une valeur faible du nombre de segments laisserait au réseau des régions complexes, alors qu'une valeur très élevée multiplierait le nombre de chemins nécessaires pour reconstruire une image entière. La compacité contrôle quant à elle l'équilibre entre la proximité spatiale et la similarité colorimétrique dans SLIC \cite{achanta2012slic}. Les effets de ces paramètres sur la qualité et le coût de la vectorisation seront évalués séparément dans le chapitre consacré aux expérimentations.
+
+\subsection{Recadrage et construction de l'entrée}
+
+Pour un superpixel donné, nous calculons la plus petite boîte englobante $(x_1,y_1,x_2,y_2)$ contenant tous ses pixels. L'image et le masque sont découpés selon cette boîte. Le recadrage RGB est ensuite redimensionné en $224 \times 224$ par interpolation bilinéaire, tandis que le masque utilise l'interpolation du plus proche voisin afin de rester binaire. Cette différence est importante : une interpolation continue du masque créerait des valeurs intermédiaires qui rendraient ambiguë l'appartenance à la région.
+
+Soient $Y \in [0,1]^{3 \times H \times W}$ le recadrage RGB redimensionné et $M \in \{0,1\}^{1 \times H \times W}$ son masque, avec $H=W=224$. Le tenseur fourni au réseau est défini par :
+
+\begin{equation}
+    X = Y \odot M - (1-M),
+    \label{eq:entree_region}
+\end{equation}
+
+où le masque est diffusé sur les trois canaux. Les pixels appartenant au superpixel conservent ainsi leur valeur RGB, alors que les pixels extérieurs prennent la valeur $-1$. Le réseau reçoit donc à la fois l'apparence de la région et une indication explicite de sa forme. Le tenseur cible reste $Y$, mais la perte de reconstruction sera calculée uniquement là où $M=1$. Le masque est conservé séparément pour normaliser cette perte et pénaliser les débordements.
+
+Aucune augmentation par rotation, miroir ou modification colorimétrique n'est appliquée dans la version actuelle du chargeur. La variabilité provient du contenu d'ImageNet et du choix aléatoire du superpixel.
+
+\section{Architecture du modèle}
+\label{sec:architecture_modele_propose}
+
+Cette section décrit l'architecture chargée de transformer les caractéristiques visuelles d'un superpixel en paramètres vectoriels. Nous présentons d'abord l'extraction des représentations avec DINOv3, puis le décodage fondé sur des requêtes apprenables, la cross-attention et la self-attention. Enfin, nous détaillons la représentation adoptée pour chaque chemin vectoriel et la manière dont ses paramètres sont interprétés sous forme de courbes de Bézier cubiques.
+
+\subsection{Extraction des caractéristiques avec DINOv3}
+
+L'encodeur visuel utilisé est la variante \texttt{vit\_small\_patch16\_dinov3}, chargée avec des poids pré-entraînés. DINOv3 est une famille de modèles visuels pré-entraînés par apprentissage auto-supervisé et conçus pour produire des représentations denses transférables \cite{simeoni2025dinov3}. Le recours à un modèle pré-entraîné est adapté à notre problème, car la reconstruction vectorielle nécessite de reconnaître des structures locales, des contours et des relations spatiales sans disposer d'annotations SVG.
+
+Avant l'encodage, chaque canal de $X$ est standardisé avec les moyennes $(0{,}485,0{,}456,0{,}406)$ et les écarts-types $(0{,}229,0{,}224,0{,}225)$ employés par l'implémentation. Si la taille de l'entrée diffère de $224 \times 224$, une interpolation bilinéaire la ramène à cette résolution. Comme la taille d'un patch est de $16 \times 16$, la région est divisée en une grille de $14 \times 14$, soit $196$ patchs. Ce principe de représentation d'une image comme une séquence de patchs a été présenté dans la section~\ref{sec:vision_transformers} \cite{dosovitskiy2021image}.
+
+Le passage dans DINOv3 peut être résumé par :
+
+\begin{equation}
+    F = E_{\theta}(X) \in \mathbb{R}^{196 \times d},
+    \label{eq:features_dinov3}
+\end{equation}
+
+où $E_{\theta}$ désigne l'encodeur visuel et $d$ sa dimension d'embedding. La sortie de l'encodeur contient également des tokens préfixes, tels que le token de classification et, selon la variante chargée, des tokens registres. Le code retire tous ces préfixes et conserve uniquement les $196$ tokens associés aux patchs. Il vérifie explicitement leur nombre afin d'éviter de transmettre au décodeur une séquence incompatible avec la résolution prévue.
+
+Les paramètres de DINOv3 ne sont pas gelés pendant l'entraînement. L'optimiseur reçoit l'ensemble des paramètres de l'encodeur de chemins, ce qui inclut le backbone pré-entraîné, les requêtes apprenables, les blocs d'attention et la tête de sortie. Le modèle bénéficie donc de l'initialisation auto-supervisée, puis adapte ses caractéristiques à la prédiction de primitives vectorielles.
+
+\subsection{Requêtes apprenables et cross-attention}
+
+Le décodeur maintient $P$ vecteurs apprenables, appelés requêtes ou tokens de chemins. Ils forment une matrice initiale $S^{(0)} \in \mathbb{R}^{P \times d}$, identique pour toutes les images avant son interaction avec les caractéristiques visuelles. Chaque requête est destinée à produire un chemin, mais aucune association fixe n'est imposée entre une requête et une position de l'image. Cette association est apprise par la cross-attention.
+
+Pour chaque tête d'attention, les requêtes proviennent des tokens de chemins, tandis que les clés et les valeurs proviennent des patchs DINOv3. En reprenant la notation introduite dans la section~\ref{sec:mecanismes_attention}, le calcul s'écrit :
+
+\begin{align}
+    Q &= \operatorname{LN}\!\left(S^{(0)}\right)W_Q, \\
+    K &= \operatorname{LN}(F)W_K, \qquad
+    V = \operatorname{LN}(F)W_V, \\
+    A &= \operatorname{softmax}\!\left(\frac{QK^{T}}{\sqrt{d_h}}\right)V,
+    \label{eq:cross_attention_approche}
+\end{align}
+
+où $d_h$ est la dimension d'une tête. Les sorties des différentes têtes sont concaténées par le module d'attention multi-têtes. Une connexion résiduelle ajoute ensuite l'information obtenue aux requêtes initiales. Le résultat traverse un réseau \textit{feed-forward} composé de deux projections linéaires, d'une activation GELU et d'une dimension cachée quatre fois supérieure à $d$. Une seconde connexion résiduelle produit les tokens contextualisés :
+
+\begin{equation}
+    S^{(1)} = S^{(0)} + \operatorname{MHA}_{\mathrm{cross}}(S^{(0)},F,F),
+    \qquad
+    \widetilde{S}^{(1)} = S^{(1)} + \operatorname{FFN}\!\left(\operatorname{LN}(S^{(1)})\right).
+    \label{eq:bloc_cross_attention}
+\end{equation}
+
+L'implémentation demande huit têtes. Si $d$ n'est pas divisible par huit, leur nombre est automatiquement diminué jusqu'à obtenir un diviseur valide. Cette précaution permet de conserver le même code avec plusieurs variantes de backbone.
+
+\subsection{Interactions entre les chemins}
+
+Après la cross-attention, chaque requête contient principalement l'information visuelle utile à son propre chemin. Une couche de self-attention est ensuite appliquée entre les $P$ requêtes. Les requêtes, les clés et les valeurs proviennent alors toutes de $\widetilde{S}^{(1)}$. Cette opération permet à un chemin de tenir compte des autres chemins déjà représentés, ce qui peut limiter la redondance et répartir la reconstruction entre plusieurs primitives.
+
+Le bloc suit la même organisation pré-normalisée que le bloc précédent : LayerNorm, attention multi-têtes, connexion résiduelle, puis réseau \textit{feed-forward} et seconde connexion résiduelle. La version actuelle emploie exactement un bloc de cross-attention et un bloc de self-attention. Elle ne contient ni décodeur récurrent, ni empilement de plusieurs étapes de raffinement.
+
+Une normalisation finale et une couche linéaire transforment chaque token en $27$ valeurs. Une fonction sigmoïde borne toutes les sorties entre $0$ et $1$ :
+
+\begin{equation}
+    Z = \sigma\!\left(W_o\operatorname{LN}(S^{(2)}) + b_o\right)
+      \in [0,1]^{P \times 27}.
+    \label{eq:sortie_decodeur}
+\end{equation}
+
+Cette contrainte convient simultanément aux coordonnées normalisées et aux trois composantes de couleur. Elle évite qu'un point soit placé hors du canevas local avant l'application de la perte de masque.
+
+\subsection{Représentation d'un chemin vectoriel}
+\label{sec:representation_chemin_propose}
+
+Pour le chemin $p$, le vecteur prédit est décomposé de la manière suivante :
+
+\begin{equation}
+    z_p = \left(x_0,y_0,\ldots,x_{11},y_{11},r_p,g_p,b_p\right).
+    \label{eq:parametres_chemin}
+\end{equation}
+
+Les $24$ premières valeurs représentent douze points $P_0,\ldots,P_{11}$ dans le repère normalisé du recadrage. Les trois dernières valeurs définissent la couleur de remplissage. DiffVG interprète ces points comme quatre segments de Bézier cubiques reliés bout à bout et ferme le dernier segment sur le point initial. Les points $P_0$, $P_3$, $P_6$ et $P_9$ sont les points d'ancrage, tandis que les autres points contrôlent la tangente et la courbure, comme l'illustre la figure~\ref{fig:chemin_quatre_bezier}.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[scale=1.05,
+        anchorpoint/.style={circle, fill=black, inner sep=2.2pt},
+        controlpoint/.style={circle, draw=black, fill=white, inner sep=1.8pt}]
+        \coordinate (p0) at (0,0);
+        \coordinate (p1) at (-0.8,1.2);
+        \coordinate (p2) at (0.45,2.45);
+        \coordinate (p3) at (2.0,2.15);
+        \coordinate (p4) at (3.15,2.05);
+        \coordinate (p5) at (4.25,1.2);
+        \coordinate (p6) at (4.0,0.0);
+        \coordinate (p7) at (3.8,-1.1);
+        \coordinate (p8) at (2.7,-1.75);
+        \coordinate (p9) at (1.55,-1.45);
+        \coordinate (p10) at (0.45,-1.35);
+        \coordinate (p11) at (-0.75,-0.75);
+
+        \draw[densely dashed, gray] (p0)--(p1)--(p2)--(p3);
+        \draw[densely dashed, gray] (p3)--(p4)--(p5)--(p6);
+        \draw[densely dashed, gray] (p6)--(p7)--(p8)--(p9);
+        \draw[densely dashed, gray] (p9)--(p10)--(p11)--(p0);
+        \draw[very thick, blue!65!black]
+            (p0) .. controls (p1) and (p2) .. (p3)
+                 .. controls (p4) and (p5) .. (p6)
+                 .. controls (p7) and (p8) .. (p9)
+                 .. controls (p10) and (p11) .. (p0);
+
+        \node[anchorpoint, label={[font=\scriptsize]below left:$P_0$}] at (p0) {};
+        \node[controlpoint, label={[font=\scriptsize]left:$P_1$}] at (p1) {};
+        \node[controlpoint, label={[font=\scriptsize]above:$P_2$}] at (p2) {};
+        \node[anchorpoint, label={[font=\scriptsize]above:$P_3$}] at (p3) {};
+        \node[controlpoint, label={[font=\scriptsize]above:$P_4$}] at (p4) {};
+        \node[controlpoint, label={[font=\scriptsize]right:$P_5$}] at (p5) {};
+        \node[anchorpoint, label={[font=\scriptsize]right:$P_6$}] at (p6) {};
+        \node[controlpoint, label={[font=\scriptsize]right:$P_7$}] at (p7) {};
+        \node[controlpoint, label={[font=\scriptsize]below:$P_8$}] at (p8) {};
+        \node[anchorpoint, label={[font=\scriptsize]below:$P_9$}] at (p9) {};
+        \node[controlpoint, label={[font=\scriptsize]below:$P_{10}$}] at (p10) {};
+        \node[controlpoint, label={[font=\scriptsize]left:$P_{11}$}] at (p11) {};
+
+        \node[font=\scriptsize, align=left] at (6.0,0.8) {Points noirs : ancrages\\Points blancs : contrôles};
+    \end{tikzpicture}
+    \caption{Chemin fermé composé de quatre courbes de Bézier cubiques et de douze points prédits.}
+    \label{fig:chemin_quatre_bezier}
+\end{figure}
+
+Pour quatre points consécutifs $A$, $C_1$, $C_2$ et $B$, chaque segment cubique est défini, pour $t \in [0,1]$, par :
+
+\begin{equation}
+    \mathcal{B}(t) = (1-t)^3A
+    + 3(1-t)^2tC_1
+    + 3(1-t)t^2C_2
+    + t^3B.
+    \label{eq:bezier_cubique_approche}
+\end{equation}
+
+Cette équation complète le rappel sur les courbes de Bézier de la section~\ref{sec:courbes_bezier} en précisant la structure réellement produite par le modèle. Dans le premier segment, par exemple, $A=P_0$, $C_1=P_1$, $C_2=P_2$ et $B=P_3$. Le quatrième segment part de $P_9$, utilise $P_{10}$ et $P_{11}$ comme points de contrôle, puis revient à $P_0$ pour fermer la forme.
+
+Les primitives sont remplies avec la couleur $(r_p,g_p,b_p)$. Leur opacité est fixée à $1$ et leur largeur de contour à $0$; le modèle produit donc des surfaces colorées sans trait séparé. Le nombre de chemins $P$ est un hyperparamètre fixé avant la construction du réseau. La valeur par défaut du code est $32$, tandis qu'une configuration d'entraînement enregistrée dans le projet utilise $128$ chemins par superpixel. Aucune sortie ne prédit actuellement la visibilité, l'opacité ou un symbole d'arrêt permettant de faire varier ce nombre.
+
+\section{Rendu différentiable et fonctions de perte}
+\label{sec:rendu_pertes_approche}
+
+Cette section présente le mécanisme utilisé pour comparer les primitives vectorielles prédites à la région matricielle cible. Nous décrivons d'abord la construction de la scène et sa rasterisation avec DiffVG, puis la perte de reconstruction calculée à l'intérieur du superpixel et la pénalité appliquée aux formes qui dépassent son masque. Enfin, nous définissons l'objectif global utilisé pour entraîner l'ensemble du réseau.
+
+\subsection{Construction de la scène DiffVG}
+
+Les paramètres $Z$ sont convertis en objets \texttt{Path} et \texttt{ShapeGroup} de DiffVG. Pour un canevas local de largeur $W$ et de hauteur $H$, chaque coordonnée normalisée $(x,y)$ est multipliée par $(W,H)$. Les quatre segments reçoivent chacun deux points de contrôle, le chemin est déclaré fermé et sa couleur de remplissage est obtenue à partir des trois dernières valeurs du vecteur. Le rasteriseur différentiable calcule ensuite une image RGBA avec un échantillonnage $2 \times 2$ par pixel \cite{li2020diffvg}.
+
+Si $\mathcal{R}$ désigne ce rendu, l'image RGB employée pour la reconstruction est composée sur un fond noir :
+
+\begin{equation}
+    \widehat{Y} = \mathcal{R}_{\mathrm{RGB}}(Z)
+    \odot \mathcal{R}_{\alpha}(Z).
+    \label{eq:composition_rendu}
+\end{equation}
+
+La différentiabilité de $\mathcal{R}$ permet de transmettre le gradient de l'erreur pixel jusqu'aux coordonnées et aux couleurs, puis à l'ensemble du réseau. DiffVG est exécuté en précision simple, même lorsque la précision mixte est active autour du reste du modèle, afin de conserver un calcul de rendu compatible et stable.
+
+\subsection{Perte de reconstruction normalisée}
+
+La première composante de l'objectif mesure l'écart quadratique entre le rendu et la cible à l'intérieur du superpixel. Comme les régions n'occupent pas toutes la même proportion de leur boîte englobante, la somme est normalisée par la surface du masque. Pour un lot de taille $B$, nous définissons :
+
+\begin{equation}
+    a_i = \frac{1}{HW}\sum_{u=1}^{H}\sum_{v=1}^{W}M_{i,u,v},
+    \label{eq:ratio_surface_masque}
+\end{equation}
+
+puis :
+
+\begin{equation}
+    \mathcal{L}_{\mathrm{rec}} =
+    \frac{1}{B}\sum_{i=1}^{B}
+    \frac{1}{3HW\max\!\left(a_i,\frac{1}{HW}\right)}
+    \sum_{c=1}^{3}\sum_{u=1}^{H}\sum_{v=1}^{W}
+    M_{i,u,v}\left(\widehat{Y}_{i,c,u,v}-Y_{i,c,u,v}\right)^2.
+    \label{eq:perte_reconstruction_approche}
+\end{equation}
+
+Cette formulation correspond à une MSE calculée sur les pixels utiles, indépendamment de la taille relative de la région. Sans la division par $a_i$, un superpixel occupant une faible partie du recadrage contribuerait moins à l'objectif qu'une région remplissant presque toute sa boîte. La borne inférieure $1/(HW)$ protège le calcul contre une division par zéro, même si le prétraitement vérifie déjà que le masque n'est pas vide.
+
+\subsection{Pénalité de débordement}
+
+La perte de reconstruction ne contraint pas les pixels extérieurs au masque, puisqu'ils sont multipliés par zéro. Un chemin pourrait donc dépasser largement la région tout en reconstruisant correctement sa partie visible à l'intérieur. Pour limiter ce comportement, les mêmes formes sont rendues une seconde fois en blanc et leur canal alpha est comparé à l'extérieur du superpixel. Cette idée est proche de la perte de frontière proposée dans SuperSVG \cite{hu2024supersvg}.
+
+Avant le calcul, le masque est dilaté par une opération de maximum local de rayon deux pixels. Soit $\widetilde{M}_i=\mathcal{D}_2(M_i)$ ce masque dilaté et $O_i=1-\widetilde{M}_i$ la zone extérieure. Si $\widehat{A}_i$ est le canal alpha du rendu blanc, la pénalité non pondérée vaut :
+
+\begin{equation}
+    \mathcal{L}_{\mathrm{ext}} =
+    \frac{1}{B}\sum_{i=1}^{B}
+    \frac{\displaystyle\sum_{u,v}\widehat{A}_{i,u,v}O_{i,u,v}}
+         {\displaystyle\max\!\left(1,\sum_{u,v}O_{i,u,v}\right)}.
+    \label{eq:perte_debordement_approche}
+\end{equation}
+
+La dilatation crée une tolérance autour de la frontière. Elle évite de pénaliser trop fortement les pixels d'anticrénelage ou un léger décalage entre le masque redimensionné et le bord de la courbe. La normalisation par la surface extérieure rend la valeur comparable entre des masques de formes différentes.
+
+\subsection{Objectif global}
+
+La fonction objectif combine les deux termes précédents :
+
+\begin{equation}
+    \mathcal{L} = \mathcal{L}_{\mathrm{rec}}
+    + \lambda_{\mathrm{masque}}\mathcal{L}_{\mathrm{ext}}.
+    \label{eq:objectif_global_approche}
+\end{equation}
+
+Le poids de la pénalité décroît linéairement au fil des époques. Pour une époque $e \in \{0,\ldots,E-1\}$ et $E>1$, il est défini par :
+
+\begin{equation}
+    \lambda_{\mathrm{masque}}(e)
+    = 0{,}05 + (0{,}01-0{,}05)\frac{e}{E-1}.
+    \label{eq:poids_masque_approche}
+\end{equation}
+
+La contrainte spatiale est ainsi plus forte au début, lorsque les formes prédites sont encore peu structurées, puis son poids diminue pour laisser davantage de place à l'ajustement des couleurs et des contours. L'objectif ne contient actuellement ni perte perceptuelle LPIPS, ni SSIM, ni terme de contrôle du nombre de chemins. Ces mesures sont utiles pour l'évaluation décrite au chapitre précédent, mais elles ne participent pas à la rétropropagation de la version entraînée.
+
+\section{Stratégie d'entraînement}
+\label{sec:entrainement_approche}
+
+Cette section décrit le protocole utilisé pour entraîner le modèle et assurer la continuité des expériences. Nous présentons d'abord les choix d'optimisation, l'ordonnancement du taux d'apprentissage et les paramètres techniques retenus, puis le mécanisme de sauvegarde permettant de reprendre un entraînement interrompu et de restaurer automatiquement sa configuration.
+
+\subsection{Optimisation des paramètres}
+
+L'entraînement utilise AdamW avec un taux d'apprentissage initial de $10^{-4}$ et une décroissance de poids de $0{,}05$. Le taux d'apprentissage augmente d'abord linéairement pendant une phase de \textit{warm-up}, puis suit une décroissance cosinus jusqu'à la fin de l'entraînement. Tous les paramètres de l'encodeur de chemins sont optimisés conjointement. La graine aléatoire est appliquée à Python, NumPy, PyTorch et CUDA afin de rendre les tirages aussi reproductibles que possible.
+
+La précision mixte automatique est activée lorsque l'entraînement s'exécute sur GPU. Un facteur d'échelle dynamique est appliqué à la perte avant la rétropropagation, puis l'optimiseur et l'ordonnanceur sont mis à jour à chaque lot. Le code permet une limitation optionnelle de la norme du gradient, mais aucune valeur n'est définie dans les configurations enregistrées; cette limitation est donc inactive pour les entraînements concernés.
+
+Le tableau~\ref{tab:configuration_entrainement} reprend la configuration complète enregistrée pour l'entraînement à $128$ chemins. Il décrit le protocole technique, sans anticiper l'analyse des performances qui appartient au chapitre suivant.
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Configuration enregistrée pour l'entraînement du modèle à 128 chemins par superpixel.}
+    \label{tab:configuration_entrainement}
+    \begin{tabular}{p{5.1cm}p{7.4cm}}
+        \toprule
+        \textbf{Paramètre} & \textbf{Valeur} \\
+        \midrule
+        Source des images & ImageNet, avec un maximum de $10\,000$ images \\
+        Taille d'une région & $224 \times 224$ pixels \\
+        Paramètres SLIC à l'entraînement & $16$ régions, compacité $10$, $\sigma=1$ \\
+        Backbone & \texttt{vit\_small\_patch16\_dinov3}, poids pré-entraînés \\
+        Nombre de chemins par région & $128$ \\
+        Taille des lots & $16$ régions \\
+        Nombre d'époques & $20$ \\
+        Optimiseur & AdamW, taux $10^{-4}$, décroissance de poids $0{,}05$ \\
+        Ordonnancement & \textit{Warm-up} de $4$ époques, puis décroissance cosinus \\
+        Précision mixte & Activée sur CUDA \\
+        Graine aléatoire & $1234$ \\
+        Poids de la perte de masque & Décroissance linéaire de $0{,}05$ à $0{,}01$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Sauvegarde et reprise}
+
+À la fin de chaque époque, le programme enregistre l'état du modèle, de l'optimiseur, de l'ordonnanceur et du facteur d'échelle de la précision mixte. Les arguments de l'expérience sont également conservés dans le point de contrôle et dans un fichier JSON séparé. Deux formes de sauvegarde sont produites : un fichier numéroté pour chaque époque et un fichier \texttt{latest.pt} représentant le dernier état écrit.
+
+Cette organisation permet de reprendre un entraînement sans réinitialiser le taux d'apprentissage ni les statistiques de l'optimiseur. Lors d'une reprise, l'époque suivante est calculée à partir du numéro sauvegardé et tous les états sont restaurés. Elle permet également au programme d'inférence de reconstruire automatiquement le nombre de chemins, la taille du canevas et le nom du backbone associés au modèle chargé.
+
+\section{Inférence et génération du SVG}
+\label{sec:inference_svg_approche}
+
+Cette section décrit le passage du modèle entraîné à la génération du fichier SVG final. Nous présentons d'abord le traitement de l'image complète et la transformation des coordonnées locales en coordonnées globales, puis l'algorithme d'inférence utilisé pour assembler les chemins prédits. Nous comparons ensuite les flux d'entraînement et d'inférence avant de préciser les limites de la version actuellement implémentée.
+
+\subsection{Traitement de l'image complète}
+
+Pendant l'entraînement, une seule région aléatoire est extraite de chaque image chargée. À l'inférence, l'objectif est au contraire de couvrir l'image entière. SLIC est donc appliqué une fois, puis toutes les étiquettes non vides sont parcourues. La configuration par défaut demande $64$ régions, avec la même compacité $10$ et le même $\sigma=1$. Chaque région est préparée de la même manière qu'à l'entraînement et les recadrages sont regroupés par lots de $16$ avant leur passage dans le réseau.
+
+Le modèle retourne des coordonnées normalisées dans la boîte locale de chaque superpixel. Pour un point prédit $(u,v) \in [0,1]^2$ et une boîte $(x_1,y_1,x_2,y_2)$, le passage au repère de l'image originale est effectué par :
+
+\begin{equation}
+    x = x_1 + (x_2-x_1)u,
+    \qquad
+    y = y_1 + (y_2-y_1)v.
+    \label{eq:coordonnees_locales_globales}
+\end{equation}
+
+Cette transformation est appliquée aux douze points de chaque chemin, tandis que la couleur reste inchangée. Les chemins de toutes les régions sont ensuite concaténés. Si SLIC produit effectivement $R$ régions et que le modèle utilise $P$ requêtes, le SVG contient donc $R \times P$ chemins. La version actuelle ne supprime aucun chemin après la prédiction et ne fusionne pas les formes similaires.
+
+\subsection{Algorithme d'inférence}
+
+L'algorithme~\ref{alg:inference_svg} résume les opérations réalisées. Le rendu PNG est produit à la résolution originale pour permettre une inspection rapide. Le fichier SVG est enregistré à partir des mêmes chemins globaux, sans conversion intermédiaire en pixels.
+
+\begin{algorithm}[H]
+    \caption{Vectorisation d'une image complète et génération du SVG.}
+    \label{alg:inference_svg}
+    \begin{algorithmic}[1]
+        \Require Image RGB $I$, modèle entraîné $f_{\theta}$, nombre de régions $R$
+        \Ensure Fichier SVG et aperçu PNG
+        \State $L \gets \Call{SLIC}{I,R}$
+        \State $S_{\mathrm{global}} \gets \varnothing$
+        \ForAll{étiquettes $k$ présentes dans $L$}
+            \State $M_k \gets [L=k]$
+            \State $(X_k,b_k) \gets \Call{PréparerRégion}{I,M_k}$
+            \State $S_k \gets f_{\theta}(X_k)$
+            \State $S_k^{g} \gets \Call{LocalVersGlobal}{S_k,b_k}$
+            \State $S_{\mathrm{global}} \gets S_{\mathrm{global}} \cup S_k^{g}$
+        \EndFor
+        \State $\widehat{I} \gets \Call{DiffVG}{S_{\mathrm{global}},\operatorname{taille}(I)}$
+        \State \Call{EnregistrerPNG}{$\widehat{I}$}
+        \State \Call{EnregistrerSVG}{$S_{\mathrm{global}},\operatorname{taille}(I)$}
+    \end{algorithmic}
+\end{algorithm}
+
+En pratique, les régions sont traitées par lots plutôt qu'une par une comme dans ce pseudo-code, mais cette optimisation ne change pas le résultat. Le calcul est exécuté sans gradient et peut utiliser la précision mixte sur GPU. Lorsqu'un point de contrôle est chargé, les paramètres architecturaux qu'il contient sont prioritaires, sauf si l'utilisateur fournit explicitement une valeur différente sur la ligne de commande.
+
+\subsection{Différences entre entraînement et inférence}
+
+Le tableau~\ref{tab:entrainement_inference} met en évidence les différences qui découlent du rôle de chaque phase. Le même prétraitement local et le même réseau sont conservés, mais la sélection des régions et l'utilisation des sorties changent.
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Comparaison du flux d'entraînement et du flux d'inférence.}
+    \label{tab:entrainement_inference}
+    \begin{tabular}{p{3.2cm}p{4.8cm}p{4.8cm}}
+        \toprule
+        \textbf{Élément} & \textbf{Entraînement} & \textbf{Inférence} \\
+        \midrule
+        Segmentation par défaut & $16$ superpixels demandés par image & $64$ superpixels demandés par image \\
+        Régions traitées & Une région aléatoire par image et par accès & Toutes les régions non vides de l'image \\
+        Repère des points & Coordonnées locales normalisées & Coordonnées replacées dans l'image originale \\
+        DiffVG & Produit le rendu utilisé par les pertes & Produit uniquement l'aperçu PNG \\
+        Sortie vectorielle & Pas de fichier SVG dans la boucle d'apprentissage & Tous les chemins sont assemblés et enregistrés \\
+        Gradient & Activé jusqu'au backbone DINOv3 & Désactivé \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Périmètre de la version implémentée}
+
+La méthode mise en œuvre couvre la chaîne complète, depuis une image RGB jusqu'à un fichier SVG éditable, mais certains choix délimitent son comportement. Le nombre de chemins est fixé pour toutes les régions, indépendamment de leur complexité. Une zone presque uniforme reçoit donc autant de primitives qu'une zone contenant plusieurs variations de couleur. De plus, les chemins sont toujours fermés, opaques et remplis; les traits ouverts, les contours d'épaisseur variable, les dégradés et la transparence ne sont pas représentés.
+
+La séparation en superpixels rend le problème local plus accessible, mais elle rend également le résultat dépendant de SLIC. Une frontière mal placée peut répartir un même objet entre plusieurs recadrages. La perte de masque encourage les formes à rester dans leur région, sans toutefois appliquer un découpage géométrique strict au moment de l'export. Enfin, la version actuelle ne contient pas l'étape de raffinement, la perte de transfert entre étapes ou l'optimisation finale des courbes présentes dans la méthode SuperSVG complète \cite{hu2024supersvg}.
+
+Ces éléments ne constituent pas des résultats expérimentaux; ils décrivent le périmètre exact du système évalué. Leur influence sur la fidélité du rendu, le nombre de chemins et le temps d'inférence devra être mesurée dans le chapitre suivant à l'aide des métriques présentées au chapitre~\ref{chap:etat_art}.
+
+\section{Conclusion}
+
+Dans ce chapitre, nous avons présenté l'approche développée pour la vectorisation automatique d'images matricielles. La méthode décompose d'abord l'image avec SLIC, prépare chaque superpixel dans un repère local, puis utilise un encodeur DINOv3 et un décodeur d'attention pour prédire des chemins fermés composés de courbes de Bézier cubiques. Chaque primitive est décrite par douze points de contrôle et une couleur de remplissage.
+
+L'apprentissage ne nécessite pas de SVG cible. DiffVG transforme les prédictions en images et permet d'optimiser une perte de reconstruction normalisée ainsi qu'une pénalité de débordement hors du masque. À l'inférence, les chemins locaux sont replacés dans le repère de l'image originale, assemblés et enregistrés directement au format SVG. Le chapitre suivant sera consacré au protocole expérimental et à l'évaluation quantitative et qualitative de cette architecture.
 
 
 % ============================================================

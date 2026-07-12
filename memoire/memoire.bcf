@@ -2426,6 +2426,17 @@
     <bcf:citekey order="43" intorder="1">ma2022live</bcf:citekey>
     <bcf:citekey order="44" intorder="1">reddy2021im2vec</bcf:citekey>
     <bcf:citekey order="45" intorder="1">hu2024supersvg</bcf:citekey>
+    <bcf:citekey order="46" intorder="1">hu2024supersvg</bcf:citekey>
+    <bcf:citekey order="47" intorder="1">achanta2012slic</bcf:citekey>
+    <bcf:citekey order="48" intorder="1">li2020diffvg</bcf:citekey>
+    <bcf:citekey order="48" intorder="2">reddy2021im2vec</bcf:citekey>
+    <bcf:citekey order="49" intorder="1">deng2009imagenet</bcf:citekey>
+    <bcf:citekey order="50" intorder="1">achanta2012slic</bcf:citekey>
+    <bcf:citekey order="51" intorder="1">simeoni2025dinov3</bcf:citekey>
+    <bcf:citekey order="52" intorder="1">dosovitskiy2021image</bcf:citekey>
+    <bcf:citekey order="53" intorder="1">li2020diffvg</bcf:citekey>
+    <bcf:citekey order="54" intorder="1">hu2024supersvg</bcf:citekey>
+    <bcf:citekey order="55" intorder="1">hu2024supersvg</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="none">
