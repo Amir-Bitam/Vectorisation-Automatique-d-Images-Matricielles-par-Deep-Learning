@@ -1,0 +1,50 @@
+{
+  "method": "SuperSVG",
+  "path_num": 1000,
+  "optimize_iter": 0,
+  "warmup": true,
+  "model_load_included": false,
+  "total_seconds": 10.19556079999893,
+  "rows": [
+    {
+      "image": "0078807977709.png",
+      "input": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\ours_native\\inputs\\0078807977709.png",
+      "png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\supersvg_native\\0078807977709.png",
+      "svg": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\supersvg_native\\0078807977709.svg",
+      "native_mse": 0.0018045668257400393,
+      "path_count": 1000,
+      "svg_bytes": 558369,
+      "elapsed_seconds": 2.493321999994805
+    },
+    {
+      "image": "0078936124638016.png",
+      "input": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\ours_native\\inputs\\0078936124638016.png",
+      "png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\supersvg_native\\0078936124638016.png",
+      "svg": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\supersvg_native\\0078936124638016.svg",
+      "native_mse": 0.0005349984858185053,
+      "path_count": 1000,
+      "svg_bytes": 557997,
+      "elapsed_seconds": 2.6260588000004645
+    },
+    {
+      "image": "007905920170535.png",
+      "input": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\ours_native\\inputs\\007905920170535.png",
+      "png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\supersvg_native\\007905920170535.png",
+      "svg": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\supersvg_native\\007905920170535.svg",
+      "native_mse": 0.0029813162982463837,
+      "path_count": 1000,
+      "svg_bytes": 557082,
+      "elapsed_seconds": 2.560330799984513
+    },
+    {
+      "image": "0079155434536247.png",
+      "input": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\ours_native\\inputs\\0079155434536247.png",
+      "png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\supersvg_native\\0079155434536247.png",
+      "svg": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\supersvg_native\\0079155434536247.svg",
+      "native_mse": 0.0003447773342486471,
+      "path_count": 1000,
+      "svg_bytes": 554945,
+      "elapsed_seconds": 2.513232400000561
+    }
+  ]
+}

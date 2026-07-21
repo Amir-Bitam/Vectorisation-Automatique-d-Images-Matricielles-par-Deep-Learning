@@ -1,0 +1,57 @@
+{
+  "method": "LIVE",
+  "configuration": "experiment_exp2_32",
+  "paths": 32,
+  "stages": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    1
+  ],
+  "iterations_per_stage": 500,
+  "total_optimization_steps": 3000,
+  "model_load_included": false,
+  "python": "C:\\Users\\zak\\anaconda3\\envs\\live-win\\python.exe",
+  "live_root": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\LIVE-Layerwise-Image-Vectorization\\LIVE",
+  "config": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\baselines\\live_benchmark.yaml",
+  "rows": [
+    {
+      "image": "0078807977709.png",
+      "input": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\ours_native\\inputs\\0078807977709.png",
+      "svg": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\live_native\\svg\\0078807977709.svg",
+      "elapsed_seconds": 251.4694299,
+      "path_count": 32,
+      "svg_bytes": 21520,
+      "experiment_dir": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\live_smoke\\178395207466_benchmark_0078807977709"
+    },
+    {
+      "image": "0078936124638016.png",
+      "input": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\ours_native\\inputs\\0078936124638016.png",
+      "svg": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\live_native\\svg\\0078936124638016.svg",
+      "elapsed_seconds": 228.99743990000002,
+      "path_count": 32,
+      "svg_bytes": 21508,
+      "experiment_dir": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\live_native\\178395236210_benchmark_0078936124638016"
+    },
+    {
+      "image": "007905920170535.png",
+      "input": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\ours_native\\inputs\\007905920170535.png",
+      "svg": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\live_native\\svg\\007905920170535.svg",
+      "elapsed_seconds": 244.91666379999998,
+      "path_count": 32,
+      "svg_bytes": 21543,
+      "experiment_dir": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\live_native\\178395259119_benchmark_007905920170535"
+    },
+    {
+      "image": "0079155434536247.png",
+      "input": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\ours_native\\inputs\\0079155434536247.png",
+      "svg": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\live_native\\svg\\0079155434536247.svg",
+      "elapsed_seconds": 249.8334074,
+      "path_count": 32,
+      "svg_bytes": 21488,
+      "experiment_dir": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\live_native\\178395283612_benchmark_0079155434536247"
+    }
+  ]
+}

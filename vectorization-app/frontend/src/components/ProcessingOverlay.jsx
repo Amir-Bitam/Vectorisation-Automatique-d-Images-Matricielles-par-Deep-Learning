@@ -2,7 +2,7 @@ import React from "react";
 import { RefreshCcw } from "lucide-react";
 
 function ProcessingOverlay() {
-  const steps = ["Uploading image", "Running SuperSVG vectorization", "Preparing SVG result"];
+  const steps = ["Uploading image", "Running model inference", "Preparing SVG result"];
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/55 px-4 backdrop-blur-sm">
@@ -12,7 +12,7 @@ function ProcessingOverlay() {
         </div>
         <h2 className="text-center text-xl font-bold text-slate-950">Vectorizing your image</h2>
         <p className="mt-2 text-center text-sm leading-6 text-slate-600">
-          SuperSVG is tracing paths and optimizing the generated SVG.
+          The backend model is generating the vector representation.
         </p>
         <ol className="mt-6 space-y-3">
           {steps.map((step, index) => (

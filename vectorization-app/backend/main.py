@@ -1,31 +1,55 @@
+"""FastAPI backend for the repository's DINOv3 + SLIC + DiffVG model."""
+
+from __future__ import annotations
+
+from contextlib import asynccontextmanager
+import logging
+from pathlib import Path
 import re
 import shutil
-import subprocess
-import sys
-from pathlib import Path
+import traceback
 from typing import Optional
 from uuid import uuid4
 
-import torch
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
+from config import BASE_DIR, Settings
+from model_service import (
+    DEFAULT_NUM_REGIONS,
+    MAX_NUM_REGIONS,
+    MIN_NUM_REGIONS,
+    ModelNotReadyError,
+    RasterVectorizationService,
+)
 
-BASE_DIR = Path(__file__).resolve().parent
-SUPERSVG_DIR = BASE_DIR / "SuperSVG"
+
+LOGGER = logging.getLogger(__name__)
+SETTINGS = Settings.from_environment()
+MODEL_SERVICE = RasterVectorizationService(SETTINGS)
 UPLOADS_DIR = BASE_DIR / "uploads"
 OUTPUTS_DIR = BASE_DIR / "outputs"
+ALLOWED_CONTENT_TYPES = {"image/png", "image/jpeg", "image/jpg"}
+ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
+CHUNK_SIZE = 1024 * 1024
 
-UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
-OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
 
-app = FastAPI(title="PFE Vectorization Backend")
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
+    OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
+    try:
+        MODEL_SERVICE.load()
+    except Exception:
+        # Keep FastAPI alive so /health exposes the precise startup problem.
+        LOGGER.exception("The raster-to-SVG model could not be loaded at startup")
+    yield
 
-# CORS configuration: allow the local Vite frontend to call the FastAPI backend.
+
+app = FastAPI(title="PFE Vectorization Backend", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
-    # Vite normally uses 5173, but may fall back to 5174 if 5173 is already busy.
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
@@ -39,42 +63,64 @@ app.add_middleware(
 
 
 def _safe_filename(filename: Optional[str]) -> str:
-    # Keep uploaded filenames safe before writing them inside the uploads folder.
     name = Path(filename or "input.png").name
     name = re.sub(r"[^A-Za-z0-9._-]", "_", name).strip("._")
     return name or "input.png"
 
 
-def _run_supersvg(
-    upload_dir: Path,
-    output_dir: Path,
-    path_num: int,
-    optimize_iter: int,
-    device: str,
-) -> subprocess.CompletedProcess[str]:
-    # Build the SuperSVG inference command. path_num and optimize_iter come from the frontend form.
-    command = [
-        sys.executable,
-        "inference.py",
-        "--input_path",
-        str(upload_dir),
-        "--output_dir",
-        str(output_dir),
-        "--device",
-        device,
-        "--path_num",
-        str(path_num),
-        "--optimize_iter",
-        str(optimize_iter),
-    ]
+def _save_upload(file: UploadFile, destination: Path) -> int:
+    total_bytes = 0
+    with destination.open("xb") as output:
+        while chunk := file.file.read(CHUNK_SIZE):
+            total_bytes += len(chunk)
+            if total_bytes > SETTINGS.max_upload_bytes:
+                raise HTTPException(
+                    status_code=413,
+                    detail=f"The uploaded image exceeds the {SETTINGS.max_upload_bytes // (1024 * 1024)} MB limit.",
+                )
+            output.write(chunk)
+    return total_bytes
 
-    # Run inference.py and capture stdout/stderr so failed jobs are easier to debug.
-    return subprocess.run(
-        command,
-        cwd=str(SUPERSVG_DIR),
-        capture_output=True,
-        text=True,
-    )
+
+def _validate_image_file(input_path: Path, size: int) -> None:
+    if size == 0:
+        raise HTTPException(status_code=400, detail="The uploaded image is empty.")
+
+    try:
+        from PIL import Image, UnidentifiedImageError
+    except ModuleNotFoundError as exc:
+        raise HTTPException(
+            status_code=500,
+            detail="Pillow is missing from the backend environment; image validation cannot run.",
+        ) from exc
+
+    try:
+        with Image.open(input_path) as image:
+            detected_format = (image.format or "").upper()
+            image.verify()
+    except (UnidentifiedImageError, OSError, ValueError) as exc:
+        raise HTTPException(
+            status_code=400,
+            detail=f"The uploaded file is not a decodable PNG or JPEG image: {exc}",
+        ) from exc
+
+    if detected_format not in {"PNG", "JPEG"}:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported image format '{detected_format or 'unknown'}'. Only PNG and JPEG are accepted.",
+        )
+
+
+def _validate_download_parts(job_id: str, filename: str, extension: str) -> Path:
+    if not re.fullmatch(r"[A-Fa-f0-9]{32}", job_id):
+        raise HTTPException(status_code=400, detail="Invalid job_id.")
+    safe_name = _safe_filename(filename)
+    if safe_name != filename or Path(filename).suffix.lower() != extension:
+        raise HTTPException(status_code=400, detail=f"Invalid {extension} filename.")
+    path = OUTPUTS_DIR / job_id / filename
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="Generated file not found.")
+    return path
 
 
 @app.get("/")
@@ -82,92 +128,112 @@ def read_root():
     return {"status": "ok", "message": "Vectorization backend is running"}
 
 
+@app.get("/health")
+def health():
+    return MODEL_SERVICE.health()
+
+
 @app.post("/vectorize")
 def vectorize(
-    file: UploadFile = File(...),
-    path_num: int = Form(256),
-    optimize_iter: int = Form(0),
-    device: str = Form("cpu"),
+    file: UploadFile | None = File(default=None),
+    num_regions: int = Form(
+        default=DEFAULT_NUM_REGIONS,
+        ge=MIN_NUM_REGIONS,
+        le=MAX_NUM_REGIONS,
+    ),
 ):
-    # Uploaded file and parameter validation happens before creating job folders.
-    device = device.strip().lower()
-    if not file.filename:
+    if file is None or not file.filename:
         raise HTTPException(status_code=400, detail="No file was uploaded.")
-    if path_num <= 0:
-        raise HTTPException(status_code=400, detail="path_num must be greater than 0.")
-    if optimize_iter < 0:
-        raise HTTPException(status_code=400, detail="optimize_iter must be greater than or equal to 0.")
-    if device not in {"cpu", "cuda"}:
-        raise HTTPException(status_code=400, detail='device must be either "cpu" or "cuda".')
-    if device == "cuda" and not torch.cuda.is_available():
+
+    suffix = Path(file.filename).suffix.lower()
+    content_type = (file.content_type or "").lower()
+    if suffix not in ALLOWED_EXTENSIONS or content_type not in ALLOWED_CONTENT_TYPES:
         raise HTTPException(
             status_code=400,
-            detail="CUDA was selected, but PyTorch cannot access the GPU. Make sure the NVIDIA driver and CUDA-compatible PyTorch are installed.",
+            detail=(
+                "Invalid file type. Upload a PNG or JPEG image "
+                f"(received extension '{suffix or 'none'}', content type '{content_type or 'none'}')."
+            ),
+        )
+    if not MODEL_SERVICE.model_loaded:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "message": "The vectorization model is not loaded.",
+                "model_error": MODEL_SERVICE.load_error,
+                "checkpoint": str(SETTINGS.model_checkpoint),
+            },
         )
 
     job_id = uuid4().hex
     upload_job_dir = UPLOADS_DIR / job_id
     output_job_dir = OUTPUTS_DIR / job_id
-
-    # Each request gets isolated input/output folders to avoid mixing generated files.
-    upload_job_dir.mkdir(parents=True, exist_ok=True)
-    output_job_dir.mkdir(parents=True, exist_ok=True)
-
-    # Save the uploaded raster image before passing the folder to SuperSVG.
+    upload_job_dir.mkdir(parents=True, exist_ok=False)
+    output_job_dir.mkdir(parents=True, exist_ok=False)
     input_path = upload_job_dir / _safe_filename(file.filename)
-    with input_path.open("wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
 
-    result = _run_supersvg(upload_job_dir, output_job_dir, path_num, optimize_iter, device)
-    if result.returncode != 0:
-        # Keep stdout/stderr in the response because SuperSVG errors are usually diagnosed from logs.
+    try:
+        size = _save_upload(file, input_path)
+        _validate_image_file(input_path, size)
+        result = MODEL_SERVICE.vectorize(
+            input_path,
+            output_job_dir,
+            num_regions=num_regions,
+        )
+    except HTTPException:
+        shutil.rmtree(upload_job_dir, ignore_errors=True)
+        shutil.rmtree(output_job_dir, ignore_errors=True)
+        raise
+    except ModelNotReadyError as exc:
+        shutil.rmtree(upload_job_dir, ignore_errors=True)
+        shutil.rmtree(output_job_dir, ignore_errors=True)
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    except Exception as exc:
+        debug_traceback = traceback.format_exc()
+        LOGGER.exception("Inference failed for job %s", job_id)
+        is_cuda_error = "cuda" in f"{type(exc).__name__}: {exc}".lower()
         raise HTTPException(
             status_code=500,
             detail={
-                "message": "SuperSVG inference failed.",
-                "returncode": result.returncode,
-                "stdout": result.stdout,
-                "stderr": result.stderr,
+                "message": "CUDA inference failed." if is_cuda_error else "Model inference failed.",
+                "error_type": type(exc).__name__,
+                "error": str(exc),
+                "job_id": job_id,
+                "traceback": debug_traceback,
             },
-        )
+        ) from exc
+    finally:
+        file.file.close()
+        # The generated files must remain downloadable, but the source upload is
+        # temporary and is removed as soon as inference finishes or fails.
+        shutil.rmtree(upload_job_dir, ignore_errors=True)
 
-    # SuperSVG writes SVG files into the job output folder. Use the newest SVG as the result.
-    svg_files = sorted(output_job_dir.glob("*.svg"), key=lambda path: path.stat().st_mtime, reverse=True)
-    if not svg_files:
-        raise HTTPException(
-            status_code=500,
-            detail={
-                "message": "SuperSVG finished, but no SVG was generated.",
-                "stdout": result.stdout,
-                "stderr": result.stderr,
-            },
-        )
-
-    svg_file = svg_files[0]
-
-    # Return the SVG download URL and parameter values so the frontend can display the result.
     return {
         "job_id": job_id,
-        "svg_filename": svg_file.name,
-        "download_url": f"/download/{job_id}/{svg_file.name}",
-        "path_num": path_num,
-        "optimize_iter": optimize_iter,
-        "device": device,
+        "svg_filename": result.svg_path.name,
+        "download_url": f"/download/{job_id}/{result.svg_path.name}",
+        "preview_filename": result.preview_path.name,
+        "preview_url": f"/preview/{job_id}/{result.preview_path.name}",
+        "device": MODEL_SERVICE.device_name,
+        "num_regions": num_regions,
+        "region_count": result.region_count,
+        "path_count": result.path_count,
     }
 
 
 @app.get("/download/{job_id}/{filename}")
 def download_svg(job_id: str, filename: str):
-    # Validate path parts before serving a generated SVG from disk.
-    if not re.fullmatch(r"[A-Fa-f0-9]{32}", job_id):
-        raise HTTPException(status_code=400, detail="Invalid job_id.")
-
-    safe_name = _safe_filename(filename)
-    if safe_name != filename or Path(filename).suffix.lower() != ".svg":
-        raise HTTPException(status_code=400, detail="Invalid SVG filename.")
-
-    svg_path = OUTPUTS_DIR / job_id / filename
-    if not svg_path.is_file():
-        raise HTTPException(status_code=404, detail="SVG file not found.")
-
+    svg_path = _validate_download_parts(job_id, filename, ".svg")
     return FileResponse(svg_path, media_type="image/svg+xml", filename=filename)
+
+
+@app.get("/preview/{job_id}/{filename}")
+def preview_png(job_id: str, filename: str):
+    png_path = _validate_download_parts(job_id, filename, ".png")
+    return FileResponse(png_path, media_type="image/png")
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host=SETTINGS.backend_host, port=SETTINGS.backend_port)

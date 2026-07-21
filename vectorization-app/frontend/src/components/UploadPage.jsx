@@ -4,7 +4,6 @@ import { FileImage, ImagePlus, RefreshCcw, UploadCloud, Wand2 } from "lucide-rea
 import ProcessingOverlay from "./ProcessingOverlay";
 
 function UploadPage({
-  device,
   errorMessage,
   handleDrop,
   handleFileChange,
@@ -12,15 +11,14 @@ function UploadPage({
   inputRef,
   isDragging,
   isProcessing,
+  maxNumRegions,
+  minNumRegions,
+  numRegions,
   onDragStateChange,
+  onNumRegionsChange,
   onPickFile,
-  optimizeIter,
   originalPreviewUrl,
-  pathNum,
   selectedFile,
-  setDevice,
-  setOptimizeIter,
-  setPathNum,
 }) {
   const fileCards = [
     { label: "PNG", tone: "bg-blue-50 text-blue-700 ring-blue-100" },
@@ -31,15 +29,15 @@ function UploadPage({
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
 
-      <form className="mx-auto grid w-full max-w-7xl gap-8 px-5 pb-12 pt-5 sm:px-8 lg:grid-cols-[minmax(0,1.08fr)_380px] lg:items-start lg:pt-10" onSubmit={handleSubmit}>
-        <section className="mx-auto w-full max-w-3xl text-center lg:mx-0 lg:max-w-none lg:text-left">
-          <div className="mx-auto max-w-3xl lg:mx-0">
+      <form className="mx-auto w-full max-w-5xl px-5 pb-12 pt-5 sm:px-8 lg:pt-10" onSubmit={handleSubmit}>
+        <section className="w-full text-center">
+          <div className="mx-auto max-w-3xl">
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-700">Raster to vector</p>
             <h1 className="mt-4 text-4xl font-black leading-tight text-slate-950 sm:text-5xl lg:text-6xl">
               Convert raster images to vector SVG
             </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg lg:mx-0">
-              Upload a PNG or JPG image and convert it into a clean SVG using SuperSVG.
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+              Upload a PNG or JPG image and convert it into a clean SVG using the project inference model.
             </p>
           </div>
 
@@ -89,7 +87,7 @@ function UploadPage({
               )}
             </div>
 
-            <div className="mt-6 flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <div className="mt-6 flex flex-col items-center justify-between gap-4 lg:flex-row">
               <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
                 {fileCards.map((card) => (
                   <span key={card.label} className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-black ring-1 ${card.tone}`}>
@@ -98,87 +96,50 @@ function UploadPage({
                   </span>
                 ))}
               </div>
-              <button
-                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 text-sm font-bold text-white shadow-lg shadow-blue-700/20 transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
-                type="button"
-                onClick={onPickFile}
-                disabled={isProcessing}
-              >
-                <ImagePlus className="h-5 w-5" aria-hidden="true" />
-                Choose image to vectorize
-              </button>
+              <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-end">
+                <label className="grid w-full gap-1 text-left sm:w-32">
+                  <span className="text-xs font-bold text-slate-600">num-regions</span>
+                  <input
+                    className="h-12 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm font-bold text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-100"
+                    type="number"
+                    min={minNumRegions}
+                    max={maxNumRegions}
+                    step="1"
+                    required
+                    inputMode="numeric"
+                    title={`Integer between ${minNumRegions} and ${maxNumRegions}`}
+                    value={numRegions}
+                    onChange={(event) => onNumRegionsChange(event.target.value)}
+                    disabled={isProcessing}
+                  />
+                </label>
+                <button
+                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-blue-200 bg-white px-5 text-sm font-bold text-blue-700 shadow-sm transition hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                  type="button"
+                  onClick={onPickFile}
+                  disabled={isProcessing}
+                >
+                  <ImagePlus className="h-5 w-5" aria-hidden="true" />
+                  Choose image
+                </button>
+                <button
+                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 px-6 text-sm font-black text-white shadow-lg shadow-blue-700/20 transition hover:from-blue-700 hover:to-violet-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                  type="submit"
+                  disabled={isProcessing || !selectedFile}
+                >
+                  {isProcessing ? <RefreshCcw className="h-5 w-5 animate-spin" aria-hidden="true" /> : <Wand2 className="h-5 w-5" aria-hidden="true" />}
+                  {isProcessing ? "Processing..." : "Vectorize image"}
+                </button>
+              </div>
             </div>
+
+            {errorMessage && (
+              <div className="mt-5 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-left text-sm font-semibold leading-6 text-rose-800 whitespace-pre-wrap">
+                {errorMessage}
+              </div>
+            )}
           </div>
         </section>
-
-        <aside id="settings" className="rounded-lg border border-slate-200 bg-white p-5 shadow-xl shadow-blue-900/10">
-          <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-lg bg-violet-50 text-violet-700">
-              <Wand2 className="h-5 w-5" aria-hidden="true" />
-            </div>
-            <div>
-              <h2 className="text-lg font-black text-slate-950">Vectorization settings</h2>
-              <p className="text-sm text-slate-500">Tune SuperSVG before running.</p>
-            </div>
-          </div>
-
-          <div className="mt-6 grid gap-5">
-            <label className="grid gap-2">
-              <span className="text-sm font-bold text-slate-800">path_num</span>
-              <input
-                className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-sm font-semibold text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                type="number"
-                step="1"
-                value={pathNum}
-                onChange={(event) => setPathNum(event.target.value)}
-                disabled={isProcessing}
-              />
-              <span className="text-xs leading-5 text-slate-500">Number of SVG paths to generate</span>
-            </label>
-
-            <label className="grid gap-2">
-              <span className="text-sm font-bold text-slate-800">optimize_iter</span>
-              <input
-                className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-sm font-semibold text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                type="number"
-                step="1"
-                value={optimizeIter}
-                onChange={(event) => setOptimizeIter(event.target.value)}
-                disabled={isProcessing}
-              />
-              <span className="text-xs leading-5 text-slate-500">Number of optimization iterations, 0 means faster</span>
-            </label>
-
-            <label className="grid gap-2">
-              <span className="text-sm font-bold text-slate-800">device</span>
-              <select
-                className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-sm font-semibold text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                value={device}
-                onChange={(event) => setDevice(event.target.value)}
-                disabled={isProcessing}
-              >
-                <option value="cpu">CPU</option>
-                <option value="cuda">CUDA / GPU</option>
-              </select>
-              <span className="text-xs leading-5 text-slate-500">Rendering device for SuperSVG</span>
-            </label>
-          </div>
-
-          {errorMessage && (
-            <div className="mt-5 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-left text-sm font-semibold leading-6 text-rose-800 whitespace-pre-wrap">
-              {errorMessage}
-            </div>
-          )}
-
-          <button
-            className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 px-5 text-sm font-black text-white shadow-lg shadow-blue-700/20 transition hover:from-blue-700 hover:to-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
-            type="submit"
-            disabled={isProcessing}
-          >
-            {isProcessing ? <RefreshCcw className="h-5 w-5 animate-spin" aria-hidden="true" /> : <Wand2 className="h-5 w-5" aria-hidden="true" />}
-            {isProcessing ? "Processing..." : "Vectorize image"}
-          </button>
-        </aside>
       </form>
 
       {isProcessing && <ProcessingOverlay />}

@@ -1,0 +1,46 @@
+config: C:\Users\zak\Documents\GitHub\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\implementation\baselines\live_benchmark.yaml
+coord_init:
+  type: sparse
+debug: false
+exid: 178395207466
+experiment: experiment_exp2_32
+experiment_dir: C:\Users\zak\Documents\GitHub\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\implementation\evaluation_results\method_comparison\live_smoke\178395207466_benchmark_0078807977709
+initial: random
+log_dir: C:\Users\zak\Documents\GitHub\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\implementation\evaluation_results\method_comparison\live_smoke
+loss:
+  bis_loss_weight: null
+  use_distance_weighted_loss: true
+  use_l1_loss: false
+  xing_loss_weight: 0.01
+lr_base:
+  bg: 0.01
+  color: 0.01
+  point: 1
+  stroke_color: null
+  stroke_width: null
+num_iter: 500
+num_segments: 4
+path_schedule:
+  base: 2
+  max_path: 32
+  max_path_per_iter: 16
+  type: exp
+save:
+  image: false
+  init: false
+  loss: false
+  output: true
+  video: false
+seed: 0
+seginit:
+  radius: 5
+  type: circle
+signature:
+- benchmark
+- 0078807977709
+target: C:\Users\zak\Documents\GitHub\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\implementation\evaluation_results\method_comparison\ours_native\inputs\0078807977709.png
+trainable:
+  bg: false
+  record: true
+  stroke: false
+use_ycrcb: false

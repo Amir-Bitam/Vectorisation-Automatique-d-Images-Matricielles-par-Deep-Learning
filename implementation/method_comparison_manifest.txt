@@ -1,0 +1,5 @@
+# Representative held-out ImageNet images used by every vectorization method.
+0078807977709.jpg
+0078936124638016.jpg
+007905920170535.jpg
+0079155434536247.jpg

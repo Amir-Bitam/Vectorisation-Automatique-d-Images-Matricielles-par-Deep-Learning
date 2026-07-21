@@ -3,9 +3,13 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import ComparisonViewer from "./components/ComparisonViewer";
 import UploadPage from "./components/UploadPage";
 import {
+  DEFAULT_NUM_REGIONS,
+  MAX_NUM_REGIONS,
+  MIN_NUM_REGIONS,
   getAbsoluteUrl,
   getSvgContent,
   isBackendUnavailableError,
+  parseNumRegions,
   vectorizeImage,
 } from "./services/vectorizationApi";
 import { FIT_PADDING, MAX_ZOOM, MIN_ZOOM, ZOOM_STEP, clamp, getZoomedPan } from "./utils/viewerMath";
@@ -17,6 +21,7 @@ function App() {
 
   // Core image and result state
   const [selectedFile, setSelectedFile] = useState(null);
+  const [numRegions, setNumRegions] = useState(String(DEFAULT_NUM_REGIONS));
   const [originalPreviewUrl, setOriginalPreviewUrl] = useState("");
   const [imageNaturalSize, setImageNaturalSize] = useState({ width: 0, height: 0 });
   const [svgResultUrl, setSvgResultUrl] = useState("");
@@ -24,19 +29,12 @@ function App() {
   const [svgContentObjectUrl, setSvgContentObjectUrl] = useState("");
   const [resultMeta, setResultMeta] = useState(null);
 
-  // SuperSVG parameters. They stay editable before upload and during re-vectorization.
-  const [pathNum, setPathNum] = useState(256);
-  const [optimizeIter, setOptimizeIter] = useState(0);
-  const [device, setDevice] = useState("cpu");
-  const [draftPathNum, setDraftPathNum] = useState(256);
-  const [draftOptimizeIter, setDraftOptimizeIter] = useState(0);
-  const [draftDevice, setDraftDevice] = useState("cpu");
-
   // UI state
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isDragging, setIsDragging] = useState(false);
+  const [isRevectorizeDialogOpen, setIsRevectorizeDialogOpen] = useState(false);
+  const [draftNumRegions, setDraftNumRegions] = useState(String(DEFAULT_NUM_REGIONS));
   const [svgLoadFailed, setSvgLoadFailed] = useState(false);
 
   // Shared comparison viewer state. Both the raster and SVG panels use these values.
@@ -123,7 +121,7 @@ function App() {
     setSvgResultUrl("");
     setSvgResultContent("");
     setSvgLoadFailed(false);
-    setIsSettingsOpen(false);
+    setIsRevectorizeDialogOpen(false);
     setViewerZoom(1);
     setViewerPan({ x: 0, y: 0 });
   }
@@ -150,32 +148,8 @@ function App() {
     handleSelectedFile(event.dataTransfer.files?.[0] || null);
   }
 
-  function validateInputs(nextPathNum = pathNum, nextOptimizeIter = optimizeIter, nextDevice = device) {
-    const rawPathNum = String(nextPathNum).trim();
-    const rawOptimizeIter = String(nextOptimizeIter).trim();
-    const parsedPathNum = Number(nextPathNum);
-    const parsedOptimizeIter = Number(nextOptimizeIter);
-    const parsedDevice = String(nextDevice).trim().toLowerCase();
-
-    if (!rawPathNum || !Number.isInteger(parsedPathNum) || parsedPathNum <= 0) {
-      return "path_num must be an integer greater than 0.";
-    }
-
-    if (!rawOptimizeIter || !Number.isInteger(parsedOptimizeIter) || parsedOptimizeIter < 0) {
-      return "optimize_iter must be an integer greater than or equal to 0.";
-    }
-
-    if (!["cpu", "cuda"].includes(parsedDevice)) {
-      return 'device must be either "cpu" or "cuda".';
-    }
-
-    return "";
-  }
-
   async function vectorizeCurrentImage({
-    nextDevice = device,
-    nextOptimizeIter = optimizeIter,
-    nextPathNum = pathNum,
+    numRegionsValue = numRegions,
     preservePreviousResult = false,
   } = {}) {
     setErrorMessage("");
@@ -185,9 +159,11 @@ function App() {
       return false;
     }
 
-    const validationError = validateInputs(nextPathNum, nextOptimizeIter, nextDevice);
-    if (validationError) {
-      setErrorMessage(validationError);
+    let validatedNumRegions;
+    try {
+      validatedNumRegions = parseNumRegions(numRegionsValue);
+    } catch (error) {
+      setErrorMessage(error.message);
       return false;
     }
 
@@ -198,12 +174,10 @@ function App() {
 
     setIsProcessing(true);
     try {
-      // API request to FastAPI. The service builds FormData with file, path_num, optimize_iter, and device.
+      // API request to FastAPI. Only the SLIC region count varies per request.
       const data = await vectorizeImage({
-        device: nextDevice,
         file: selectedFile,
-        pathNum: nextPathNum,
-        optimizeIter: nextOptimizeIter,
+        numRegions: validatedNumRegions,
       });
 
       const nextSvgContent = getSvgContent(data);
@@ -218,9 +192,7 @@ function App() {
       setSvgResultContent(nextSvgContent);
       setSvgResultUrl(nextSvgUrl);
       setSvgLoadFailed(false);
-      setDevice(String(data?.device || nextDevice).toLowerCase());
-      setPathNum(String(Number(nextPathNum)));
-      setOptimizeIter(String(Number(nextOptimizeIter)));
+      setNumRegions(String(data?.num_regions ?? validatedNumRegions));
       return true;
     } catch (requestError) {
       setErrorMessage(
@@ -230,7 +202,7 @@ function App() {
       );
       return false;
     } finally {
-      // Processing/loading state stays active for the whole request, even if SuperSVG takes minutes.
+      // Processing/loading state stays active for the whole inference request.
       setIsProcessing(false);
     }
   }
@@ -362,39 +334,28 @@ function App() {
     resetResult();
   }
 
-  // Settings/Edit parameters modal
-  function handleOpenSettings() {
-    setDraftPathNum(pathNum);
-    setDraftOptimizeIter(optimizeIter);
-    setDraftDevice(device);
+  function handleOpenRevectorize() {
+    setDraftNumRegions(numRegions);
     setErrorMessage("");
-    setIsSettingsOpen(true);
+    setIsRevectorizeDialogOpen(true);
   }
 
-  function handleCancelSettings() {
-    if (isProcessing) {
-      return;
+  function handleCancelRevectorize() {
+    if (!isProcessing) {
+      setIsRevectorizeDialogOpen(false);
     }
-
-    setDraftPathNum(pathNum);
-    setDraftOptimizeIter(optimizeIter);
-    setDraftDevice(device);
-    setIsSettingsOpen(false);
   }
 
-  // Re-vectorization with new parameters: reuse the uploaded file and keep the old SVG on failure.
+  // Confirm the new SLIC region count before reusing the uploaded image.
   async function handleRevectorize(event) {
     event.preventDefault();
-
     const succeeded = await vectorizeCurrentImage({
-      nextDevice: draftDevice,
-      nextOptimizeIter: draftOptimizeIter,
-      nextPathNum: draftPathNum,
+      numRegionsValue: draftNumRegions,
       preservePreviousResult: true,
     });
 
     if (succeeded) {
-      setIsSettingsOpen(false);
+      setIsRevectorizeDialogOpen(false);
     }
   }
 
@@ -402,27 +363,24 @@ function App() {
     return (
       <ComparisonViewer
         contentSize={imageNaturalSize}
-        device={resultMeta?.device || device}
-        draftDevice={draftDevice}
-        draftOptimizeIter={draftOptimizeIter}
-        draftPathNum={draftPathNum}
+        draftNumRegions={draftNumRegions}
         downloadHref={downloadHref}
         errorMessage={errorMessage}
         filename={filename}
         isProcessing={isProcessing}
-        isSettingsOpen={isSettingsOpen}
-        onCancelSettings={handleCancelSettings}
-        onEditParameters={handleOpenSettings}
+        isRevectorizeDialogOpen={isRevectorizeDialogOpen}
+        maxNumRegions={MAX_NUM_REGIONS}
+        minNumRegions={MIN_NUM_REGIONS}
+        onCancelRevectorize={handleCancelRevectorize}
         onFit={resetView}
         onNewImage={handleNewImage}
+        onOpenRevectorize={handleOpenRevectorize}
         onRevectorize={handleRevectorize}
         onWheel={handleWheel}
         originalPreviewUrl={originalPreviewUrl}
         pan={viewerPan}
         pointerHandlers={pointerHandlers}
-        setDraftOptimizeIter={setDraftOptimizeIter}
-        setDraftDevice={setDraftDevice}
-        setDraftPathNum={setDraftPathNum}
+        setDraftNumRegions={setDraftNumRegions}
         setSvgLoadFailed={setSvgLoadFailed}
         svgDisplayUrl={svgDisplayUrl}
         svgLoadFailed={svgLoadFailed}
@@ -437,22 +395,20 @@ function App() {
   return (
     <UploadPage
       errorMessage={errorMessage}
-      device={device}
       handleDrop={handleDrop}
       handleFileChange={handleFileChange}
       handleSubmit={handleSubmit}
       inputRef={inputRef}
       isDragging={isDragging}
       isProcessing={isProcessing}
+      maxNumRegions={MAX_NUM_REGIONS}
+      minNumRegions={MIN_NUM_REGIONS}
+      numRegions={numRegions}
       onDragStateChange={setIsDragging}
+      onNumRegionsChange={setNumRegions}
       onPickFile={() => inputRef.current?.click()}
-      optimizeIter={optimizeIter}
       originalPreviewUrl={originalPreviewUrl}
-      pathNum={pathNum}
       selectedFile={selectedFile}
-      setDevice={setDevice}
-      setOptimizeIter={setOptimizeIter}
-      setPathNum={setPathNum}
     />
   );
 }

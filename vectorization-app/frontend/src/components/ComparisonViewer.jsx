@@ -5,13 +5,11 @@ import {
   Maximize2,
   Minus,
   RefreshCcw,
-  SlidersHorizontal,
   Wand2,
   ZoomIn,
 } from "lucide-react";
 
 import IconButton from "./IconButton";
-import ParameterEditorPanel from "./ParameterEditorPanel";
 import ProcessingOverlay from "./ProcessingOverlay";
 
 function ComparisonPane({
@@ -75,27 +73,24 @@ function ComparisonPane({
 
 function ComparisonViewer({
   contentSize,
-  device,
-  draftDevice,
-  draftOptimizeIter,
-  draftPathNum,
+  draftNumRegions,
   downloadHref,
   errorMessage,
   filename,
   isProcessing,
-  isSettingsOpen,
-  onCancelSettings,
-  onEditParameters,
+  isRevectorizeDialogOpen,
+  maxNumRegions,
+  minNumRegions,
+  onCancelRevectorize,
   onFit,
   onNewImage,
+  onOpenRevectorize,
   onRevectorize,
   onWheel,
   originalPreviewUrl,
   pan,
   pointerHandlers,
-  setDraftOptimizeIter,
-  setDraftDevice,
-  setDraftPathNum,
+  setDraftNumRegions,
   setSvgLoadFailed,
   svgDisplayUrl,
   svgLoadFailed,
@@ -122,7 +117,6 @@ function ComparisonViewer({
           </div>
           <div className="min-w-0">
             <span className="truncate text-sm font-black text-slate-950 sm:text-base">Raster to vector</span>
-            <p className="text-xs font-bold uppercase text-slate-500">Device: {String(device || "cpu").toUpperCase()}</p>
           </div>
         </div>
 
@@ -142,11 +136,11 @@ function ComparisonViewer({
           <button
             className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-3 text-sm font-black text-slate-700 shadow-sm transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
             type="button"
-            onClick={onEditParameters}
+            onClick={onOpenRevectorize}
             disabled={isProcessing}
           >
-            <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
-            <span className="hidden sm:inline">Edit parameters</span>
+            <RefreshCcw className="h-4 w-4" aria-hidden="true" />
+            <span className="hidden sm:inline">Re-vectorize</span>
           </button>
           {/* SVG download action uses the current generated SVG URL from App.jsx. */}
           <a
@@ -203,20 +197,77 @@ function ComparisonViewer({
         </div>
       </div>
 
-      {/* Settings/Edit parameters modal for re-vectorization without uploading again. */}
-      {isSettingsOpen && (
-        <ParameterEditorPanel
-          draftDevice={draftDevice}
-          draftOptimizeIter={draftOptimizeIter}
-          draftPathNum={draftPathNum}
-          isProcessing={isProcessing}
-          onCancel={onCancelSettings}
-          onRevectorize={onRevectorize}
-          setDraftDevice={setDraftDevice}
-          setDraftOptimizeIter={setDraftOptimizeIter}
-          setDraftPathNum={setDraftPathNum}
-        />
+      {isRevectorizeDialogOpen && (
+        <div
+          className="fixed inset-0 z-40 grid place-items-center bg-slate-950/55 p-4 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="revectorize-title"
+        >
+          <form
+            className="w-full max-w-sm rounded-lg border border-white/20 bg-white p-6 shadow-2xl"
+            onSubmit={onRevectorize}
+          >
+            <div className="grid h-11 w-11 place-items-center rounded-lg bg-violet-50 text-violet-700">
+              <RefreshCcw className="h-5 w-5" aria-hidden="true" />
+            </div>
+            <h2 id="revectorize-title" className="mt-4 text-xl font-black text-slate-950">
+              Re-vectorize image
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              Choose the number of SLIC regions before running the model again.
+            </p>
+
+            <label className="mt-5 grid gap-2" htmlFor="revectorize-num-regions">
+              <span className="text-sm font-bold text-slate-800">num-regions</span>
+              <input
+                id="revectorize-num-regions"
+                className="h-12 rounded-lg border border-slate-300 bg-white px-3 text-sm font-bold text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-100"
+                type="number"
+                min={minNumRegions}
+                max={maxNumRegions}
+                step="1"
+                required
+                autoFocus
+                inputMode="numeric"
+                aria-describedby="revectorize-num-regions-help"
+                value={draftNumRegions}
+                onChange={(event) => setDraftNumRegions(event.target.value)}
+                disabled={isProcessing}
+              />
+              <span id="revectorize-num-regions-help" className="text-xs leading-5 text-slate-500">
+                Integer between {minNumRegions} and {maxNumRegions}. More regions increase detail and processing time.
+              </span>
+            </label>
+
+            {errorMessage && (
+              <div className="mt-4 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold leading-6 text-rose-800 whitespace-pre-wrap">
+                {errorMessage}
+              </div>
+            )}
+
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <button
+                className="inline-flex h-11 items-center justify-center rounded-lg border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                type="button"
+                onClick={onCancelRevectorize}
+                disabled={isProcessing}
+              >
+                Cancel
+              </button>
+              <button
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 px-4 text-sm font-black text-white shadow-lg shadow-blue-700/20 transition hover:from-blue-700 hover:to-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+                type="submit"
+                disabled={isProcessing}
+              >
+                <RefreshCcw className="h-4 w-4" aria-hidden="true" />
+                Re-vectorize
+              </button>
+            </div>
+          </form>
+        </div>
       )}
+
       {isProcessing && <ProcessingOverlay />}
     </main>
   );

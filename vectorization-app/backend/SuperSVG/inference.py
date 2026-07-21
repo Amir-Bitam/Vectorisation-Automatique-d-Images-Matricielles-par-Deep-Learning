@@ -1,4 +1,5 @@
 import argparse
+import json
 import math
 import time
 from pathlib import Path
@@ -48,6 +49,13 @@ def get_args_parser():
     parser.add_argument("--hf_repo_id", type=str, default=HF_REPO_ID_DEFAULT, help="Hugging Face repo id for auto-downloading weights")
     parser.add_argument("--refine_paths_per_segment", type=int, default=8, help="estimated refine paths per superpixel")
     parser.add_argument("--refine_batch_size", type=int, default=PREDICT_BATCH_SIZE, help="batch size for refine")
+    parser.add_argument("--benchmark_json", type=str, help="optional per-image timing report")
+    parser.add_argument(
+        "--warmup",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="run one untimed warm-up pass before benchmarking",
+    )
     return parser
 
 
@@ -83,6 +91,11 @@ def configure_render_device(device: torch.device) -> None:
 
     pydiffvg.set_device(torch.device("cpu"))
     pydiffvg.set_use_gpu(False)
+
+
+def synchronize(device: torch.device) -> None:
+    if device.type == "cuda":
+        torch.cuda.synchronize(device)
 
 
 def set_internal_device_attrs(model: torch.nn.Module, device: torch.device) -> None:
@@ -463,12 +476,35 @@ def main(args):
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    if args.warmup:
+        warmup_image = Image.open(str(files[0])).convert("RGB")
+        with torch.inference_mode():
+            warmup_strokes, _ = decode_by_id_map(
+                warmup_image, coarse_model, device, num_of_segments
+            )
+            warmup_strokes = global_slic_refine_once(
+                image=warmup_image,
+                coarse_strokes=warmup_strokes,
+                coarse_model=coarse_model,
+                refine_model=refine_model,
+                target_path_num=args.path_num,
+                refine_paths_per_segment=args.refine_paths_per_segment,
+                refine_batch_size=args.refine_batch_size,
+                device=device,
+            )
+            coarse_model.width = RENDER_WIDTH
+            coarse_model.rendering(warmup_strokes)
+        synchronize(device)
+
     print(f"Start rendering {len(files)} image(s)")
     print(f"path_num={args.path_num}, num_of_segments={num_of_segments}")
-    start_time = time.time()
+    start_time = time.perf_counter()
     average_mse = 0.0
+    benchmark_rows = []
 
     for idx, image_path in enumerate(files):
+        synchronize(device)
+        image_start = time.perf_counter()
         image = Image.open(str(image_path)).convert("RGB")
         coarse_strokes, _ = decode_by_id_map(image, coarse_model, device, num_of_segments)
         final_strokes = global_slic_refine_once(
@@ -491,16 +527,52 @@ def main(args):
         target = to_tensor_512(image).unsqueeze(0).to(device)
         mse_loss = ((output - target) ** 2).mean()
         average_mse += float(mse_loss)
-        print(idx, mse_loss.item(), f"final_path_count={count_active_paths(final_strokes)}")
+        active_paths = int(count_active_paths(final_strokes))
 
         output_png_path = output_dir / image_path.name
         output_svg_path = output_dir / f"{image_path.stem}.svg"
         save_image(output, str(output_png_path), normalize=False)
         coarse_model.width = RENDER_WIDTH
         coarse_model.rendering(final_strokes, save_svg_path=str(output_svg_path))
+        synchronize(device)
+        elapsed_seconds = time.perf_counter() - image_start
+        benchmark_rows.append(
+            {
+                "image": image_path.name,
+                "input": str(image_path.resolve()),
+                "png": str(output_png_path.resolve()),
+                "svg": str(output_svg_path.resolve()),
+                "native_mse": float(mse_loss.item()),
+                "path_count": active_paths,
+                "svg_bytes": output_svg_path.stat().st_size,
+                "elapsed_seconds": elapsed_seconds,
+            }
+        )
+        print(
+            idx,
+            mse_loss.item(),
+            f"final_path_count={active_paths}",
+            f"elapsed={elapsed_seconds:.4f}s",
+        )
 
     print(average_mse / len(files))
-    print(f"Rendering time {time.time() - start_time:.2f}s")
+    total_seconds = time.perf_counter() - start_time
+    print(f"Rendering time {total_seconds:.2f}s")
+    if args.benchmark_json:
+        report_path = Path(args.benchmark_json)
+        if not report_path.is_absolute():
+            report_path = (Path.cwd() / report_path).resolve()
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report = {
+            "method": "SuperSVG",
+            "path_num": args.path_num,
+            "optimize_iter": args.optimize_iter,
+            "warmup": args.warmup,
+            "model_load_included": False,
+            "total_seconds": total_seconds,
+            "rows": benchmark_rows,
+        }
+        report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,56 @@
+{
+  "method": "Im2Vec",
+  "checkpoint": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\logs\\VectorVAEnLayers\\version_110\\epoch=667.ckpt",
+  "checkpoint_domain": "emoji",
+  "config": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\logs\\VectorVAEnLayers\\version_110\\configs\\emoji.yaml",
+  "model_input_size": 128,
+  "curves_per_path": 20,
+  "model_load_included": false,
+  "warmup": true,
+  "load_info": {
+    "checkpoint_epoch": 668,
+    "global_step": 11462,
+    "strict_load": true,
+    "missing_keys": [],
+    "unexpected_keys": [],
+    "checkpoint_pytorch_lightning_version": "0.9.0"
+  },
+  "rows": [
+    {
+      "image": "0078807977709.png",
+      "input": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\ours_native\\inputs\\0078807977709.png",
+      "svg": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\im2vec_native\\svg\\0078807977709.svg",
+      "elapsed_seconds": 0.014683200017316267,
+      "path_count": 4,
+      "cubic_segments_per_path": 20,
+      "svg_bytes": 9784
+    },
+    {
+      "image": "0078936124638016.png",
+      "input": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\ours_native\\inputs\\0078936124638016.png",
+      "svg": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\im2vec_native\\svg\\0078936124638016.svg",
+      "elapsed_seconds": 0.013679399999091402,
+      "path_count": 4,
+      "cubic_segments_per_path": 20,
+      "svg_bytes": 9786
+    },
+    {
+      "image": "007905920170535.png",
+      "input": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\ours_native\\inputs\\007905920170535.png",
+      "svg": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\im2vec_native\\svg\\007905920170535.svg",
+      "elapsed_seconds": 0.010917400009930134,
+      "path_count": 4,
+      "cubic_segments_per_path": 20,
+      "svg_bytes": 9840
+    },
+    {
+      "image": "0079155434536247.png",
+      "input": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\ours_native\\inputs\\0079155434536247.png",
+      "svg": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\implementation\\evaluation_results\\method_comparison\\im2vec_native\\svg\\0079155434536247.svg",
+      "elapsed_seconds": 0.009704099997179583,
+      "path_count": 4,
+      "cubic_segments_per_path": 20,
+      "svg_bytes": 9778
+    }
+  ]
+}

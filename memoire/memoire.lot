@@ -1,8 +1,8 @@
 \babel@toc {french}{}\relax 
 \addvspace {10\p@ }
+\contentsline {table}{\numberline {1.1}{\ignorespaces Synthèse comparative des principales approches de vectorisation étudiées.}}{18}{table.1.1}%
 \addvspace {10\p@ }
+\contentsline {table}{\numberline {2.1}{\ignorespaces Principaux modules de la pipeline proposée.}}{22}{table.caption.16}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces Configuration enregistrée pour l'entraînement du modèle à 128 chemins par superpixel.}}{31}{table.caption.18}%
+\contentsline {table}{\numberline {2.3}{\ignorespaces Comparaison du flux d'entraînement et du flux d'inférence.}}{34}{table.caption.19}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {3.1}{\ignorespaces Spécifications de la machine Kaggle}}{17}{table.caption.12}%
-\contentsline {table}{\numberline {3.2}{\ignorespaces Valeurs du PSNR en fonction du nombre de générations}}{18}{table.caption.13}%
-\contentsline {table}{\numberline {3.3}{\ignorespaces Résultats du downsampling (Set5) — PSNR / SSIM}}{18}{table.caption.14}%
-\contentsline {table}{\numberline {3.4}{\ignorespaces Comparaison quantitative sur Set5 (PSNR en dB)}}{19}{table.caption.15}%
