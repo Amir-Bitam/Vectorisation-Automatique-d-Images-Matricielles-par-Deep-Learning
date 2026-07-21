@@ -1,0 +1,17 @@
+name: im2vec-win
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pip
+  - pytorch=2.5.1
+  - torchvision=0.20.1
+  - pytorch-cuda=12.4
+  - cuda-nvcc=12.4
+  - cuda-libraries-dev=12.4
+  - numpy=1.26.4
+  - cmake
+  - ninja

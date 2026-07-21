@@ -1,0 +1,15 @@
+{
+  "config": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\configs\\emoji_windows_smoke.yaml",
+  "output_dir": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\training_smoke",
+  "dataset_size": 52,
+  "batch_size": 1,
+  "loss": 4.461073875427246,
+  "finite_gradients": true,
+  "gradient_norm_sum": 0.0037240542464708204,
+  "changed_parameter": "model.fc_mu.weight",
+  "checkpoint": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\training_smoke\\emoji_windows_smoke.ckpt",
+  "reload_missing_keys": [],
+  "reload_unexpected_keys": [],
+  "elapsed_seconds": 1.1068652999820188,
+  "peak_gpu_memory_mb": 110.0634765625
+}

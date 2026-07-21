@@ -1,0 +1,29 @@
+{
+  "method": "Im2Vec",
+  "repository_commit": "f6516e0938b6101aacda893be6cfc668cf82f5f8",
+  "checkpoint_filename": "epoch=667.ckpt",
+  "checkpoint_sha256": "9162b31c54ec4abcde34d16f6b880276b1be797995a4a7c3f77697ee9d952feb",
+  "checkpoint_domain": "emoji",
+  "python_version": "3.11.15",
+  "pytorch_version": "2.5.1",
+  "torchvision_version": "0.20.1",
+  "pytorch_lightning_version": "1.9.5",
+  "cuda_runtime": "12.4",
+  "cuda_available": true,
+  "gpu_name": "NVIDIA GeForce RTX 4070 SUPER",
+  "gpu_compute_capability": "8.9",
+  "pydiffvg_path": "C:\\Users\\zak\\anaconda3\\envs\\im2vec-win\\Lib\\site-packages\\pydiffvg\\__init__.py",
+  "native_windows": true,
+  "successful_official_evaluation": true,
+  "custom_image_supported": true,
+  "compatibility_patches": [
+    "Built official DiffVG source natively on Windows with MSVC/Ninja/CUDA 12.4.",
+    "Updated DiffVG build metadata for setuptools and Python 3.11.",
+    "Updated DiffVG pybind11 submodule to v2.13.6 for Python 3.11 compatibility.",
+    "Added Windows-safe eval_local.py path/checkpoint/output arguments.",
+    "Added explicit SVG export and validation for decoded Im2Vec vector layers.",
+    "Set DataLoader workers to 0 by default on Windows.",
+    "Added Kornia PyrDown compatibility fallback.",
+    "Replaced legacy TestTubeLogger/Trainer usage in root launchers with Lightning 1.9-compatible APIs."
+  ]
+}

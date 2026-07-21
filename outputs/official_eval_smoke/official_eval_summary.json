@@ -1,0 +1,82 @@
+{
+  "config": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\logs\\VectorVAEnLayers\\version_110\\configs\\emoji.yaml",
+  "checkpoint": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\logs\\VectorVAEnLayers\\version_110\\epoch=667.ckpt",
+  "output_dir": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\official_eval_smoke",
+  "dataset_example_paths": [
+    "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\data\\emoji\\train\\emoji_u1f603 - Copy (2).png",
+    "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\data\\emoji\\train\\emoji_u1f603 - Copy - Copy.png",
+    "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\data\\emoji\\train\\emoji_u1f603 - Copy.png",
+    "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\data\\emoji\\train\\emoji_u1f603.png",
+    "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\data\\emoji\\train\\emoji_u1f609 - Copy (2).png",
+    "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\data\\emoji\\train\\emoji_u1f609 - Copy - Copy.png",
+    "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\data\\emoji\\train\\emoji_u1f609 - Copy.png",
+    "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\data\\emoji\\train\\emoji_u1f609.png"
+  ],
+  "load_info": {
+    "checkpoint_epoch": 668,
+    "global_step": 11462,
+    "strict_load": true,
+    "missing_keys": [],
+    "unexpected_keys": [],
+    "checkpoint_pytorch_lightning_version": "0.9.0"
+  },
+  "grid_outputs": {
+    "input_grid": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\official_eval_smoke\\official_input_grid.png",
+    "reconstruction_grid": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\official_eval_smoke\\official_reconstruction_grid.png"
+  },
+  "reconstruction": {
+    "input_png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\official_eval_smoke\\official_reconstruction_000_input.png",
+    "reconstruction_png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\official_eval_smoke\\official_reconstruction_000_reconstruction.png",
+    "metrics": {
+      "mse": 0.009401698596775532,
+      "psnr": 20.2679367570205,
+      "ssim": 0.890181839466095
+    },
+    "svg_path": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\official_eval_smoke\\official_reconstruction_000.svg",
+    "rerasterized_png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\official_eval_smoke\\official_reconstruction_000_rerasterized.png",
+    "comparison_png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\official_eval_smoke\\official_reconstruction_000_comparison.png",
+    "svg_validation": {
+      "svg_path": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\official_eval_smoke\\official_reconstruction_000.svg",
+      "size_bytes": 9785,
+      "root": "svg",
+      "path_count": 4,
+      "primitive_count": 0,
+      "fill_count": 4,
+      "group_count": 1,
+      "width": 128,
+      "height": 128,
+      "rerasterized_path": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\official_eval_smoke\\official_reconstruction_000_rerasterized.png",
+      "transparent": false,
+      "constant": false,
+      "black": false,
+      "white": false
+    }
+  },
+  "interpolations": {
+    "interpolation": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\official_eval_smoke\\official_interpolate_img.png"
+  },
+  "random_sample": {
+    "sample_png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\official_eval_smoke\\official_random_sample.png",
+    "sample_svg": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\official_eval_smoke\\official_random_sample.svg",
+    "sample_svg_validation": {
+      "svg_path": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\official_eval_smoke\\official_random_sample.svg",
+      "size_bytes": 9932,
+      "root": "svg",
+      "path_count": 4,
+      "primitive_count": 0,
+      "fill_count": 4,
+      "group_count": 1,
+      "width": 128,
+      "height": 128,
+      "rerasterized_path": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\official_eval_smoke\\official_random_sample_rerasterized.png",
+      "transparent": false,
+      "constant": false,
+      "black": false,
+      "white": false
+    }
+  },
+  "elapsed_seconds": 7.93509870005073,
+  "peak_gpu_memory_mb": 80.2490234375,
+  "device": "cuda:0",
+  "pydiffvg_use_gpu": true
+}

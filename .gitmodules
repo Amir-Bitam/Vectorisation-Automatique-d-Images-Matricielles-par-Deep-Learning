@@ -1,0 +1,4 @@
+[submodule "external/diffvg"]
+	path = external/diffvg
+	url = https://github.com/Amir-Bitam/Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning.git
+	branch = submodules/im2vec-diffvg-final

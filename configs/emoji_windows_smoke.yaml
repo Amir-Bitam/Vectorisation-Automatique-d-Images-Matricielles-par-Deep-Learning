@@ -1,0 +1,38 @@
+model_params:
+  name: "VectorVAEnLayers"
+  in_channels: 3
+  latent_dim: 128
+  loss_fn: 'MSE'
+  paths: 20
+  beta: 0
+  radius: 3
+  scale_factor: 1
+  learn_sampling: False
+  only_auxillary_training: False
+  memory_leak_training: False
+  other_losses_weight: 0
+  composite_fn: 'hard'
+
+exp_params:
+  dataset: irrelavant
+  data_path: "./data/emoji/"
+  img_size: 128
+  batch_size: 1
+  val_batch_size: 2
+  val_shuffle: False
+  LR: 0.0005
+  weight_decay: 0.0
+  scheduler_gamma: 0.95
+  grow: False
+  num_workers: 0
+
+trainer_params:
+  gpus: 1
+  max_epochs: 1
+
+logging_params:
+  save_dir: "outputs/training_smoke/"
+  other_interpolations: False
+  name: "VectorVAEnLayersSmoke"
+  version: 0
+  manual_seed: 1265

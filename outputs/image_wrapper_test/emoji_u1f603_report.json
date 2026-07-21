@@ -1,0 +1,56 @@
+{
+  "input": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\data\\emoji\\train\\emoji_u1f603.png",
+  "checkpoint": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\logs\\VectorVAEnLayers\\version_110\\epoch=667.ckpt",
+  "config": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\logs\\VectorVAEnLayers\\version_110\\configs\\emoji.yaml",
+  "checkpoint_domain": "emoji",
+  "custom_image_supported": true,
+  "support_scope": "The encoder accepts RGB rasters resized/cropped to the training size; quality is only demonstrated for the emoji-domain checkpoint.",
+  "preprocessing": {
+    "original_mode": "RGBA",
+    "original_size": [
+      136,
+      128
+    ],
+    "model_input_size": [
+      128,
+      128
+    ],
+    "alpha_handling": "PIL convert('RGB'), matching the repository dataset loader",
+    "normalization": "ToTensor only, values in [0, 1]"
+  },
+  "load_info": {
+    "checkpoint_epoch": 668,
+    "global_step": 11462,
+    "strict_load": true,
+    "missing_keys": [],
+    "unexpected_keys": [],
+    "checkpoint_pytorch_lightning_version": "0.9.0"
+  },
+  "elapsed_seconds": 0.6265131999971345,
+  "input_png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\image_wrapper_test\\emoji_u1f603_input.png",
+  "reconstruction_png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\image_wrapper_test\\emoji_u1f603_reconstruction.png",
+  "metrics": {
+    "mse": 0.009401698596775532,
+    "psnr": 20.2679367570205,
+    "ssim": 0.890181839466095
+  },
+  "svg_path": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\image_wrapper_test\\emoji_u1f603.svg",
+  "rerasterized_png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\image_wrapper_test\\emoji_u1f603_rerasterized.png",
+  "comparison_png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\image_wrapper_test\\emoji_u1f603_comparison.png",
+  "svg_validation": {
+    "svg_path": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\image_wrapper_test\\emoji_u1f603.svg",
+    "size_bytes": 9785,
+    "root": "svg",
+    "path_count": 4,
+    "primitive_count": 0,
+    "fill_count": 4,
+    "group_count": 1,
+    "width": 128,
+    "height": 128,
+    "rerasterized_path": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\image_wrapper_test\\emoji_u1f603_rerasterized.png",
+    "transparent": false,
+    "constant": false,
+    "black": false,
+    "white": false
+  }
+}

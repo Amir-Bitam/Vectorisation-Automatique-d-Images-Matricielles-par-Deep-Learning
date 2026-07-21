@@ -1,0 +1,16 @@
+# Windows runtime dependencies for the repaired native Im2Vec workflow.
+# Do not use the legacy kaolin==0.0 pin: this repository never imports kaolin.
+# Do not install PyPI diffvg blindly: pydiffvg is built from official DiffVG source.
+pytorch-lightning==1.9.5
+setuptools<81
+PyYAML
+kornia==0.7.4
+torch-optimizer==0.3.0
+matplotlib
+imageio
+scikit-image
+svgpathtools
+cssutils
+tensorboard
+click
+pandas

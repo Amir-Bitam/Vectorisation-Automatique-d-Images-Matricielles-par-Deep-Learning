@@ -1,0 +1,56 @@
+{
+  "input": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\inputs\\haninabz-woman-9009013.png",
+  "checkpoint": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\logs\\VectorVAEnLayers\\version_110\\epoch=667.ckpt",
+  "config": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\logs\\VectorVAEnLayers\\version_110\\configs\\emoji.yaml",
+  "checkpoint_domain": "emoji",
+  "custom_image_supported": true,
+  "support_scope": "The encoder accepts RGB rasters resized/cropped to the training size; quality is only demonstrated for the emoji-domain checkpoint.",
+  "preprocessing": {
+    "original_mode": "RGB",
+    "original_size": [
+      3200,
+      3200
+    ],
+    "model_input_size": [
+      128,
+      128
+    ],
+    "alpha_handling": "PIL convert('RGB'), matching the repository dataset loader",
+    "normalization": "ToTensor only, values in [0, 1]"
+  },
+  "load_info": {
+    "checkpoint_epoch": 668,
+    "global_step": 11462,
+    "strict_load": true,
+    "missing_keys": [],
+    "unexpected_keys": [],
+    "checkpoint_pytorch_lightning_version": "0.9.0"
+  },
+  "elapsed_seconds": 0.7610676999902353,
+  "input_png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\haninabz-woman-9009013\\haninabz-woman-9009013_input.png",
+  "reconstruction_png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\haninabz-woman-9009013\\haninabz-woman-9009013_reconstruction.png",
+  "metrics": {
+    "mse": 0.1799101084470749,
+    "psnr": 7.449444346563761,
+    "ssim": 0.39269375801086426
+  },
+  "svg_path": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\haninabz-woman-9009013\\haninabz-woman-9009013.svg",
+  "rerasterized_png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\haninabz-woman-9009013\\haninabz-woman-9009013_rerasterized.png",
+  "comparison_png": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\haninabz-woman-9009013\\haninabz-woman-9009013_comparison.png",
+  "svg_validation": {
+    "svg_path": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\haninabz-woman-9009013\\haninabz-woman-9009013.svg",
+    "size_bytes": 9806,
+    "root": "svg",
+    "path_count": 4,
+    "primitive_count": 0,
+    "fill_count": 4,
+    "group_count": 1,
+    "width": 128,
+    "height": 128,
+    "rerasterized_path": "C:\\Users\\zak\\Documents\\GitHub\\Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning\\test & result\\Im2Vec\\outputs\\haninabz-woman-9009013\\haninabz-woman-9009013_rerasterized.png",
+    "transparent": false,
+    "constant": false,
+    "black": false,
+    "white": false
+  }
+}
