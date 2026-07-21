@@ -1,3 +1,12 @@
 [submodule "implementation/diffvg"]
 	path = implementation/diffvg
-	url = https://github.com/BachiLi/diffvg.git
+	url = https://github.com/Amir-Bitam/Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning.git
+	branch = submodules/diffvg-implementation-final
+[submodule "test & result/Im2Vec"]
+	path = test & result/Im2Vec
+	url = https://github.com/Amir-Bitam/Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning.git
+	branch = submodules/im2vec-final
+[submodule "test & result/LIVE-Layerwise-Image-Vectorization"]
+	path = test & result/LIVE-Layerwise-Image-Vectorization
+	url = https://github.com/Amir-Bitam/Vectorisation-Automatique-d-Images-Matricielles-par-Deep-Learning.git
+	branch = submodules/live-final
