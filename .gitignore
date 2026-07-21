@@ -1,0 +1,7 @@
+.idea/
+.DS_Store
+
+# Generated local runs and Python caches
+LIVE/log/
+LIVE/__pycache__/
+windows_setup_logs/

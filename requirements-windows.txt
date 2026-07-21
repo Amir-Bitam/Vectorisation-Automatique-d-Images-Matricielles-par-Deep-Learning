@@ -1,0 +1,5 @@
+cssutils==2.11.1
+easydict==1.13
+opencv-python==4.10.0.84
+svgpathtools==1.6.1
+svgwrite==1.4.3

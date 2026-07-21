@@ -1,0 +1,29 @@
+name: live-win
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - pip
+  - setuptools
+  - wheel
+  - cmake=3.26.4
+  - ninja
+  - numpy=1.26
+  - scipy=1.13
+  - scikit-image=0.24
+  - matplotlib=3.9
+  - pillow=10.4
+  - pyyaml=6.0
+  - tqdm=4.67
+  - numba=0.60
+  - scikit-fmm=2025.1.29
+  - pytorch=2.4.1
+  - torchvision=0.19.1
+  - pytorch-cuda=12.4
+  - cuda-toolkit=12.4
+  - cuda-compiler=12.4.1
+  - cuda-nvcc=12.4.131
+  - cuda-version=12.4
