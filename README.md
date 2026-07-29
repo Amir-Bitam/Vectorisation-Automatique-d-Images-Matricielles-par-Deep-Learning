@@ -1,91 +1,93 @@
-# Vectorisation raster vers SVG avec DINOv3 et DiffVG
+# Raster-to-SVG Vectorization with DINOv3 and DiffVG
 
-Ce dépôt contient le modèle de vectorisation du projet et une application web qui
-l'utilise directement. Le backend actif ne lance plus SuperSVG : il importe la
-pipeline réelle de `implementation/`, charge le modèle une seule fois au démarrage,
-puis réutilise la même instance pour toutes les requêtes.
+This repository contains the project's vectorization model and a web app that
+uses it directly. The active backend no longer runs SuperSVG: it imports the
+real pipeline from `implementation/`, loads the model once at startup, then
+reuses the same instance for every request.
 
-## Structure du projet
+## Project structure
 
 ```text
 implementation/
-  inference.py                    Pipeline d'inférence complète
-  dataset.py                      Lecture RGB, SLIC et préparation des régions
-  encoder.py                      Encodeur DINOv3 et tête de chemins
-  model.py                        Modèle, rendu DiffVG et export SVG
-  checkpoints/                    Checkpoints entraînés
-  diffvg/                         Sous-module DiffVG local, avec correctifs Windows
+  inference.py                    Full inference pipeline
+  dataset.py                      RGB reading, SLIC, region preparation
+  encoder.py                      DINOv3 encoder and path head
+  model.py                        Model, DiffVG rendering and SVG export
+  checkpoints/                    Trained checkpoints
+  diffvg/                         Local DiffVG submodule, with Windows patches
 
 vectorization-app/
   backend/
-    main.py                       API FastAPI
-    model_service.py              Adaptateur persistant vers implementation/
-    config.py                     Configuration .env et chemins pathlib
-    SuperSVG/                     Ancien moteur conservé, mais non utilisé
-  frontend/                       Interface React/Vite/Tailwind existante
+    main.py                       FastAPI API
+    model_service.py              Persistent adapter to implementation/
+    config.py                     .env configuration and pathlib paths
+    SuperSVG/                     Legacy engine, kept but unused
+  frontend/                       Existing React/Vite/Tailwind interface
 ```
 
-## Pipeline utilisée
+## Pipeline used
 
-Le point d'entrée de référence est `implementation/inference.py`. Le backend
-réutilise directement ses fonctions `build_model`, `prepare_regions` et
-`predict_global_strokes`, ainsi que les fonctions de rendu/export de
-`implementation/model.py`.
+The reference entry point is `implementation/inference.py`. The backend
+directly reuses its `build_model`, `prepare_regions`, and
+`predict_global_strokes` functions, along with the rendering/export functions
+from `implementation/model.py`.
 
-Pour chaque image :
+For each image:
 
-1. Pillow convertit l'image complète en RGB `float32` dans `[0, 1]`.
-2. SLIC segmente l'image ; chaque région est recadrée et redimensionnée en
-   `224 x 224`, avec le fond placé à `-1`.
-3. Le modèle DINOv3 `vit_small_patch16_dinov3` prédit 128 chemins par région.
-4. Les 12 points de chaque chemin fermé (quatre Bézier cubiques) sont remappés
-   dans les coordonnées de l'image complète.
-5. DiffVG génère le SVG aux dimensions originales et un aperçu PNG sur fond noir.
+1. Pillow converts the full image to `float32` RGB in `[0, 1]`.
+2. SLIC segments the image; each region is cropped and resized to
+   `224 x 224`, with the background set to `-1`.
+3. The DINOv3 `vit_small_patch16_dinov3` model predicts 128 paths per region.
+4. The 12 points of each closed path (four cubic Béziers) are remapped into
+   the full image's coordinates.
+5. DiffVG generates the SVG at the original dimensions and a PNG preview on a
+   black background.
 
-Le checkpoint utilisé par défaut est :
+The default checkpoint used is:
 
 ```text
 implementation/checkpoints/raster_to_svg_128paths/epoch_0019.pt
 ```
 
-Il correspond au modèle `ours_final` évalué dans le dépôt. Ne pas le remplacer
-par `raster_to_svg_128paths/latest.pt` : ce dernier contient l'époque 14.
+It corresponds to the `ours_final` model evaluated in the repo. Do not replace
+it with `raster_to_svg_128paths/latest.pt`: the latter is epoch 14.
 
-## Prérequis Windows
+## Windows prerequisites
 
-- Windows 10 ou 11 64 bits ;
-- Python 3.11 recommandé ;
-- Node.js 18+ (Node.js 20 ou 24 recommandé) et npm ;
-- Git avec les sous-modules initialisés ;
-- CMake et Visual Studio Build Tools avec le composant C++ pour compiler DiffVG ;
-- le checkpoint ci-dessus, ou un autre checkpoint compatible indiqué dans `.env`.
+- Windows 10 or 11, 64-bit;
+- Python 3.11 recommended;
+- Node.js 18+ (Node.js 20 or 24 recommended) and npm;
+- Git with submodules initialized;
+- CMake and Visual Studio Build Tools with the C++ component to compile
+  DiffVG;
+- the checkpoint above, or another compatible checkpoint set in `.env`.
 
-Initialiser DiffVG si le sous-module est vide :
+Initialize DiffVG if the submodule is empty:
 
 ```powershell
 git submodule update --init --recursive
 ```
 
-### GPU et CUDA (RTX 4070 SUPER)
+### GPU and CUDA (RTX 4070 SUPER)
 
-Le GPU est facultatif : `MODEL_DEVICE=auto` utilise CUDA quand
-`torch.cuda.is_available()` vaut `True`, sinon le CPU.
+The GPU is optional: `MODEL_DEVICE=auto` uses CUDA when
+`torch.cuda.is_available()` is `True`, otherwise it falls back to CPU.
 
-La configuration réellement validée sur la machine du projet est : Python
-3.11.15, PyTorch 2.5.1, torchvision 0.20.1, runtime PyTorch CUDA 12.4 et une
-RTX 4070 SUPER. Cette combinaison est une référence vérifiée, pas une obligation
-pour toutes les machines. Pour compiler une extension DiffVG GPU neuve, un CUDA
-Toolkit compatible avec le build PyTorch et `nvcc` sont également nécessaires.
+The configuration actually validated on the project's machine is: Python
+3.11.15, PyTorch 2.5.1, torchvision 0.20.1, PyTorch CUDA runtime 12.4, and an
+RTX 4070 SUPER. This combination is a verified reference, not a requirement
+for every machine. To compile a fresh GPU DiffVG extension, a CUDA Toolkit
+compatible with the PyTorch build and `nvcc` are also required.
 
-Vérification rapide :
+Quick check:
 
 ```powershell
 python -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')"
 ```
 
-## Installation du backend
+## Backend installation
 
-Depuis PowerShell :
+From PowerShell:
 
 ```powershell
 cd vectorization-app/backend
@@ -94,27 +96,27 @@ py -3.11 -m venv venv
 python -m pip install --upgrade pip
 ```
 
-Installer d'abord la variante PyTorch souhaitée. Pour la configuration CUDA 12.4
-validée :
+Install the desired PyTorch variant first. For the validated CUDA 12.4
+configuration:
 
 ```powershell
 python -m pip install torch==2.5.1 torchvision==0.20.1 --index-url https://download.pytorch.org/whl/cu124
 ```
 
-Pour un backend CPU :
+For a CPU backend:
 
 ```powershell
 python -m pip install torch==2.5.1 torchvision==0.20.1
 ```
 
-Installer ensuite le reste des dépendances :
+Then install the remaining dependencies:
 
 ```powershell
 python -m pip install -r requirements.txt
 ```
 
-DiffVG/pydiffvg est une extension native locale et n'a pas de wheel Windows
-portable. Après PyTorch, l'installer depuis le sous-module. Pour CUDA :
+DiffVG/pydiffvg is a local native extension with no portable Windows wheel.
+After PyTorch, install it from the submodule. For CUDA:
 
 ```powershell
 Push-Location ..\..\implementation\diffvg
@@ -123,21 +125,21 @@ python setup.py install
 Pop-Location
 ```
 
-Pour une compilation CPU, utiliser `$env:DIFFVG_CUDA="0"`. Vérifier ensuite :
+For a CPU build, use `$env:DIFFVG_CUDA="0"`. Then verify:
 
 ```powershell
 python -c "import torch, pydiffvg, diffvg; print(torch.cuda.is_available()); print(pydiffvg.__file__); print(diffvg.__file__)"
 ```
 
-## Configuration du backend
+## Backend configuration
 
-Créer le fichier local `.env` :
+Create the local `.env` file:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-Valeurs fournies :
+Provided values:
 
 ```env
 MODEL_CHECKPOINT=../../implementation/checkpoints/raster_to_svg_128paths/epoch_0019.pt
@@ -148,30 +150,29 @@ BACKEND_PORT=8000
 MAX_UPLOAD_MB=25
 ```
 
-Les chemins relatifs sont résolus avec `pathlib` depuis
-`vectorization-app/backend`. `MODEL_DEVICE` accepte uniquement `auto`, `cpu` ou
-`cuda`.
+Relative paths are resolved with `pathlib` from `vectorization-app/backend`.
+`MODEL_DEVICE` only accepts `auto`, `cpu`, or `cuda`.
 
-Démarrage avec rechargement du code :
+Start with code reload:
 
 ```powershell
 python -m uvicorn main:app --reload
 ```
 
-`python main.py` lit directement `BACKEND_HOST` et `BACKEND_PORT`. Avec la CLI
-Uvicorn, ajouter `--host` et `--port` si des valeurs autres que les défauts sont
-souhaitées.
+`python main.py` reads `BACKEND_HOST` and `BACKEND_PORT` directly. With the
+Uvicorn CLI, add `--host` and `--port` if values other than the defaults are
+needed.
 
 ## API
 
-- `GET /` : état du serveur ;
-- `GET /health` : état du modèle, device et checkpoint ;
-- `POST /vectorize` : formulaire multipart contenant `file` (PNG ou JPEG) et
-  `num_regions` (entier optionnel entre 2 et 256, valeur par défaut : 64) ;
-- `GET /download/{job_id}/{filename}` : téléchargement du SVG ;
-- `GET /preview/{job_id}/{filename}` : aperçu PNG produit par la pipeline.
+- `GET /`: server status;
+- `GET /health`: model status, device, and checkpoint;
+- `POST /vectorize`: multipart form containing `file` (PNG or JPEG) and
+  `num_regions` (optional integer between 2 and 256, default: 64);
+- `GET /download/{job_id}/{filename}`: SVG download;
+- `GET /preview/{job_id}/{filename}`: PNG preview produced by the pipeline.
 
-Réponse de vectorisation :
+Vectorization response:
 
 ```json
 {
@@ -187,11 +188,11 @@ Réponse de vectorisation :
 }
 ```
 
-Le modèle et le checkpoint sont chargés dans le lifespan FastAPI, une seule fois
-par processus. Les inférences utilisent `torch.inference_mode()` et sont
-sérialisées par un verrou, car DiffVG conserve son device dans un état global.
+The model and checkpoint are loaded in the FastAPI lifespan, once per
+process. Inferences use `torch.inference_mode()` and are serialized by a
+lock, since DiffVG keeps its device in a global state.
 
-## Installation du frontend
+## Frontend installation
 
 ```powershell
 cd vectorization-app/frontend
@@ -200,64 +201,65 @@ Copy-Item .env.example .env
 npm run dev
 ```
 
-Configuration Vite :
+Vite configuration:
 
 ```env
 VITE_API_BASE_URL=http://127.0.0.1:8000
 ```
 
-Sans cette variable, le frontend utilise la même URL par défaut. Le design, le
-drag-and-drop, le viewer comparatif, la relance et le téléchargement SVG sont
-conservés. Les anciens paramètres SuperSVG ne sont plus envoyés.
+Without this variable, the frontend falls back to the same default URL. The
+design, drag-and-drop, comparison viewer, retry, and SVG download are
+preserved. The old SuperSVG parameters are no longer sent.
 
-Build de production :
+Production build:
 
 ```powershell
 npm run build
 ```
 
-## Erreurs courantes
+## Common errors
 
-### Checkpoint introuvable
+### Checkpoint not found
 
-Consulter `http://127.0.0.1:8000/health`. Le champ `checkpoint` montre le chemin
-résolu et `error` précise le fichier manquant. Corriger `MODEL_CHECKPOINT` ; depuis
-le backend, `implementation/` se trouve à `../../implementation`.
+Check `http://127.0.0.1:8000/health`. The `checkpoint` field shows the
+resolved path and `error` specifies the missing file. Fix
+`MODEL_CHECKPOINT`; from the backend, `implementation/` is located at
+`../../implementation`.
 
-### CUDA indisponible
+### CUDA unavailable
 
-Utiliser temporairement `MODEL_DEVICE=cpu`, ou vérifier le pilote NVIDIA et la
-variante PyTorch installée. `MODEL_DEVICE=cuda` échoue explicitement si
-`torch.cuda.is_available()` est faux.
+Temporarily use `MODEL_DEVICE=cpu`, or check the NVIDIA driver and the
+installed PyTorch variant. `MODEL_DEVICE=cuda` fails explicitly if
+`torch.cuda.is_available()` is false.
 
-### PyTorch et CUDA incompatibles
+### PyTorch and CUDA incompatible
 
-Comparer `torch.version.cuda`, la version du pilote affichée par `nvidia-smi` et
-la version utilisée pour compiler DiffVG. Réinstaller ensemble PyTorch,
-torchvision et l'extension DiffVG dans le même environnement Python.
+Compare `torch.version.cuda`, the driver version shown by `nvidia-smi`, and
+the version used to compile DiffVG. Reinstall PyTorch, torchvision, and the
+DiffVG extension together in the same Python environment.
 
-### pydiffvg ou DiffVG manquant
+### pydiffvg or DiffVG missing
 
-Une erreur `No module named pydiffvg` ou `No module named diffvg` indique que le
-sous-module natif n'est pas installé dans le `venv` actif. Reprendre l'étape
-`implementation/diffvg`. Une extension compilée pour une autre version de Python
-n'est pas réutilisable.
+A `No module named pydiffvg` or `No module named diffvg` error means the
+native submodule is not installed in the active `venv`. Redo the
+`implementation/diffvg` step. An extension compiled for a different Python
+version cannot be reused.
 
 ### CORS
 
-Le backend autorise `localhost` et `127.0.0.1` sur les ports Vite 5173 et 5174.
-Utiliser l'une de ces origines, ou ajouter explicitement une autre origine dans
+The backend allows `localhost` and `127.0.0.1` on Vite ports 5173 and 5174.
+Use one of these origins, or explicitly add another origin in
 `backend/main.py`.
 
-### Backend non lancé
+### Backend not running
 
-Si l'interface affiche `Backend is not running`, démarrer Uvicorn, vérifier
-`/health`, puis confirmer que `VITE_API_BASE_URL` correspond à l'adresse du
-backend.
+If the interface shows `Backend is not running`, start Uvicorn, check
+`/health`, then confirm that `VITE_API_BASE_URL` matches the backend's
+address.
 
-## Comment démarrer l'application
+## How to start the app
 
-Backend :
+Backend:
 
 ```powershell
 cd vectorization-app/backend
@@ -265,7 +267,7 @@ cd vectorization-app/backend
 python -m uvicorn main:app --reload
 ```
 
-Frontend :
+Frontend:
 
 ```powershell
 cd vectorization-app/frontend
@@ -273,7 +275,7 @@ npm install
 npm run dev
 ```
 
-Navigateur :
+Browser:
 
 ```text
 http://localhost:5173
